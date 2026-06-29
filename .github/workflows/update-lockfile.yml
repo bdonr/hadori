@@ -1,0 +1,31 @@
+name: Update lockfile on Linux
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - '.github/workflows/update-lockfile.yml'
+
+jobs:
+  update-lockfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Regenerate package-lock.json on Linux
+        run: npm install
+
+      - name: Commit updated lock file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git diff --staged --quiet || git commit -m "chore: regenerate package-lock.json on Linux [skip ci]"
+          git push
