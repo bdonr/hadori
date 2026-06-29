@@ -24,7 +24,7 @@ let _auth: Auth | null = null;
 let _db: Firestore | null = null;
 let _storage: FirebaseStorage | null = null;
 
-if (firebaseConfig.apiKey) {
+if (typeof window !== "undefined" && firebaseConfig.apiKey) {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   _auth = getAuth(app);
   _db = getFirestore(app);
