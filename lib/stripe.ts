@@ -1,6 +1,23 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+// Lazy singleton — avoids crash during Next.js build when STRIPE_SECRET_KEY is not set
+let _stripe: Stripe | null = null;
+
+export function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
+    _stripe = new Stripe(key);
+  }
+  return _stripe;
+}
+
+// Back-compat export used by API routes — resolves lazily at call time
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    return (getStripe() as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});
 
 export const PLANS = {
   startup_pro: process.env.STRIPE_PRICE_STARTUP_PRO!,
@@ -20,7 +37,7 @@ export async function createCheckoutSession({
   successUrl: string;
   cancelUrl: string;
 }) {
-  return stripe.checkout.sessions.create({
+  return getStripe().checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
@@ -31,7 +48,7 @@ export async function createCheckoutSession({
 }
 
 export async function createPortalSession(customerId: string, returnUrl: string) {
-  return stripe.billingPortal.sessions.create({
+  return getStripe().billingPortal.sessions.create({
     customer: customerId,
     return_url: returnUrl,
   });
