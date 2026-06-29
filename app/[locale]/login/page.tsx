@@ -6,7 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase/client";
-import { profileDoc } from "@/lib/firebase/collections";
+import { profileDoc } from "@/lib/firebase/refs";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { LangSwitcher } from "@/components/LangSwitcher";

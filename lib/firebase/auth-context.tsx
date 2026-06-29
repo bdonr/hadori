@@ -6,7 +6,8 @@ import {
 import { onAuthStateChanged, User } from "firebase/auth";
 import { getDoc } from "firebase/firestore";
 import { auth, db } from "./client";
-import { profileDoc, Profile } from "./collections";
+import { Profile } from "./collections";
+import { profileDoc } from "./refs";
 import { doc } from "firebase/firestore";
 
 interface AuthState {

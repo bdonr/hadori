@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { setDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase/client";
-import { profileDoc } from "@/lib/firebase/collections";
+import { profileDoc } from "@/lib/firebase/refs";
 import type { UserRole, Profile } from "@/lib/firebase/collections";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
