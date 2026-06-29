@@ -36,7 +36,7 @@ export default async function InvestorDashboard() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <span className="text-sm text-zinc-500">Investor · {profile.plan_tier}</span>
@@ -45,7 +45,7 @@ export default async function InvestorDashboard() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-12">
         <h1 className="text-2xl font-bold text-zinc-900">Hallo, {profile.full_name} 💼</h1>
-        <p className="mt-1 text-zinc-500">Entdecke HADORI-validierte Startups.</p>
+        <p className="mt-1 text-zinc-500">Entdecke DADORI-validierte Startups.</p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((c) => (
             <Link
@@ -63,7 +63,7 @@ export default async function InvestorDashboard() {
           ))}
         </div>
         <div className="mt-12 rounded-2xl border border-amber-100 bg-amber-50 p-6 text-sm text-amber-800">
-          <strong>Rechtlicher Hinweis:</strong> HADORI vermittelt ausschliesslich Introductions zwischen Gründern und Investoren. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
+          <strong>Rechtlicher Hinweis:</strong> DADORI vermittelt ausschliesslich Introductions zwischen Gründern und Investoren. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
         </div>
       </main>
     </div>

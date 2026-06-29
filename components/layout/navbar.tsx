@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="text-xl font-bold tracking-tight text-indigo-600">
-          HADORI
+          DADORI
         </Link>
         <nav className="hidden gap-6 text-sm text-zinc-600 sm:flex">
           <Link href="#features" className="hover:text-zinc-900">Features</Link>

@@ -16,7 +16,7 @@ const features = [
   {
     icon: "💡",
     title: "Investor-Netzwerk",
-    desc: "Sobald dein Startup die Validierungshürde erreicht, wirst du für passende Investoren sichtbar — mit gesichertem Data Room und HADORI-Badge.",
+    desc: "Sobald dein Startup die Validierungshürde erreicht, wirst du für passende Investoren sichtbar — mit gesichertem Data Room und DADORI-Badge.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function HomePage() {
             <span className="text-indigo-600">Von der Idee zum Investment.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-600">
-            HADORI verbindet Gründer, Talente und Investoren. Erstelle einen KI-Businessplan mit echten Marktdaten,
+            DADORI verbindet Gründer, Talente und Investoren. Erstelle einen KI-Businessplan mit echten Marktdaten,
             bau dein Team auf und werde von Investoren entdeckt — alles auf einer Plattform.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -85,7 +85,7 @@ export default function HomePage() {
       {/* How it works */}
       <section className="bg-zinc-50 py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold text-zinc-900">So funktioniert HADORI</h2>
+          <h2 className="text-center text-3xl font-bold text-zinc-900">So funktioniert DADORI</h2>
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
               <div key={s.num} className="flex flex-col">
@@ -156,7 +156,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-zinc-100 py-10 text-center text-sm text-zinc-400">
-        <p>© {new Date().getFullYear()} HADORI. Alle Rechte vorbehalten.</p>
+        <p>© {new Date().getFullYear()} DADORI. Alle Rechte vorbehalten.</p>
         <div className="mt-3 flex justify-center gap-6">
           <Link href="/privacy" className="hover:text-zinc-600">Datenschutz</Link>
           <Link href="/imprint" className="hover:text-zinc-600">Impressum</Link>

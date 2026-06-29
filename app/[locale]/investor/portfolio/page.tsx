@@ -23,7 +23,7 @@ const INITIAL_DEALS: {
   id: string; name: string; icon: string; category: string; stage: string;
   checkSize?: string; status: DealStatus; addedDate: string; notes: string;
 }[] = [
-  { id: "hadori",   name: "HADORI",    icon: "🚀", category: "B2B SaaS",    stage: "Pre-Seed", checkSize: "€100k",  status: "in_talk",       addedDate: "2026-06-10", notes: "Spannende Plattform, starker Founder" },
+  { id: "dadori",   name: "DADORI",    icon: "🚀", category: "B2B SaaS",    stage: "Pre-Seed", checkSize: "€100k",  status: "in_talk",       addedDate: "2026-06-10", notes: "Spannende Plattform, starker Founder" },
   { id: "klimaapp", name: "KlimaApp",  icon: "🌍", category: "Climate Tech", stage: "Seed",     checkSize: "€250k",  status: "due_diligence", addedDate: "2026-06-05", notes: "MRR wächst 20% MoM. Warteraum angefragt." },
   { id: "beatlab",  name: "BeatLab",   icon: "🎵", category: "Music",        stage: "Pre-Seed", checkSize: undefined, status: "passed",        addedDate: "2026-05-20", notes: "Markt zu klein für unsere Ticket-Size." },
   { id: "edupilot", name: "EduPilot",  icon: "📚", category: "EdTech",       stage: "Pre-Revenue", checkSize: "€75k", status: "intro_sent",  addedDate: "2026-06-28", notes: "" },

@@ -10,7 +10,7 @@ const DEAL_FLOW: {
   region: string; regionFlag: string; mrr: string; teamSize: string; tagline: string;
   addedDaysAgo: number; isNew: boolean; isStealth: boolean; stealthProblems?: string[];
 }[] = [
-  { id: "hadori", name: "HADORI", icon: "🚀", category: "B2B SaaS", stage: "Pre-Seed", stageEmoji: "🌱", region: "DE", regionFlag: "🇩🇪", mrr: "€0", teamSize: "2–5", tagline: "Dreiseitige Incubator-Plattform für Startups, Talente & Investoren.", addedDaysAgo: 1, isNew: true, isStealth: false },
+  { id: "dadori", name: "DADORI", icon: "🚀", category: "B2B SaaS", stage: "Pre-Seed", stageEmoji: "🌱", region: "DE", regionFlag: "🇩🇪", mrr: "€0", teamSize: "2–5", tagline: "Dreiseitige Incubator-Plattform für Startups, Talente & Investoren.", addedDaysAgo: 1, isNew: true, isStealth: false },
   { id: "klimaapp", name: "KlimaApp", icon: "🌍", category: "Climate Tech", stage: "Seed", stageEmoji: "🌿", region: "DE", regionFlag: "🇩🇪", mrr: "€5k", teamSize: "5–10", tagline: "CO₂-Tracking für den Alltag.", addedDaysAgo: 3, isNew: true, isStealth: false },
   { id: "edupilot", name: "EduPilot", icon: "📚", category: "EdTech", stage: "Pre-Revenue", stageEmoji: "🚀", region: "CH", regionFlag: "🇨🇭", mrr: "€0", teamSize: "2–5", tagline: "KI-Tutor für Schüler in DACH.", addedDaysAgo: 5, isNew: false, isStealth: false },
   { id: "stealth-1", name: "???", icon: "🥷", category: "Fintech", stage: "Seed", stageEmoji: "🌿", region: "DE", regionFlag: "🇩🇪", mrr: "€12k", teamSize: "6–15", tagline: "", addedDaysAgo: 2, isNew: true, isStealth: true, stealthProblems: ["Zu hohe Kosten", "Compliance"] },

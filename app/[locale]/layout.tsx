@@ -10,8 +10,8 @@ import "../globals.css";
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
-  title: "HADORI — Idea · Team · Capital",
-  description: "HADORI connects startups, skilled talent, and investors.",
+  title: "DADORI — Idea · Team · Capital",
+  description: "DADORI connects startups, skilled talent, and investors.",
 };
 
 export default async function LocaleLayout({

@@ -1,6 +1,6 @@
-{
+﻿{
   "nav": {
-    "brand": "HADORI",
+    "brand": "DADORI",
     "signout": "Ausloggen",
     "login": "Anmelden",
     "signup": "Jetzt starten"
@@ -30,7 +30,7 @@
     "feature_talent": "Talent-Matching",
     "feature_talent_desc": "Finde den perfekten Cutter, CTO oder Co-Founder — oder werde gefunden.",
     "feature_investor": "Investor-Netzwerk",
-    "feature_investor_desc": "Validierte Startups werden sichtbar für Seed-Investoren. Mit HADORI Intro."
+    "feature_investor_desc": "Validierte Startups werden sichtbar für Seed-Investoren. Mit DADORI Intro."
   },
   "auth": {
     "login_title": "Willkommen zurück",
@@ -49,7 +49,7 @@
     "switch_to_login": "Bereits registriert? Anmelden"
   },
   "startup": {
-    "dashboard_title": "Dein HADORI-Dashboard",
+    "dashboard_title": "Dein DADORI-Dashboard",
     "dashboard_sub": "Alles an einem Ort — Plan, Team, Investoren.",
     "card_plan": "Businessplan erstellen",
     "card_plan_desc": "KI-gestützter Plan mit echten Marktdaten",
@@ -132,7 +132,7 @@
   },
   "matches": {
     "title": "Matches & Intros",
-    "tab_intros": "🤝 HADORI Intros",
+    "tab_intros": "🤝 DADORI Intros",
     "tab_pulse": "🔴 Live Pulse",
     "online_count": "{count} gerade aktiv",
     "why_match": "Warum dieser Match: ",
@@ -142,7 +142,7 @@
     "status_pending": "Wartet auf Bestätigung",
     "status_accepted": "Intro bestätigt",
     "status_declined": "Abgelehnt",
-    "hadori_says": "🤝 HADORI sagt",
+    "dadori_says": "🤝 DADORI sagt",
     "pulse_subtitle": "Echtzeit — Ereignisse die zu dir passen",
     "view_all": "Alle Matches & Intros ansehen →"
   },

@@ -69,7 +69,7 @@ export default function StartupProfilePage() {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="z.B. HADORI"
+              placeholder="z.B. DADORI"
               className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

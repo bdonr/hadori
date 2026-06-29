@@ -1,6 +1,6 @@
-{
+﻿{
   "nav": {
-    "brand": "HADORI",
+    "brand": "DADORI",
     "signout": "ログアウト",
     "login": "ログイン",
     "signup": "始める"
@@ -30,7 +30,7 @@
     "feature_talent": "タレントマッチング",
     "feature_talent_desc": "最適な編集者・CTO・共同創業者を見つける、または見つけられる。",
     "feature_investor": "投資家ネットワーク",
-    "feature_investor_desc": "検証済みスタートアップがシード投資家に見えるようになる。HADORI Introで。"
+    "feature_investor_desc": "検証済みスタートアップがシード投資家に見えるようになる。DADORI Introで。"
   },
   "auth": {
     "login_title": "おかえりなさい",
@@ -49,7 +49,7 @@
     "switch_to_login": "すでに登録済みの方はログイン"
   },
   "startup": {
-    "dashboard_title": "HADORIダッシュボード",
+    "dashboard_title": "DADORIダッシュボード",
     "dashboard_sub": "プラン、チーム、投資家 — すべて一か所で。",
     "card_plan": "ビジネスプラン作成",
     "card_plan_desc": "実市場データによるAIプラン",
@@ -132,7 +132,7 @@
   },
   "matches": {
     "title": "マッチング & イントロ",
-    "tab_intros": "🤝 HADORIイントロ",
+    "tab_intros": "🤝 DADORIイントロ",
     "tab_pulse": "🔴 ライブパルス",
     "online_count": "{count}人がオンライン中",
     "why_match": "マッチング理由：",
@@ -142,7 +142,7 @@
     "status_pending": "確認待ち",
     "status_accepted": "イントロ確認済み",
     "status_declined": "断られました",
-    "hadori_says": "🤝 HADORIより",
+    "dadori_says": "🤝 DADORIより",
     "pulse_subtitle": "リアルタイム — あなたにマッチするイベント",
     "view_all": "すべてのマッチ & イントロを見る →"
   },

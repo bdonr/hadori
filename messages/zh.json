@@ -1,6 +1,6 @@
-{
+﻿{
   "nav": {
-    "brand": "HADORI",
+    "brand": "DADORI",
     "signout": "退出登录",
     "login": "登录",
     "signup": "立即开始"
@@ -30,7 +30,7 @@
     "feature_talent": "人才匹配",
     "feature_talent_desc": "找到完美的剪辑师、CTO 或联合创始人 — 或者被发现。",
     "feature_investor": "投资者网络",
-    "feature_investor_desc": "经过验证的创业公司对种子投资者可见。通过 HADORI Intro。"
+    "feature_investor_desc": "经过验证的创业公司对种子投资者可见。通过 DADORI Intro。"
   },
   "auth": {
     "login_title": "欢迎回来",
@@ -49,7 +49,7 @@
     "switch_to_login": "已经注册？登录"
   },
   "startup": {
-    "dashboard_title": "您的 HADORI 仪表板",
+    "dashboard_title": "您的 DADORI 仪表板",
     "dashboard_sub": "一站式管理 — 计划、团队、投资者。",
     "card_plan": "创建商业计划",
     "card_plan_desc": "基于真实市场数据的 AI 驱动计划",
@@ -132,7 +132,7 @@
   },
   "matches": {
     "title": "匹配 & 引荐",
-    "tab_intros": "🤝 HADORI 引荐",
+    "tab_intros": "🤝 DADORI 引荐",
     "tab_pulse": "🔴 实时脉冲",
     "online_count": "{count} 人正在活跃",
     "why_match": "匹配原因：",
@@ -142,7 +142,7 @@
     "status_pending": "等待确认",
     "status_accepted": "引荐已确认",
     "status_declined": "已拒绝",
-    "hadori_says": "🤝 HADORI 说",
+    "dadori_says": "🤝 DADORI 说",
     "pulse_subtitle": "实时 — 与您匹配的事件",
     "view_all": "查看所有匹配 & 引荐 →"
   },

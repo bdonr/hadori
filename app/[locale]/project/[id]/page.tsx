@@ -20,12 +20,12 @@ const DEMO_PROJECTS: Record<string, {
   type?: "project" | "startup";
   stealth?: boolean; stealthProblems?: string[]; stealthCategory?: string;
 }> = {
-  "hadori": {
-    id: "hadori", name: "HADORI", tagline: "Die Plattform die Startups, Talente und Investoren verbindet.",
-    description: "HADORI ist eine dreiseitige Incubator-Plattform. Startups generieren KI-gestützte Businesspläne mit echten Marktdaten, finden Co-Founder und Talente, und werden für Investoren sichtbar. Talent-Nutzer bauen Profile auf und matchen mit Startups und Creator-Projekten. Investoren entdecken validierte Startups — mit HADORI Intro.",
+  "dadori": {
+    id: "dadori", name: "DADORI", tagline: "Die Plattform die Startups, Talente und Investoren verbindet.",
+    description: "DADORI ist eine dreiseitige Incubator-Plattform. Startups generieren KI-gestützte Businesspläne mit echten Marktdaten, finden Co-Founder und Talente, und werden für Investoren sichtbar. Talent-Nutzer bauen Profile auf und matchen mit Startups und Creator-Projekten. Investoren entdecken validierte Startups — mit DADORI Intro.",
     category: "B2B SaaS", icon: "🚀", stage: "Pre-Seed", stageEmoji: "🌱",
     mrr: "Kein Umsatz", teamSize: "2–5", region: "Deutschland", regionFlag: "🇩🇪",
-    website: "https://hadori.co", foundedYear: 2026,
+    website: "https://dadori.com", foundedYear: 2026,
     founders: [
       { name: "Don R.", role: "CEO & Founder", avatar: "👨‍💻" },
     ],
@@ -118,12 +118,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
               stealthCategory: d.category ?? "",
             });
           } else {
-            setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["hadori"]);
+            setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["dadori"]);
           }
         }
       } catch {
         if (!cancelled) {
-          setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["hadori"]);
+          setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["dadori"]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -148,7 +148,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
       <div className="min-h-screen bg-zinc-50">
         <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
           <div className="mx-auto flex max-w-4xl items-center justify-between">
-            <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+            <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
             <div className="flex items-center gap-3">
               <LangSwitcher />
               <Link href="/en/login" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">Mitmachen</Link>
@@ -198,7 +198,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
       {/* Header */}
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <Link href="/en/login" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
@@ -380,7 +380,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
         {/* Back nav */}
         <p className="mt-8 text-center text-sm text-zinc-400">
-          Auf HADORI entdecken:{" "}
+          Auf DADORI entdecken:{" "}
           <Link href="/en/explore" className="text-indigo-600 hover:underline">Alle Projekte & Startups →</Link>
         </p>
       </main>

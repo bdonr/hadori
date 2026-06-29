@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Matching engine — shared logic for talent ↔ role and startup ↔ investor matching.
  * Runs client-side for instant UI feedback; mirrored in Cloud Functions for push triggers.
  */
@@ -10,8 +10,8 @@ export interface MatchEvent {
     | "talent_online"      // Matching talent came online
     | "investor_viewed"    // Investor viewed a startup profile
     | "project_created"    // New startup/project that needs your skills
-    | "mutual_interest"    // Both sides showed interest → HADORI Intro
-    | "intro_sent";        // HADORI sent an intro between two parties
+    | "mutual_interest"    // Both sides showed interest → DADORI Intro
+    | "intro_sent";        // DADORI sent an intro between two parties
   score: number;           // 0–100 match score
   timestamp: string;       // ISO
   read: boolean;

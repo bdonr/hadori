@@ -198,7 +198,7 @@ export default function InvestorProfilePage() {
           <section className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-zinc-900">Offen für HADORI Intros</p>
+                <p className="font-semibold text-zinc-900">Offen für DADORI Intros</p>
                 <p className="text-sm text-zinc-500 mt-0.5">Gründer können eine Intro-Anfrage stellen.</p>
               </div>
               <button type="button" onClick={() => setOpenToIntros(!openToIntros)}

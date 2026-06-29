@@ -1,4 +1,4 @@
-export type TalentTier   = "free" | "plus" | "pro";
+﻿export type TalentTier   = "free" | "plus" | "pro";
 export type ProjectTier  = "project" | "startup" | "startup_pro";
 export type InvestorTier = "investor_free" | "investor_basic" | "investor_pro" | "investor_premium" | "investor_elite";
 
@@ -41,7 +41,7 @@ export const TALENT_TIERS = [
       "Alles aus Plus +",
       "Featured Profil (Top Placement)",
       "Profil-Analytics & Views",
-      "HADORI Match Score sichtbar",
+      "DADORI Match Score sichtbar",
       "Unbegrenzte Bewerbungen",
       "Priority Support",
     ],
@@ -76,7 +76,7 @@ export const PROJECT_TIERS = [
       "Funding Stage & MRR sichtbar",
       "KI-Businessplan Generator",
       "Investoren entdecken & anfragen",
-      "HADORI Intro (kuratiert)",
+      "DADORI Intro (kuratiert)",
     ],
     cta: "Zu Startup upgraden",
     highlight: true,
@@ -91,7 +91,7 @@ export const PROJECT_TIERS = [
       "Incubator-verifiziert Badge",
       "Featured in Investor-Discovery",
       "Datenraum für Investoren",
-      "Unbegrenzte HADORI Intros",
+      "Unbegrenzte DADORI Intros",
       "Priority Support",
     ],
     cta: "Pro Startup werden",
@@ -123,7 +123,7 @@ export const INVESTOR_TIERS = [
     introsPerMonth: 3,
     features: [
       "Alles aus Scout +",
-      "3 HADORI Intros / Monat",
+      "3 DADORI Intros / Monat",
       "Startup-Details & Gründerprofile sehen",
       "Watchlist (bis 20 Startups speichern)",
       "Wöchentlicher Deal Flow Digest (E-Mail)",
@@ -139,7 +139,7 @@ export const INVESTOR_TIERS = [
     introsPerMonth: 10,
     features: [
       "Alles aus Angel +",
-      "10 HADORI Intros / Monat",
+      "10 DADORI Intros / Monat",
       "Erweiterte Filter (Stage, MRR, Region, Kategorie)",
       "Stealth-Projekte entdecken",
       "Portfolio-Tracker (aktive Deals verfolgen)",
@@ -156,12 +156,12 @@ export const INVESTOR_TIERS = [
     introsPerMonth: 25,
     features: [
       "Alles aus Pro +",
-      "25 HADORI Intros / Monat",
+      "25 DADORI Intros / Monat",
       "Verifizierter Investor-Badge",
       "Featured in Startup-Suche (Top Placement)",
       "Datenraum-Zugang (nach Freigabe)",
       "Frühzugang zu neuen Startups (72h Vorsprung)",
-      "Monatlicher HADORI Analyst-Report",
+      "Monatlicher DADORI Analyst-Report",
     ],
     cta: "Lead Investor werden",
     highlight: false,
@@ -174,12 +174,12 @@ export const INVESTOR_TIERS = [
     introsPerMonth: -1, // unlimited
     features: [
       "Alles aus Lead Investor +",
-      "Unbegrenzte HADORI Intros",
+      "Unbegrenzte DADORI Intros",
       "Dedizierter Deal Flow Manager",
       "API-Zugang (Webhooks für neue Startups)",
-      "Co-Investor Netzwerk (andere VCs auf HADORI)",
+      "Co-Investor Netzwerk (andere VCs auf DADORI)",
       "White-Label Datenraum",
-      "Quartals-Briefing mit HADORI-Team",
+      "Quartals-Briefing mit DADORI-Team",
       "Priority Support (< 2h Antwortzeit)",
     ],
     cta: "Elite-Zugang anfragen",

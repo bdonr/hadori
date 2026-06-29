@@ -140,7 +140,7 @@ export default function PlanPage() {
               <h2 className="font-semibold text-zinc-900">Startup-Name</h2>
               <input
                 required value={name} onChange={e => setName(e.target.value)}
-                placeholder="z.B. HADORI"
+                placeholder="z.B. DADORI"
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
               />
             </section>

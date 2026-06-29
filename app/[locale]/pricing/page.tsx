@@ -42,7 +42,7 @@ export default function PricingPage() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <Link href="/en/login" className="text-sm font-semibold text-zinc-600 hover:text-indigo-600">Login</Link>
@@ -123,7 +123,7 @@ export default function PricingPage() {
 
         {/* Upgrade path */}
         <section className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm mb-12">
-          <h2 className="text-center font-bold text-zinc-900 text-lg mb-8">Dein Weg auf HADORI</h2>
+          <h2 className="text-center font-bold text-zinc-900 text-lg mb-8">Dein Weg auf DADORI</h2>
           <div className="flex flex-col gap-6">
             {[
               { track: "Talent", steps: ["👤 Free", "⭐ Plus 5€", "🏆 Pro 20€"], color: "indigo" },
@@ -159,7 +159,7 @@ export default function PricingPage() {
             { q: "Was ist Stealth-Modus?", a: "Dein Projekt ist anonym sichtbar — nur Kategorie & Problem-Bereich, kein Name. Investoren können trotzdem Interesse bekunden." },
             { q: "Upgrade Projekt → Startup?", a: "Ein Klick — dein Profil wird vollständig übernommen, du zahlst nur die Differenz." },
             { q: "Investoren: warum Free?", a: "Wir wollen Investoren auf der Plattform, nicht davon fernhalten. Pro lohnt sich für aktiven Deal Flow." },
-            { q: "Was kostet HADORI Intro?", a: "Die Intro selbst ist kostenlos — du brauchst nur den passenden Tier (Startup oder Investor Pro)." },
+            { q: "Was kostet DADORI Intro?", a: "Die Intro selbst ist kostenlos — du brauchst nur den passenden Tier (Startup oder Investor Pro)." },
             { q: "Gibt es Jahrespläne?", a: "Kommt bald — mit ~20% Rabatt gegenüber monatlicher Zahlung." },
           ].map(({ q, a }) => (
             <div key={q} className="rounded-xl border border-zinc-200 bg-white p-5">

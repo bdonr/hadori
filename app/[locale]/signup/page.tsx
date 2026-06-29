@@ -61,7 +61,7 @@ export default function SignupPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 py-16">
-      <Link href="/" className="mb-8 text-2xl font-extrabold text-indigo-600">HADORI</Link>
+      <Link href="/" className="mb-8 text-2xl font-extrabold text-indigo-600">DADORI</Link>
 
       {step === "role" ? (
         <div className="w-full max-w-md">

@@ -28,7 +28,7 @@ const OPEN_ROLES = [
   },
   {
     id: "2",
-    projectName: "HADORI",
+    projectName: "DADORI",
     projectType: "SaaS Startup",
     projectIcon: "🚀",
     title: "CTO / Full-Stack Developer",

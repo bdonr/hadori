@@ -47,7 +47,7 @@ export default function InvestorProfilePage({ params }: { params: { id: string }
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <Link href="/en/login" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
@@ -87,14 +87,14 @@ export default function InvestorProfilePage({ params }: { params: { id: string }
             {investor.openToIntros && (
               requested ? (
                 <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">
-                  ✓ HADORI Intro angefragt
+                  ✓ DADORI Intro angefragt
                 </span>
               ) : (
                 <button
                   onClick={() => setRequested(true)}
                   className="rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-white hover:bg-amber-600 transition-colors"
                 >
-                  🤝 HADORI Intro anfragen
+                  🤝 DADORI Intro anfragen
                 </button>
               )
             )}
@@ -108,7 +108,7 @@ export default function InvestorProfilePage({ params }: { params: { id: string }
 
           {investor.openToIntros && (
             <p className="mt-3 text-xs text-zinc-400">
-              ⚡ Offen für Intros — HADORI leitet deine Anfrage weiter wenn ihr zusammenpasst
+              ⚡ Offen für Intros — DADORI leitet deine Anfrage weiter wenn ihr zusammenpasst
             </p>
           )}
         </div>
@@ -172,7 +172,7 @@ export default function InvestorProfilePage({ params }: { params: { id: string }
 
             {/* Note */}
             <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 text-xs text-amber-700">
-              <strong>Hinweis:</strong> HADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
+              <strong>Hinweis:</strong> DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
             </div>
           </div>
         </div>

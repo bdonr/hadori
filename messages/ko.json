@@ -1,6 +1,6 @@
-{
+﻿{
   "nav": {
-    "brand": "HADORI",
+    "brand": "DADORI",
     "signout": "로그아웃",
     "login": "로그인",
     "signup": "시작하기"
@@ -30,7 +30,7 @@
     "feature_talent": "인재 매칭",
     "feature_talent_desc": "완벽한 편집자, CTO 또는 공동 창업자를 찾거나 발견되세요.",
     "feature_investor": "투자자 네트워크",
-    "feature_investor_desc": "검증된 스타트업이 시드 투자자에게 노출됩니다. HADORI Intro와 함께."
+    "feature_investor_desc": "검증된 스타트업이 시드 투자자에게 노출됩니다. DADORI Intro와 함께."
   },
   "auth": {
     "login_title": "다시 오신 것을 환영합니다",
@@ -49,7 +49,7 @@
     "switch_to_login": "이미 등록하셨나요? 로그인"
   },
   "startup": {
-    "dashboard_title": "HADORI 대시보드",
+    "dashboard_title": "DADORI 대시보드",
     "dashboard_sub": "한 곳에서 모두 — 계획, 팀, 투자자.",
     "card_plan": "사업 계획 만들기",
     "card_plan_desc": "실제 시장 데이터 기반 AI 계획",
@@ -132,7 +132,7 @@
   },
   "matches": {
     "title": "매칭 & 소개",
-    "tab_intros": "🤝 HADORI 소개",
+    "tab_intros": "🤝 DADORI 소개",
     "tab_pulse": "🔴 라이브 펄스",
     "online_count": "{count}명 지금 활동 중",
     "why_match": "매칭 이유: ",
@@ -142,7 +142,7 @@
     "status_pending": "확인 대기 중",
     "status_accepted": "소개 확인됨",
     "status_declined": "거절됨",
-    "hadori_says": "🤝 HADORI 말",
+    "dadori_says": "🤝 DADORI 말",
     "pulse_subtitle": "실시간 — 당신과 매칭되는 이벤트",
     "view_all": "모든 매칭 & 소개 보기 →"
   },

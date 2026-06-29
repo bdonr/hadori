@@ -1,7 +1,7 @@
 {
   "functions": {
     "source": "functions",
-    "codebase": "hadori",
+    "codebase": "dadori",
     "runtime": "nodejs22",
     "ignore": [
       "node_modules",

@@ -116,8 +116,8 @@ export default function DiscoverInvestorsPage() {
         <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 flex items-start gap-3">
           <span className="text-xl">💡</span>
           <div>
-            <p className="text-sm font-semibold text-amber-900">HADORI Intro — wie es funktioniert</p>
-            <p className="text-sm text-amber-700">Du siehst Investoren die zu eurer Phase & Kategorie passen. Anfrage senden → HADORI prüft den Match → beide Seiten stimmen zu → Intro.</p>
+            <p className="text-sm font-semibold text-amber-900">DADORI Intro — wie es funktioniert</p>
+            <p className="text-sm text-amber-700">Du siehst Investoren die zu eurer Phase & Kategorie passen. Anfrage senden → DADORI prüft den Match → beide Seiten stimmen zu → Intro.</p>
           </div>
         </div>
 

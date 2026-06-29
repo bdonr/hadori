@@ -133,7 +133,7 @@ export default function StartupBillingPage() {
                   ["Funding Stage & MRR",           "–", "✓", "✓"],
                   ["KI-Businessplan",               "–", "✓", "✓"],
                   ["Investoren entdecken & anfragen","–", "✓", "✓"],
-                  ["HADORI Intro",                  "–", "✓", "✓"],
+                  ["DADORI Intro",                  "–", "✓", "✓"],
                   ["Verified Badge",                "–", "–", "✓"],
                   ["Featured Placement",            "–", "–", "✓"],
                   ["Datenraum",                     "–", "–", "✓"],

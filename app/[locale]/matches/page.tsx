@@ -15,7 +15,7 @@ const INTROS = [
     score: 100,
     reason: "StreamerXY hat Sara's Profil 6 Minuten lang angeschaut. Sara hat die Rolle von StreamerXY als Favorit markiert. 4 Skills stimmen exakt überein.",
     matchedSkills: ["Video Editing / Schnitt", "Short-Form", "DaVinci Resolve", "Color Grading"],
-    introMessage: "Hey Sara & StreamerXY — ich bin HADORI und habe euer gegenseitiges Interesse bemerkt. Ihr passt auf 100% zusammen. StreamerXY sucht genau das, was Sara macht. Sara ist sofort verfügbar. Ich würde euch gerne vorstellen — wollt ihr?",
+    introMessage: "Hey Sara & StreamerXY — ich bin DADORI und habe euer gegenseitiges Interesse bemerkt. Ihr passt auf 100% zusammen. StreamerXY sucht genau das, was Sara macht. Sara ist sofort verfügbar. Ich würde euch gerne vorstellen — wollt ihr?",
   },
   {
     id: "2",
@@ -33,11 +33,11 @@ const INTROS = [
     status: "pending",
     initiatedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     partyA: { name: "VC Berlin Fund", type: "investor", icon: "💼", desc: "Seed-Investor · B2B SaaS" },
-    partyB: { name: "HADORI", type: "startup", icon: "🚀", desc: "SaaS-Startup · Pre-Seed" },
+    partyB: { name: "DADORI", type: "startup", icon: "🚀", desc: "SaaS-Startup · Pre-Seed" },
     score: 75,
-    reason: "VC Berlin hat das HADORI-Profil zweimal besucht und 4 Minuten auf der Businessplan-Sektion verbracht. HADORI ist investordiscoverable.",
+    reason: "VC Berlin hat das DADORI-Profil zweimal besucht und 4 Minuten auf der Businessplan-Sektion verbracht. DADORI ist investordiscoverable.",
     matchedSkills: ["SaaS", "B2B", "Seed-Phase", "Tech"],
-    introMessage: "VC Berlin & HADORI-Team — VC Berlin hat euer Profil intensiv angeschaut. Interesse scheint vorhanden. Ich würde gerne eine kurze Vorstellung machen — seid ihr offen?",
+    introMessage: "VC Berlin & DADORI-Team — VC Berlin hat euer Profil intensiv angeschaut. Interesse scheint vorhanden. Ich würde gerne eine kurze Vorstellung machen — seid ihr offen?",
   },
 ];
 
@@ -91,7 +91,7 @@ export default function MatchesPage() {
         {/* Tabs */}
         <div className="mb-6 flex gap-1 rounded-xl border border-zinc-200 bg-white p-1 shadow-sm w-fit">
           {[
-            { id: "intros", label: `🤝 HADORI Intros${pendingCount > 0 ? ` (${pendingCount})` : ""}` },
+            { id: "intros", label: `🤝 DADORI Intros${pendingCount > 0 ? ` (${pendingCount})` : ""}` },
             { id: "pulse", label: "🔴 Live Pulse" },
           ].map(tab => (
             <button
@@ -155,9 +155,9 @@ export default function MatchesPage() {
                     </div>
                   </div>
 
-                  {/* HADORI message */}
+                  {/* DADORI message */}
                   <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-4 mb-4">
-                    <p className="text-xs font-bold text-indigo-400 mb-1">🤝 HADORI sagt</p>
+                    <p className="text-xs font-bold text-indigo-400 mb-1">🤝 DADORI sagt</p>
                     <p className="text-sm text-indigo-900 leading-relaxed">{intro.introMessage}</p>
                   </div>
 

@@ -12,7 +12,7 @@ function tierAtLeast(r: string) { return TIER_ORDER.indexOf(CURRENT_TIER) >= TIE
 const MAX_WATCHLIST = tierAtLeast("investor_basic") ? (tierAtLeast("investor_pro") ? Infinity : 20) : 5;
 
 const INITIAL: { id: string; name: string; icon: string; category: string; stage: string; regionFlag: string; tagline: string }[] = [
-  { id: "hadori",   name: "HADORI",   icon: "🚀", category: "B2B SaaS",    stage: "Pre-Seed", regionFlag: "🇩🇪", tagline: "Dreiseitige Incubator-Plattform." },
+  { id: "dadori",   name: "DADORI",   icon: "🚀", category: "B2B SaaS",    stage: "Pre-Seed", regionFlag: "🇩🇪", tagline: "Dreiseitige Incubator-Plattform." },
   { id: "klimaapp", name: "KlimaApp", icon: "🌍", category: "Climate Tech", stage: "Seed",     regionFlag: "🇩🇪", tagline: "CO₂-Tracking für den Alltag." },
   { id: "fitstreak",name: "FitStreak",icon: "💪", category: "Health",       stage: "Seed",     regionFlag: "🇩🇪", tagline: "Habit-App für Sport-Nerds." },
 ];

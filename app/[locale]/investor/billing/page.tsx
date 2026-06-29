@@ -26,7 +26,7 @@ export default function InvestorBillingPage() {
 
   async function handleUpgrade(tierId: string) {
     if (tierId === "investor_elite") {
-      window.location.href = "mailto:hello@hadori.co?subject=Elite-Zugang Anfrage";
+      window.location.href = "mailto:hello@dadori.com?subject=Elite-Zugang Anfrage";
       return;
     }
     const priceId = STRIPE_PRICE_IDS[tierId];
@@ -191,7 +191,7 @@ export default function InvestorBillingPage() {
                   ["Startups entdecken",       "✓","✓","✓","✓","✓"],
                   ["Deal Flow Feed",           "–","✓","✓","✓","✓"],
                   ["Watchlist",               "5","20","∞","∞","∞"],
-                  ["HADORI Intros / Mo",       "–","3","10","25","∞"],
+                  ["DADORI Intros / Mo",       "–","3","10","25","∞"],
                   ["Stealth-Projekte",         "–","–","✓","✓","✓"],
                   ["Portfolio-Tracker",        "–","–","✓","✓","✓"],
                   ["Verified Badge",           "–","–","–","✓","✓"],

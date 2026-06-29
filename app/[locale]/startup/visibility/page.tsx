@@ -19,9 +19,9 @@ export default async function VisibilityPage() {
   const isVisible = profile.investor_visible ?? false;
 
   const perks = [
-    { icon: "🔍", title: "Auffindbar für 200+ Investoren", desc: "Dein Profil erscheint im Investoren-Feed von HADORI-geprüften VCs und Angels." },
+    { icon: "🔍", title: "Auffindbar für 200+ Investoren", desc: "Dein Profil erscheint im Investoren-Feed von DADORI-geprüften VCs und Angels." },
     { icon: "📬", title: "Direkte Anfragen erhalten", desc: "Investoren können dich direkt kontaktieren — du entscheidest, ob du antwortest." },
-    { icon: "🏅", title: "HADORI-Verified Badge", desc: "Zeigt Investoren, dass dein Businessplan und Pitchdeck geprüft wurden." },
+    { icon: "🏅", title: "DADORI-Verified Badge", desc: "Zeigt Investoren, dass dein Businessplan und Pitchdeck geprüft wurden." },
     { icon: "🔒", title: "Data Room", desc: "Teile Dokumente sicher mit ausgewählten Investoren — du kontrollierst den Zugang." },
   ];
 
@@ -108,7 +108,7 @@ export default async function VisibilityPage() {
 
         {/* Legal note */}
         <p className="mt-8 text-xs text-zinc-400">
-          HADORI vermittelt ausschließlich Kontakte zwischen Startups und Investoren.
+          DADORI vermittelt ausschließlich Kontakte zwischen Startups und Investoren.
           Wir sind nicht an Transaktionen beteiligt und erheben keine Beteiligungsgebühren.
           Hol dir rechtliche Beratung, bevor du Kapital annimmst.
         </p>

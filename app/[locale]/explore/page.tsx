@@ -9,7 +9,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 const DEMO_PROJECTS = [
   {
-    id: "hadori", name: "HADORI", tagline: "Die Plattform die Startups, Talente und Investoren verbindet.",
+    id: "dadori", name: "DADORI", tagline: "Die Plattform die Startups, Talente und Investoren verbindet.",
     category: "B2B SaaS", icon: "🚀", stage: "Pre-Seed", stageEmoji: "🌱",
     mrr: null, teamSize: "2–5", region: "de", regionFlag: "🇩🇪",
     skills: ["fullstack", "ai_ml", "marketing"],
@@ -178,7 +178,7 @@ export default function ExplorePage() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <Link href={`/${locale}/login`} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
@@ -332,7 +332,7 @@ export default function ExplorePage() {
 
         <div className="mt-12 rounded-2xl border border-indigo-100 bg-indigo-50 p-8 text-center">
           <h2 className="text-xl font-extrabold text-indigo-900">Du bist Talent?</h2>
-          <p className="mt-2 text-sm text-indigo-700">Erstell dein HADORI-Profil und lass Startups zu dir kommen.</p>
+          <p className="mt-2 text-sm text-indigo-700">Erstell dein DADORI-Profil und lass Startups zu dir kommen.</p>
           <Link
             href={`/${locale}/signup`}
             className="mt-4 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors"

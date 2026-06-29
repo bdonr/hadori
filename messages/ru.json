@@ -1,6 +1,6 @@
-{
+﻿{
   "nav": {
-    "brand": "HADORI",
+    "brand": "DADORI",
     "signout": "Выйти",
     "login": "Войти",
     "signup": "Начать"
@@ -30,7 +30,7 @@
     "feature_talent": "Матчинг талантов",
     "feature_talent_desc": "Найдите идеального монтажёра, технического директора или сооснователя — или вас найдут.",
     "feature_investor": "Сеть инвесторов",
-    "feature_investor_desc": "Проверенные стартапы становятся видимы для посевных инвесторов. С HADORI Intro."
+    "feature_investor_desc": "Проверенные стартапы становятся видимы для посевных инвесторов. С DADORI Intro."
   },
   "auth": {
     "login_title": "С возвращением",
@@ -49,7 +49,7 @@
     "switch_to_login": "Уже зарегистрированы? Войти"
   },
   "startup": {
-    "dashboard_title": "Ваша панель HADORI",
+    "dashboard_title": "Ваша панель DADORI",
     "dashboard_sub": "Всё в одном месте — план, команда, инвесторы.",
     "card_plan": "Создать бизнес-план",
     "card_plan_desc": "ИИ-план с реальными рыночными данными",
@@ -132,7 +132,7 @@
   },
   "matches": {
     "title": "Совпадения & Знакомства",
-    "tab_intros": "🤝 HADORI Знакомства",
+    "tab_intros": "🤝 DADORI Знакомства",
     "tab_pulse": "🔴 Live Pulse",
     "online_count": "{count} активны сейчас",
     "why_match": "Почему это совпадение: ",
@@ -142,7 +142,7 @@
     "status_pending": "Ожидает подтверждения",
     "status_accepted": "Знакомство подтверждено",
     "status_declined": "Отклонено",
-    "hadori_says": "🤝 HADORI говорит",
+    "dadori_says": "🤝 DADORI говорит",
     "pulse_subtitle": "В реальном времени — события, подходящие вам",
     "view_all": "Просмотреть все совпадения & знакомства →"
   },

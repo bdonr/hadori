@@ -106,7 +106,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">HADORI</Link>
+          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
             {isOwnProfile ? (
