@@ -214,7 +214,7 @@ export default function MatchesPage() {
               </span>
               <p className="text-sm font-semibold text-zinc-700">Echtzeit — Ereignisse die zu dir passen</p>
             </div>
-            <LivePulse role="startup" compact={false} />
+            <LivePulse />
           </div>
         )}
       </main>
