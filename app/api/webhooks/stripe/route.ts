@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { adminDb } from "@/lib/firebase/admin";
 import Stripe from "stripe";
-import type { PlanTier } from "@/lib/firebase/collections";
+
+type PlanTier = "free" | "pro" | "scale";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
