@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Helper: user owns this document
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+
+    // Profiles: users can only read/write their own profile
+    match /profiles/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid)
+        // Prevent role and plan_tier from being changed client-side
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["role", "plan_tier", "stripe_customer_id"]);
+    }
+
+    // Startups
+    match /startups/{startupId} {
+      // Owner can read/write
+      allow read, write: if isAuth() && resource.data.owner_uid == request.auth.uid;
+      // Investors can read discoverable startups
+      allow read: if isAuth() && resource.data.is_discoverable == true;
+
+      // Business plans: subcollection, startup-owner only
+      match /plans/{planId} {
+        allow read, write: if isAuth()
+          && get(/databases/$(database)/documents/startups/$(startupId)).data.owner_uid == request.auth.uid;
+      }
+
+      // Job roles: owner writes, authenticated talent reads open roles
+      match /roles/{roleId} {
+        allow read: if isAuth() && resource.data.is_open == true;
+        allow write: if isAuth()
+          && get(/databases/$(database)/documents/startups/$(startupId)).data.owner_uid == request.auth.uid;
+      }
+    }
+
+    // Talent profiles: owner reads/writes, startups read to match
+    match /talent/{uid} {
+      allow read, write: if isOwner(uid);
+      allow read: if isAuth(); // startups can browse
+    }
+
+    // Applications: talent creates, startup owner reads
+    match /applications/{appId} {
+      allow create: if isAuth() && request.resource.data.talent_uid == request.auth.uid;
+      allow read: if isAuth() && (
+        resource.data.talent_uid == request.auth.uid
+        // Startup owner reads via server-side only (Admin SDK bypasses rules)
+      );
+    }
+
+    // Investor profiles: owner only (never public)
+    match /investors/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // Investor interests: investor creates, startup owner reads via Admin SDK
+    match /investor_interests/{id} {
+      allow create: if isAuth() && request.resource.data.investor_uid == request.auth.uid;
+      allow read: if isAuth() && resource.data.investor_uid == request.auth.uid;
+    }
+  }
+}
