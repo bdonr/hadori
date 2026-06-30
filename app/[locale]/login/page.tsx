@@ -37,7 +37,7 @@ export default function LoginPage() {
       });
       const snap = await getDoc(profileDoc(user.uid));
       const role = snap.data()?.role;
-      if (role === "startup") router.push(`/${locale}/startup`);
+      if (role === "startup" || role === "creator") router.push(`/${locale}/startup`);
       else if (role === "talent") router.push(`/${locale}/talent`);
       else if (role === "investor") router.push(`/${locale}/investor`);
       else router.push(`/${locale}`);

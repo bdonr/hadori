@@ -36,6 +36,8 @@ export async function login(page: Page, email: string) {
   await page.getByLabel("E-Mail").fill(email);
   await page.getByLabel("Passwort").fill(TEST_PASSWORD);
   await page.getByRole("button", { name: /anmelden|einloggen/i }).click();
+  // Wait until session cookie is set and redirect completes
+  await page.waitForURL(/\/(startup|talent|investor)/, { timeout: 20_000 });
 }
 
 export async function signout(page: Page) {

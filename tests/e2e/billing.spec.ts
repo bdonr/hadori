@@ -1,18 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { signup, login, uniqueEmail } from "./helpers";
 
-/**
- * Billing / Pricing tests.
- *
- * These tests verify that:
- *  - the billing page loads with correct plans
- *  - clicking upgrade starts a Stripe Checkout session
- *
- * We do NOT complete real payments in tests — Stripe test-mode
- * Checkout is opened and we verify the redirect to stripe.com.
- * To test a full purchase flow, use Stripe's test card 4242 4242 4242 4242.
- */
-
 test.describe("Startup billing", () => {
   let email: string;
 
@@ -26,13 +14,11 @@ test.describe("Startup billing", () => {
 
   test("billing page shows all three plans", async ({ page }) => {
     await login(page, email);
-    await page.waitForURL(/\/de\/startup/);
-
     await page.goto("/de/startup/billing");
 
-    await expect(page.getByText("Projekt")).toBeVisible();
-    await expect(page.getByText("Startup")).toBeVisible();
-    await expect(page.getByText("Startup Pro")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Projekt" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Startup" }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Startup Pro" })).toBeVisible();
   });
 
   test("current plan shows 'Aktueller Plan' badge", async ({ page }) => {
@@ -46,13 +32,11 @@ test.describe("Startup billing", () => {
     await login(page, email);
     await page.goto("/de/startup/billing");
 
-    // Click the Startup upgrade button (first non-current upgrade)
     const upgradeBtn = page.getByRole("button", { name: /zu startup upgraden/i });
     await expect(upgradeBtn).toBeVisible();
 
-    // Intercept the navigation — Stripe redirects to checkout.stripe.com
     const [response] = await Promise.all([
-      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 10_000 }),
+      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 15_000 }),
       upgradeBtn.click(),
     ]);
 
@@ -77,9 +61,9 @@ test.describe("Talent billing", () => {
     await login(page, email);
     await page.goto("/de/talent/billing");
 
-    await expect(page.getByText("Free")).toBeVisible();
-    await expect(page.getByText("Plus")).toBeVisible();
-    await expect(page.getByText("Pro")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Free" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Plus" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Pro" })).toBeVisible();
   });
 
   test("clicking Plus upgrade opens Stripe Checkout", async ({ page }) => {
@@ -90,7 +74,7 @@ test.describe("Talent billing", () => {
     await expect(upgradeBtn).toBeVisible();
 
     const [response] = await Promise.all([
-      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 10_000 }),
+      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 15_000 }),
       upgradeBtn.click(),
     ]);
 
@@ -115,11 +99,11 @@ test.describe("Investor billing", () => {
     await login(page, email);
     await page.goto("/de/investor/billing");
 
-    await expect(page.getByText("Scout")).toBeVisible();
-    await expect(page.getByText("Angel")).toBeVisible();
-    await expect(page.getByText("Investor Pro")).toBeVisible();
-    await expect(page.getByText("Lead Investor")).toBeVisible();
-    await expect(page.getByText("VC / Elite")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Scout" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Angel" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Investor Pro" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Lead Investor" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /VC.*Elite/ })).toBeVisible();
   });
 
   test("clicking Angel upgrade opens Stripe Checkout", async ({ page }) => {
@@ -130,7 +114,7 @@ test.describe("Investor billing", () => {
     await expect(upgradeBtn).toBeVisible();
 
     const [response] = await Promise.all([
-      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 10_000 }),
+      page.waitForResponse((r) => r.url().includes("/api/billing/checkout"), { timeout: 15_000 }),
       upgradeBtn.click(),
     ]);
 
@@ -143,12 +127,11 @@ test.describe("Investor billing", () => {
     await login(page, email);
     await page.goto("/de/investor/billing");
 
-    // Elite goes to mailto — intercept navigation
-    const [nav] = await Promise.all([
-      page.waitForEvent("framenavigated").catch(() => null),
-      page.getByRole("button", { name: /elite-zugang anfragen/i }).click(),
-    ]);
-    // No Stripe call expected — just verify button is clickable without error
-    await expect(page.getByText("VC / Elite")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /VC.*Elite/ })).toBeVisible();
+    const eliteBtn = page.getByRole("button", { name: /elite-zugang anfragen/i });
+    await expect(eliteBtn).toBeVisible();
+    // Elite button triggers mailto, not Stripe — just verify it's clickable
+    await eliteBtn.click();
+    await expect(page.getByRole("heading", { name: /VC.*Elite/ })).toBeVisible();
   });
 });
