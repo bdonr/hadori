@@ -7,7 +7,7 @@ export async function getServerSession(): Promise<{ uid: string } | null> {
   const token = cookieStore.get("__session")?.value;
   if (!token) return null;
   try {
-    return await adminAuth!.verifyIdToken(token);
+    return await adminAuth!.verifySessionCookie(token, true);
   } catch {
     return null;
   }

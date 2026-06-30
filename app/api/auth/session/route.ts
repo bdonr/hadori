@@ -10,13 +10,16 @@ export async function POST(req: NextRequest) {
   if (!token) return NextResponse.json({ error: "Missing token" }, { status: 400 });
 
   try {
+    // Verify the ID token first, then exchange for a long-lived session cookie (up to 14 days)
     await adminAuth!.verifyIdToken(token);
+    const expiresIn = 60 * 60 * 24 * 14 * 1000; // 14 days in ms
+    const sessionCookie = await adminAuth!.createSessionCookie(token, { expiresIn });
     const cookieStore = await cookies();
-    cookieStore.set("__session", token, {
+    cookieStore.set("__session", sessionCookie, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 14, // 14 days in seconds
       path: "/",
     });
     return NextResponse.json({ ok: true });
