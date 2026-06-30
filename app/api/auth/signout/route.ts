@@ -1,14 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function POST() {
+async function signout(req: NextRequest) {
   const cookieStore = await cookies();
   cookieStore.delete("__session");
-  return NextResponse.json({ ok: true });
+
+  // If called via fetch (XHR), return JSON; if form submit, redirect
+  const isXhr = req.headers.get("x-requested-with") === "XMLHttpRequest"
+    || req.headers.get("accept")?.includes("application/json");
+
+  if (isXhr) {
+    return NextResponse.json({ ok: true });
+  }
+
+  const origin = req.headers.get("origin") ?? "https://dadori.com";
+  const locale = req.cookies.get("NEXT_LOCALE")?.value ?? "de";
+  return NextResponse.redirect(new URL(`/${locale}`, origin));
 }
 
-export async function GET() {
-  const cookieStore = await cookies();
-  cookieStore.delete("__session");
-  return NextResponse.redirect(new URL("/", process.env.NEXTAUTH_URL ?? "https://dadori.com"));
-}
+export const POST = signout;
+export const GET  = signout;
