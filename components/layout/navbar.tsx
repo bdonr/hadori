@@ -47,13 +47,18 @@ export function Navbar() {
   }, []);
 
   async function handleSignout() {
-    await fetch("/api/auth/signout", { method: "POST" });
+    // Clear UI immediately so name disappears before navigation
+    setUser(null);
+    setLoading(false);
+    // Sign out from Firebase first so onAuthStateChanged fires null
     if (auth) {
       const { signOut } = await import("firebase/auth");
       await signOut(auth);
     }
-    router.push(`/${locale}`);
-    router.refresh();
+    // Delete server session cookie
+    await fetch("/api/auth/signout", { method: "POST" });
+    // Hard navigation so the server re-renders without session
+    window.location.href = `/${locale}`;
   }
 
   function dashboardHref() {
