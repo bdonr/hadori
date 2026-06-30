@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/firebase/session";
 import { adminDb } from "@/lib/firebase/admin";
-import { NotificationBell } from "@/components/NotificationBell";
-import { LangSwitcher } from "@/components/LangSwitcher";
-import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
+import { Navbar } from "@/components/layout/navbar";
+import Link from "next/link";
 
 export default async function TalentDashboard({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -18,18 +16,17 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
   if (!profile || profile.role !== "talent") redirect(`/${locale}/login`);
 
   const t = await getTranslations("talent");
-  const tNav = await getTranslations("nav");
 
   const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
   const tier = profile.plan_tier ?? "free";
   const name = profile.full_name ?? "";
 
   const cards = [
-    { href: `/${locale}/talent/skills`,       icon: "⚡", title: t("card_skills"),      desc: t("card_skills_desc"), badge: null },
-    { href: `/${locale}/talent/portfolio`,    icon: "🎨", title: t("card_portfolio"),   desc: isPro ? t("card_portfolio_desc_pro") : t("card_portfolio_desc_free"), badge: !isPro ? "1 / 1" : null },
-    { href: `/${locale}/talent/jobs`,         icon: "🔍", title: t("card_jobs"),        desc: t("card_jobs_desc"), badge: null },
+    { href: `/${locale}/talent/skills`,       icon: "⚡", title: t("card_skills"),       desc: t("card_skills_desc"),       badge: null },
+    { href: `/${locale}/talent/portfolio`,    icon: "🎨", title: t("card_portfolio"),    desc: isPro ? t("card_portfolio_desc_pro") : t("card_portfolio_desc_free"), badge: !isPro ? "1 / 1" : null },
+    { href: `/${locale}/talent/jobs`,         icon: "🔍", title: t("card_jobs"),         desc: t("card_jobs_desc"),         badge: null },
     { href: `/${locale}/talent/applications`, icon: "📋", title: t("card_applications"), desc: t("card_applications_desc"), badge: null },
-    { href: `/${locale}/talent/billing`,      icon: "💳", title: t("card_billing"),     desc: isPro ? `${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "", badge: null },
+    { href: `/${locale}/talent/billing`,      icon: "💳", title: t("card_billing"),      desc: isPro ? `${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "", badge: null },
   ];
 
   const steps = [
@@ -40,28 +37,7 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href={`/${locale}`} className="text-xl font-extrabold text-indigo-600">{tNav("brand")}</Link>
-          <div className="flex items-center gap-3">
-            <LangSwitcher />
-            <NotificationBell />
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${isPro ? "bg-indigo-100 text-indigo-700" : "bg-zinc-100 text-zinc-500"}`}>
-              {tier.toUpperCase()}
-            </span>
-            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-indigo-300 transition-colors">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">
-                {(profile.full_name ?? "?").charAt(0).toUpperCase()}
-              </span>
-              <span className="text-sm font-medium text-zinc-700">{profile.full_name}</span>
-            </Link>
-            <form action="/api/auth/signout" method="post">
-              <Button variant="ghost" size="sm" type="submit">{tNav("signout")}</Button>
-            </form>
-          </div>
-        </div>
-      </header>
-
+      <Navbar />
       <main className="mx-auto max-w-6xl px-6 py-12">
         <h1 className="text-2xl font-bold text-zinc-900">{t("dashboard_title", { name })}</h1>
         <p className="mt-1 text-zinc-500">{t("dashboard_sub")}</p>
