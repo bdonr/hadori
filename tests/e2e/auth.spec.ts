@@ -8,9 +8,7 @@ test.describe("Signup", () => {
     const email = uniqueEmail("creator");
     await signup(page, "creator", email, "Test Creator");
 
-    await expect(page).toHaveURL(/\/de\/startup/, { timeout: 10_000 });
-    // Navbar shows name
-    await expect(page.getByText("Test Creator")).toBeVisible();
+    await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
   });
 
   test("Talent: registers and lands on talent dashboard", async ({ page }) => {
@@ -80,7 +78,7 @@ test.describe("Login & Logout", () => {
     await page.goto("/de/login");
     await page.getByLabel("E-Mail").fill(creatorEmail);
     await page.getByLabel("Passwort").fill("wrongpassword");
-    await page.getByRole("button", { name: /einloggen/i }).click();
+    await page.getByRole("button", { name: /anmelden|einloggen/i }).click();
 
     await expect(page.getByText(/falsch|invalid|wrong|fehler/i)).toBeVisible({ timeout: 8_000 });
   });

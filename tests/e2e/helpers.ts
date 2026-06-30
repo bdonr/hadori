@@ -35,7 +35,7 @@ export async function login(page: Page, email: string) {
   await page.goto("/de/login");
   await page.getByLabel("E-Mail").fill(email);
   await page.getByLabel("Passwort").fill(TEST_PASSWORD);
-  await page.getByRole("button", { name: /einloggen/i }).click();
+  await page.getByRole("button", { name: /anmelden|einloggen/i }).click();
 }
 
 export async function signout(page: Page) {
