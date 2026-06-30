@@ -24,8 +24,12 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
 
   let workspaceId: string | null = null;
   if (adminDb) {
-    const wsSnap = await adminDb.collectionGroup("members").where("uid", "==", session.uid).limit(1).get();
-    if (!wsSnap.empty) workspaceId = wsSnap.docs[0].ref.parent.parent!.id;
+    try {
+      const wsSnap = await adminDb.collectionGroup("members").where("uid", "==", session.uid).limit(1).get();
+      if (!wsSnap.empty) workspaceId = wsSnap.docs[0].ref.parent.parent!.id;
+    } catch {
+      // collectionGroup index may not exist yet — workspace section degrades gracefully
+    }
   }
 
   const cards = [
