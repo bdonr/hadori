@@ -82,7 +82,16 @@ export function Navbar() {
         </Link>
         <nav className="hidden gap-6 text-sm text-zinc-600 sm:flex">
           <Link href={`/${locale}#features`} className="hover:text-zinc-900">Features</Link>
-          <Link href={`/${locale}#pricing`} className="hover:text-zinc-900">Pricing</Link>
+          {user ? (
+            <Link
+              href={`/${locale}/${user.role === "talent" ? "talent" : user.role === "investor" ? "investor" : "startup"}/billing`}
+              className="hover:text-zinc-900"
+            >
+              Plan
+            </Link>
+          ) : (
+            <Link href={`/${locale}#pricing`} className="hover:text-zinc-900">Pricing</Link>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <LangSwitcher />

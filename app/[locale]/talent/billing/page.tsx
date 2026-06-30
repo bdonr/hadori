@@ -5,10 +5,9 @@ import Link from "next/link";
 import { TALENT_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
 import { useCurrency } from "@/hooks/useCurrency";
+import { usePlanTier } from "@/hooks/usePlanTier";
 import { formatPrice } from "@/lib/currency";
 import { Navbar } from "@/components/layout/navbar";
-
-const CURRENT: string = "free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
   plus: STRIPE_PRICES.talent_plus,
   pro:  STRIPE_PRICES.talent_pro,
@@ -24,6 +23,7 @@ export default function TalentBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
+  const CURRENT = usePlanTier("free");
 
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];

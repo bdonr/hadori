@@ -5,10 +5,9 @@ import Link from "next/link";
 import { INVESTOR_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
 import { useCurrency } from "@/hooks/useCurrency";
+import { usePlanTier } from "@/hooks/usePlanTier";
 import { formatPrice } from "@/lib/currency";
 import { Navbar } from "@/components/layout/navbar";
-
-const CURRENT: string = "investor_free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
   investor_basic:   STRIPE_PRICES.investor_angel,
   investor_pro:     STRIPE_PRICES.investor_pro,
@@ -28,6 +27,7 @@ export default function InvestorBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
+  const CURRENT = usePlanTier("investor_free");
 
   async function handleUpgrade(tierId: string) {
     if (tierId === "investor_elite") {

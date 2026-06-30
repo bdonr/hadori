@@ -5,10 +5,9 @@ import Link from "next/link";
 import { PROJECT_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
 import { useCurrency } from "@/hooks/useCurrency";
+import { usePlanTier } from "@/hooks/usePlanTier";
 import { formatPrice } from "@/lib/currency";
 import { Navbar } from "@/components/layout/navbar";
-
-const CURRENT: string = "project";
 const STRIPE_PRICE_IDS: Record<string, string> = {
   project:     STRIPE_PRICES.project,
   startup:     STRIPE_PRICES.startup,
@@ -25,6 +24,7 @@ export default function StartupBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
+  const CURRENT = usePlanTier("project");
 
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];
