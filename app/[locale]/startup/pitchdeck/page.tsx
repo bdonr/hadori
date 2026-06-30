@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
 
 /* ──────────────────────────────────────────────
    Slide definitions
@@ -103,18 +107,61 @@ const SLIDES: Slide[] = [
    Component
 ────────────────────────────────────────────── */
 export default function PitchDeckPage() {
-  // Simulate tier — in production read from Firestore profile / cookie
-  const isPro = false; // swap to `true` to preview Pro view
+  const params = useParams();
+  const locale = (params.locale as string) ?? "en";
+
+  const [isPro, setIsPro] = useState(false);
+  const [uid, setUid] = useState<string | null>(null);
+  const [values, setValues] = useState<Record<string, Record<string, string>>>({});
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      setUid(user.uid);
+      try {
+        // Load plan tier
+        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+        if (profileSnap.exists()) {
+          const tier = profileSnap.data().plan_tier as string | undefined;
+          setIsPro(tier === "pro" || tier === "scale");
+        }
+        // Load existing pitchdeck
+        const deckSnap = await getDoc(doc(db, "pitchdecks", user.uid));
+        if (deckSnap.exists()) {
+          const slides = deckSnap.data().slides as Record<string, Record<string, string>> | undefined;
+          if (slides) setValues(slides);
+        }
+      } catch { /* ignore */ }
+    });
+    return () => unsub();
+  }, []);
+
   const visibleSlides = isPro ? SLIDES : SLIDES.slice(0, 3);
   const lockedSlides = isPro ? [] : SLIDES.slice(3);
-
-  const [values, setValues] = useState<Record<string, Record<string, string>>>({});
 
   function set(slideId: string, label: string, value: string) {
     setValues((prev) => ({
       ...prev,
       [slideId]: { ...(prev[slideId] ?? {}), [label]: value },
     }));
+    setSaved(false);
+  }
+
+  async function handleSave() {
+    if (!uid) return;
+    setSaving(true);
+    try {
+      await setDoc(
+        doc(db, "pitchdecks", uid),
+        { slides: values, updated_at: serverTimestamp() },
+        { merge: true }
+      );
+      setSaved(true);
+    } catch { /* ignore */ } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -122,7 +169,7 @@ export default function PitchDeckPage() {
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/startup" className="text-sm text-zinc-400 hover:text-zinc-600">
+            <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">
               ← Dashboard
             </Link>
             <h1 className="text-lg font-semibold text-zinc-900">Pitchdeck erstellen</h1>
@@ -148,7 +195,7 @@ export default function PitchDeckPage() {
               </p>
             </div>
             <Button size="sm" className="ml-auto shrink-0" asChild>
-              <Link href="/startup/billing">Auf Pro upgraden</Link>
+              <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden</Link>
             </Button>
           </div>
         )}
@@ -210,7 +257,7 @@ export default function PitchDeckPage() {
                     das vollständige Pitchdeck für echte Investorengespräche.
                   </p>
                   <Button className="mt-5" size="lg" asChild>
-                    <Link href="/startup/billing">Auf Pro upgraden — 49 €/Monat</Link>
+                    <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden — 49 €/Monat</Link>
                   </Button>
                   <p className="mt-2 text-xs text-zinc-400">Monatlich kündbar · PDF-Export inklusive</p>
                 </div>
@@ -220,9 +267,12 @@ export default function PitchDeckPage() {
         )}
 
         {/* Save button for active slides */}
-        <div className="mt-8 flex justify-end">
-          <Button size="lg" onClick={() => alert("Gespeichert! (Demo)")}>
-            Pitchdeck speichern
+        <div className="mt-8 flex items-center justify-end gap-3">
+          {saved && (
+            <span className="text-sm font-medium text-green-600">✓ Gespeichert</span>
+          )}
+          <Button size="lg" onClick={handleSave} disabled={saving}>
+            {saving ? "Speichern …" : "Pitchdeck speichern"}
           </Button>
         </div>
       </main>
