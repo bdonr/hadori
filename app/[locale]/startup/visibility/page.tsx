@@ -1,19 +1,19 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getServerSession, DEV_PROFILE } from "@/lib/firebase/session";
-import { adminDb, DEV_MODE } from "@/lib/firebase/admin";
+import { getServerSession } from "@/lib/firebase/session";
+import { adminDb } from "@/lib/firebase/admin";
 import type { Profile } from "@/lib/firebase/collections";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { Button } from "@/components/ui/button";
 
-export default async function VisibilityPage() {
+export default async function VisibilityPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await getServerSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(`/${locale}/login`);
 
-  const profile: Profile | undefined = DEV_MODE
-    ? DEV_PROFILE
-    : (await adminDb!.collection("profiles").doc(session.uid).get()).data() as Profile | undefined;
-  if (!profile || profile.role !== "startup") redirect("/login");
+  const snap = await adminDb!.collection("profiles").doc(session.uid).get();
+  const profile = snap.data() as Profile | undefined;
+  if (!profile || profile.role !== "startup") redirect(`/${locale}/login`);
 
   const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
   const isVisible = profile.investor_visible ?? false;
@@ -29,7 +29,7 @@ export default async function VisibilityPage() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center gap-4">
-          <Link href="/startup" className="text-sm text-zinc-400 hover:text-zinc-600">
+          <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">
             ← Dashboard
           </Link>
           <h1 className="text-lg font-semibold text-zinc-900">Investor-Sichtbarkeit</h1>
@@ -62,7 +62,7 @@ export default async function VisibilityPage() {
               <VisibilityToggle uid={session.uid} initialValue={isVisible} />
             ) : (
               <Button asChild className="shrink-0">
-                <Link href="/startup/billing">Auf Pro upgraden</Link>
+                <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden</Link>
               </Button>
             )}
           </div>
@@ -100,7 +100,7 @@ export default async function VisibilityPage() {
                 </p>
               </div>
               <Button asChild className="shrink-0 bg-amber-600 hover:bg-amber-700">
-                <Link href="/startup/billing">49 €/Monat</Link>
+                <Link href={`/${locale}/startup/billing`}>49 €/Monat</Link>
               </Button>
             </div>
           </div>
