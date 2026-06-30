@@ -43,7 +43,12 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
           <div className="flex items-center gap-3">
             <LangSwitcher />
             <NotificationBell />
-            <span className="text-sm text-zinc-500">Startup · {profile.plan_tier}</span>
+            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-indigo-300 transition-colors">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">
+                {name.charAt(0).toUpperCase()}
+              </span>
+              <span className="text-sm font-medium text-zinc-700">{name}</span>
+            </Link>
             <form action="/api/auth/signout" method="post">
               <Button variant="ghost" size="sm" type="submit">{tNav("signout")}</Button>
             </form>

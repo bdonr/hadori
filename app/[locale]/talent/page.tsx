@@ -39,7 +39,12 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${isPro ? "bg-indigo-100 text-indigo-700" : "bg-zinc-100 text-zinc-500"}`}>
               {tier.toUpperCase()}
             </span>
-            <span className="text-sm text-zinc-500">{profile.full_name}</span>
+            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-indigo-300 transition-colors">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">
+                {(profile.full_name ?? "?").charAt(0).toUpperCase()}
+              </span>
+              <span className="text-sm font-medium text-zinc-700">{profile.full_name}</span>
+            </Link>
           </div>
         </div>
       </header>

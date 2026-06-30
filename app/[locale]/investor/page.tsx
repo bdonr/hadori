@@ -30,7 +30,12 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
           <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
-            <span className="text-sm text-zinc-500">Investor · {profile.plan_tier}</span>
+            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-indigo-300 transition-colors">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
+                {(profile.full_name ?? "?").charAt(0).toUpperCase()}
+              </span>
+              <span className="text-sm font-medium text-zinc-700">{profile.full_name}</span>
+            </Link>
           </div>
         </div>
       </header>
