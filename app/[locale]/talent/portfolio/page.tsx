@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { auth, db } from "@/lib/firebase/client";
 import { collection, getDocs, addDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
+import { Navbar } from "@/components/layout/navbar";
 
 const TIER_LIMITS: Record<string, number> = { free: 1, pro: 10, scale: Infinity };
 // Tier is loaded from Firestore profile — defaults to free until fetched
@@ -96,22 +97,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}/talent`} className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-            <h1 className="text-lg font-semibold text-zinc-900">Mein Portfolio</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-zinc-400">
-              {items.length}/{isScale ? "∞" : LIMIT} Einträge
-            </span>
-            <Button onClick={() => setShowForm(true)} disabled={showForm || atLimit}>
-              + Hinzufügen
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-4xl px-6 py-10">
 

@@ -6,6 +6,7 @@ import { INVESTOR_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
 import { useCurrency } from "@/hooks/useCurrency";
 import { formatPrice } from "@/lib/currency";
+import { Navbar } from "@/components/layout/navbar";
 
 const CURRENT: string = "investor_free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
@@ -58,12 +59,7 @@ export default function InvestorBillingPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 pb-20">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center gap-4">
-          <Link href="/investor" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Investor-Plan</h1>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="text-center mb-10">

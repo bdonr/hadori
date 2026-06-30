@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { Navbar } from "@/components/layout/navbar";
 
 const CURRENT_TIER = "investor_pro";
 const TIER_ORDER = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
@@ -72,15 +73,7 @@ export default function WatchlistPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-4xl items-center gap-4">
-          <Link href="/investor" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Watchlist</h1>
-          <span className="ml-auto text-xs text-zinc-400">
-            {list.length} / {MAX_WATCHLIST === Infinity ? "∞" : MAX_WATCHLIST} gespeichert
-          </span>
-        </div>
-      </header>
+      <Navbar />
       <main className="mx-auto max-w-4xl px-6 py-8">
         {loading ? (
           <div className="flex justify-center py-24">

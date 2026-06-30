@@ -7,6 +7,7 @@ import { getSkillLabel } from "@/lib/skills";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query } from "firebase/firestore";
+import { Navbar } from "@/components/layout/navbar";
 
 type Talent = {
   id: string;
@@ -98,13 +99,7 @@ export default function TalentSearchPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center gap-4">
-          <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Talent-Suche</h1>
-          {!loading && <span className="ml-auto text-xs text-zinc-400">{talents.length} Talente</span>}
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         {/* Filter-Bar */}

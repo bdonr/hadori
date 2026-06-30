@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Navbar } from "@/components/layout/navbar";
 
 const TIER_GATE = "investor_basic"; // angel+
 
@@ -44,13 +45,7 @@ export default function DealFlowPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center gap-4">
-          <Link href="/investor" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Deal Flow</h1>
-          <span className="ml-auto rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">Angel+</span>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         {!canSeeDeals ? (

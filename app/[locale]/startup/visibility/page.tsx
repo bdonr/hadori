@@ -5,6 +5,7 @@ import { adminDb } from "@/lib/firebase/admin";
 import type { Profile } from "@/lib/firebase/collections";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/layout/navbar";
 
 export default async function VisibilityPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -13,7 +14,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || profile.role !== "startup") redirect(`/${locale}/login`);
+  if (!profile || (profile.role !== "startup" && profile.role !== "creator")) redirect(`/${locale}/login`);
 
   const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
   const isVisible = profile.investor_visible ?? false;
@@ -27,14 +28,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-4xl items-center gap-4">
-          <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">
-            ← Dashboard
-          </Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Investor-Sichtbarkeit</h1>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-4xl px-6 py-12">
 

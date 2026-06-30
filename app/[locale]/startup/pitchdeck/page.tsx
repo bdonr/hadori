@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
+import { Navbar } from "@/components/layout/navbar";
 
 /* ──────────────────────────────────────────────
    Slide definitions
@@ -166,21 +167,7 @@ export default function PitchDeckPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">
-              ← Dashboard
-            </Link>
-            <h1 className="text-lg font-semibold text-zinc-900">Pitchdeck erstellen</h1>
-          </div>
-          {isPro && (
-            <Button size="sm" variant="outline">
-              Als PDF exportieren
-            </Button>
-          )}
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         {!isPro && (

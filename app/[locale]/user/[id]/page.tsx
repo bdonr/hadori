@@ -10,6 +10,7 @@ import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import type { Profile } from "@/lib/firebase/collections";
+import { Navbar } from "@/components/layout/navbar";
 
 const AVAIL_META = {
   immediately:   { label: "Sofort verfügbar",      color: "bg-green-50 border-green-200 text-green-700" },
@@ -102,6 +103,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+      <Navbar />
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
       </div>
     );
@@ -143,23 +145,6 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
-          <div className="flex items-center gap-3">
-            <LangSwitcher />
-            {isOwnProfile ? (
-              <Link href={`/${locale}/talent`} className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 hover:border-indigo-300 transition-colors">
-                Dashboard
-              </Link>
-            ) : (
-              <Link href={`/${locale}/login`} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-                Mitmachen
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
 
       <main className="mx-auto max-w-4xl px-6 py-10">
         {/* Hero */}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { Navbar } from "@/components/layout/navbar";
 
 function deriveCategoryIcon(category: string): string {
   const c = category.toLowerCase();
@@ -108,17 +109,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
-          <div className="flex items-center gap-3">
-            <LangSwitcher />
-            <Link href={`/${locale}/login`} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-              Mitmachen
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         <div className="mb-8">

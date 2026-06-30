@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Navbar } from "@/components/layout/navbar";
 
 const CURRENT_TIER = "investor_pro";
 const TIER_ORDER = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
@@ -50,13 +51,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center gap-4">
-          <Link href="/investor" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
-          <h1 className="text-lg font-semibold text-zinc-900">Portfolio-Tracker</h1>
-          <span className="ml-auto rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">Pro+</span>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         {!canAccess ? (
