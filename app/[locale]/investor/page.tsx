@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/firebase/session";
 import { adminDb } from "@/lib/firebase/admin";
 import { LangSwitcher } from "@/components/LangSwitcher";
+import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 
 export default async function InvestorDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -14,34 +16,39 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
   const profile = snap.data() as Profile | undefined;
   if (!profile || profile.role !== "investor") redirect(`/${locale}/login`);
 
+  const tNav = await getTranslations("nav");
+
   const cards = [
-    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",          desc: "Neue Startups & Stealth-Projekte",      tier: "Angel+" },
-    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Startups entdecken", desc: "Filtern nach Stage, MRR, Fokus",        tier: null },
-    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio-Tracker",  desc: "Deals verfolgen & Notizen",             tier: "Pro+" },
-    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",          desc: "Gemerkte Startups auf einen Blick",     tier: null },
-    { href: `/${locale}/investor/profile`,   icon: "💼", title: "Mein Profil",        desc: "Investment-Fokus & Check-Size",         tier: null },
-    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Abo & Tier",         desc: "Scout → Angel → Pro → Lead → Elite",   tier: null },
+    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",          desc: "New Startups & Stealth Projects", tier: "Angel+" },
+    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Discover Startups",  desc: "Filter by stage, MRR, focus",    tier: null },
+    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio Tracker",  desc: "Track deals & notes",            tier: "Pro+" },
+    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",          desc: "Saved startups at a glance",     tier: null },
+    { href: `/${locale}/investor/profile`,   icon: "💼", title: "My Profile",         desc: "Investment focus & check size",  tier: null },
+    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Subscription",       desc: "Scout → Angel → Pro → Lead → Elite", tier: null },
   ];
 
   return (
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
+          <Link href={`/${locale}`} className="text-xl font-extrabold text-indigo-600">{tNav("brand")}</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
-            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-indigo-300 transition-colors">
+            <Link href={`/${locale}/user/me`} className="flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-1.5 hover:border-emerald-300 transition-colors">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                 {(profile.full_name ?? "?").charAt(0).toUpperCase()}
               </span>
               <span className="text-sm font-medium text-zinc-700">{profile.full_name}</span>
             </Link>
+            <form action="/api/auth/signout" method="post">
+              <Button variant="ghost" size="sm" type="submit">{tNav("signout")}</Button>
+            </form>
           </div>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-6 py-12">
-        <h1 className="text-2xl font-bold text-zinc-900">Hallo, {profile.full_name} 💼</h1>
-        <p className="mt-1 text-zinc-500">Entdecke DADORI-validierte Startups.</p>
+        <h1 className="text-2xl font-bold text-zinc-900">Hello, {profile.full_name} 💼</h1>
+        <p className="mt-1 text-zinc-500">Discover DADORI-validated startups.</p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((c) => (
             <Link
@@ -59,7 +66,7 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
           ))}
         </div>
         <div className="mt-12 rounded-2xl border border-amber-100 bg-amber-50 p-6 text-sm text-amber-800">
-          <strong>Rechtlicher Hinweis:</strong> DADORI vermittelt ausschliesslich Introductions zwischen Gründern und Investoren. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
+          <strong>Legal notice:</strong> DADORI exclusively facilitates introductions between founders and investors. No success fees, no transaction participation.
         </div>
       </main>
     </div>
