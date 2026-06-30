@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { auth, db } from "@/lib/firebase/client";
+import { collection, getDocs, addDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
 
-// Free = 1, Pro = 10, Scale = Infinity
-// In production: read from Firestore profile. Simulated here.
 const TIER_LIMITS: Record<string, number> = { free: 1, pro: 10, scale: Infinity };
-const CURRENT_TIER: string = "free"; // swap to "pro" / "scale" to preview
-const LIMIT = TIER_LIMITS[CURRENT_TIER];
+// Tier is loaded from Firestore profile — defaults to free until fetched
+const DEFAULT_TIER = "free";
 
 const MEDIA_TYPES = [
   { id: "video", label: "Video / Reel", icon: "🎬" },
@@ -28,21 +28,23 @@ interface PortfolioItem {
   createdAt: string;
 }
 
-const DEMO_ITEMS: PortfolioItem[] = [
-  {
-    id: "1",
-    title: "Gaming Highlight Reel – StreamerXY",
-    description: "Monatliches Highlight-Video für einen Twitch-Streamer mit 80k Followern. Schnitt, Color Grading, Musik.",
-    mediaType: "video",
-    url: "https://youtube.com/watch?v=example",
-    tags: ["Gaming", "YouTube", "DaVinci Resolve"],
-    createdAt: "2026-05-10",
-  },
-];
-
 export default function PortfolioPage() {
-  const [items, setItems] = useState<PortfolioItem[]>(DEMO_ITEMS);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [tier, setTier] = useState(DEFAULT_TIER);
   const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    const uid = auth?.currentUser?.uid;
+    if (!uid) return;
+    // Load tier from profile
+    getDoc(doc(db, "profiles", uid)).then(snap => {
+      if (snap.exists()) setTier(snap.data().plan_tier ?? DEFAULT_TIER);
+    }).catch(() => {});
+    // Load portfolio items
+    getDocs(collection(db, "portfolios", uid, "items")).then(snap => {
+      setItems(snap.docs.map(d => ({ id: d.id, ...d.data() } as PortfolioItem)));
+    }).catch(() => {});
+  }, []);
 
   // Form
   const [title, setTitle] = useState("");
@@ -52,6 +54,7 @@ export default function PortfolioPage() {
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
+  const LIMIT = TIER_LIMITS[tier] ?? 1;
   const atLimit = items.length >= LIMIT;
   const isScale = LIMIT === Infinity;
 
@@ -64,23 +67,28 @@ export default function PortfolioPage() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (atLimit) return;
-    setItems(prev => [
-      {
-        id: crypto.randomUUID(),
-        title, description, mediaType, url, tags,
-        createdAt: new Date().toISOString().split("T")[0],
-      },
-      ...prev,
-    ]);
+    const uid = auth?.currentUser?.uid;
+    const newItem = {
+      title, description, mediaType, url, tags,
+      createdAt: new Date().toISOString().split("T")[0],
+    };
+    if (uid) {
+      const ref = await addDoc(collection(db, "portfolios", uid, "items"), newItem);
+      setItems(prev => [{ id: ref.id, ...newItem }, ...prev]);
+    } else {
+      setItems(prev => [{ id: crypto.randomUUID(), ...newItem }, ...prev]);
+    }
     setShowForm(false);
     setTitle(""); setDescription(""); setUrl(""); setTags([]); setTagInput("");
     setMediaType("video");
   }
 
-  function remove(id: string) {
+  async function remove(id: string) {
+    const uid = auth?.currentUser?.uid;
+    if (uid) await deleteDoc(doc(db, "portfolios", uid, "items", id)).catch(() => {});
     setItems(prev => prev.filter(i => i.id !== id));
   }
 
@@ -106,24 +114,18 @@ export default function PortfolioPage() {
       <main className="mx-auto max-w-4xl px-6 py-10">
 
         {/* Limit reached banner */}
-        {atLimit && CURRENT_TIER !== "scale" && (
+        {atLimit && !isScale && (
           <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
             <div>
               <p className="font-semibold text-amber-900">
-                {CURRENT_TIER === "free"
-                  ? "Free-Plan: 1 Portfolio-Eintrag"
-                  : "Pro-Plan: 10 Portfolio-Einträge"}
+                {tier === "free" ? "Free-Plan: 1 Portfolio-Eintrag" : "Pro-Plan: 10 Portfolio-Einträge"}
               </p>
               <p className="mt-0.5 text-sm text-amber-700">
-                {CURRENT_TIER === "free"
-                  ? "Upgrade auf Pro für 10 Einträge, auf Scale für unbegrenzt."
-                  : "Upgrade auf Scale für unbegrenzte Einträge."}
+                {tier === "free" ? "Upgrade auf Pro für 10 Einträge, auf Scale für unbegrenzt." : "Upgrade auf Scale für unbegrenzte Einträge."}
               </p>
             </div>
             <Button asChild className="shrink-0 bg-amber-600 hover:bg-amber-700">
-              <Link href="/talent/billing">
-                {CURRENT_TIER === "free" ? "Auf Pro upgraden" : "Auf Scale upgraden"}
-              </Link>
+              <Link href="/talent/billing">{tier === "free" ? "Auf Pro upgraden" : "Auf Scale upgraden"}</Link>
             </Button>
           </div>
         )}
@@ -242,7 +244,7 @@ export default function PortfolioPage() {
             ))}
 
             {/* Locked placeholder cards for free users */}
-            {CURRENT_TIER === "free" && (
+            {tier === "free" && (
               <div className="relative rounded-2xl border-2 border-dashed border-zinc-200 bg-white p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
                 <span className="text-3xl">🔒</span>
                 <p className="text-sm font-semibold text-zinc-500">+9 weitere Einträge im Pro-Plan</p>

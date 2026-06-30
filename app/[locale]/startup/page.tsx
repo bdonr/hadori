@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getServerSession, DEV_PROFILE } from "@/lib/firebase/session";
-import { adminDb, DEV_MODE } from "@/lib/firebase/admin";
+import { getServerSession } from "@/lib/firebase/session";
+import { adminDb } from "@/lib/firebase/admin";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/NotificationBell";
 import { LangSwitcher } from "@/components/LangSwitcher";
@@ -12,9 +12,8 @@ export default async function StartupDashboard() {
   const session = await getServerSession();
   if (!session) redirect("/login");
 
-  const profile: Profile | undefined = DEV_MODE
-    ? DEV_PROFILE
-    : (await adminDb!.collection("profiles").doc(session.uid).get()).data() as Profile | undefined;
+  const snap = await adminDb!.collection("profiles").doc(session.uid).get();
+  const profile = snap.data() as Profile | undefined;
   if (!profile || profile.role !== "startup") redirect("/login");
 
   const t = await getTranslations("startup");

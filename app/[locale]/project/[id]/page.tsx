@@ -7,68 +7,6 @@ import { db } from "@/lib/firebase/client";
 import { getSkillLabel } from "@/lib/skills";
 import { LangSwitcher } from "@/components/LangSwitcher";
 
-// Demo data — replace with Firestore fetch by `id`
-const DEMO_PROJECTS: Record<string, {
-  id: string; name: string; tagline: string; description: string;
-  category: string; icon: string; stage: string; stageEmoji: string;
-  mrr: string; teamSize: string; region: string; regionFlag: string;
-  website?: string; foundedYear: number;
-  founders: { name: string; role: string; avatar: string }[];
-  neededSkills: string[];
-  lookingFor: string[];
-  investorVisible: boolean; fundingGoal?: string;
-  type?: "project" | "startup";
-  stealth?: boolean; stealthProblems?: string[]; stealthCategory?: string;
-}> = {
-  "dadori": {
-    id: "dadori", name: "DADORI", tagline: "Die Plattform die Startups, Talente und Investoren verbindet.",
-    description: "DADORI ist eine dreiseitige Incubator-Plattform. Startups generieren KI-gestützte Businesspläne mit echten Marktdaten, finden Co-Founder und Talente, und werden für Investoren sichtbar. Talent-Nutzer bauen Profile auf und matchen mit Startups und Creator-Projekten. Investoren entdecken validierte Startups — mit DADORI Intro.",
-    category: "B2B SaaS", icon: "🚀", stage: "Pre-Seed", stageEmoji: "🌱",
-    mrr: "Kein Umsatz", teamSize: "2–5", region: "Deutschland", regionFlag: "🇩🇪",
-    website: "https://dadori.com", foundedYear: 2026,
-    founders: [
-      { name: "Don R.", role: "CEO & Founder", avatar: "👨‍💻" },
-    ],
-    neededSkills: ["fullstack", "ai_ml", "marketing", "video_editing"],
-    lookingFor: ["CTO / Full-Stack Dev", "Marketing Lead"],
-    investorVisible: true, fundingGoal: "€500k Seed-Runde",
-  },
-  "streamerxy": {
-    id: "streamerxy", name: "StreamerXY", tagline: "Gaming-Creator mit 80k Subs sucht Team.",
-    description: "Gaming-Creator auf YouTube und Twitch mit 80.000 Abonnenten. Produktionen: Let's Plays, Reviews, Shorts. Sucht einen Cutter der Raw-Footage zu 10–15 min Videos schneidet und Reels/Shorts erstellt.",
-    category: "Creator / Streaming", icon: "🎮", stage: "Revenue-generating", stageEmoji: "💰",
-    mrr: "€1k – €10k / Monat", teamSize: "1", region: "Deutschland", regionFlag: "🇩🇪",
-    foundedYear: 2022,
-    founders: [{ name: "XY", role: "Creator & Gründer", avatar: "🎮" }],
-    neededSkills: ["video_editing", "short_form", "davinci", "color_grading"],
-    lookingFor: ["Video-Cutter (Freelance)"],
-    investorVisible: false, type: "project",
-  },
-  "stealth-demo": {
-    id: "stealth-demo", name: "???", tagline: "", description: "",
-    category: "Creator / Media", icon: "🥷", stage: "", stageEmoji: "",
-    mrr: "", teamSize: "", region: "de", regionFlag: "🇩🇪", foundedYear: 2026,
-    founders: [], neededSkills: [], lookingFor: [], investorVisible: true,
-    type: "project", stealth: true,
-    stealthProblems: ["Fehlende Reichweite", "Monetarisierung"],
-    stealthCategory: "Creator / Media",
-  },
-  "beatlab": {
-    id: "beatlab", name: "BeatLab Records", tagline: "Indie-Label für die nächste Generation.",
-    description: "BeatLab Records ist ein unabhängiges Musik-Label das Nachwuchskünstler entdeckt, produziert und vermarktet. Wir haben 3 Künstler unter Vertrag, 2 EP-Releases in 2025, und suchen jetzt einen Music Video Editor für Social-Content.",
-    category: "Musik / Entertainment", icon: "🎵", stage: "Pre-Seed", stageEmoji: "🌱",
-    mrr: "< €1k / Monat", teamSize: "2–5", region: "Österreich", regionFlag: "🇦🇹",
-    foundedYear: 2024,
-    founders: [
-      { name: "Lena K.", role: "CEO", avatar: "🎤" },
-      { name: "Marco F.", role: "A&R", avatar: "🎧" },
-    ],
-    neededSkills: ["video_editing", "color_grading", "after_effects", "social_media"],
-    lookingFor: ["Music Video Editor", "Social Media Manager"],
-    investorVisible: true, fundingGoal: "€200k für Studio & Marketing",
-  },
-};
-
 const CATEGORY_ICON: Record<string, string> = {
   creator: "🎬", music: "🎵", gaming: "🎮", app: "📱", ecommerce: "🛒",
 };
@@ -79,10 +17,24 @@ const REGION_FLAG: Record<string, string> = {
   de: "🇩🇪", at: "🇦🇹", ch: "🇨🇭", us: "🇺🇸", worldwide: "🌍",
 };
 
+type Project = {
+  id: string; name: string; tagline: string; description: string;
+  category: string; icon: string; stage: string; stageEmoji: string;
+  mrr: string; teamSize: string; region: string; regionFlag: string;
+  website?: string; foundedYear: number;
+  founders: { name: string; role: string; avatar: string }[];
+  neededSkills: string[];
+  lookingFor: string[];
+  investorVisible: boolean; fundingGoal?: string;
+  type?: "project" | "startup";
+  stealth?: boolean; stealthProblems?: string[]; stealthCategory?: string;
+};
+
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [project, setProject] = useState<typeof DEMO_PROJECTS[string] | null>(null);
+  const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [interested, setInterested] = useState(false);
 
   useEffect(() => {
@@ -106,25 +58,23 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
               teamSize: d.teamSize ?? "",
               region: d.region ?? "",
               regionFlag: REGION_FLAG[d.region] ?? "🌐",
-              foundedYear: d.foundedYear ?? 2026,
-              founders: d.founders ?? [{ name: "Gründer", role: "Founder", avatar: "👤" }],
+              foundedYear: d.foundedYear ?? new Date().getFullYear(),
+              founders: d.founders ?? [],
               neededSkills: d.skills ?? [],
               lookingFor: d.lookingFor ?? [],
               investorVisible: d.investorVisible ?? false,
-              fundingGoal: d.fundingGoal ?? undefined,
+              fundingGoal: d.fundingGoal,
               type: d.type ?? "project",
               stealth: d.stealth ?? false,
               stealthProblems: d.stealthProblems ?? [],
               stealthCategory: d.category ?? "",
             });
           } else {
-            setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["dadori"]);
+            setNotFound(true);
           }
         }
       } catch {
-        if (!cancelled) {
-          setProject(DEMO_PROJECTS[id] ?? DEMO_PROJECTS["dadori"]);
-        }
+        if (!cancelled) setNotFound(true);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -140,9 +90,19 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     );
   }
 
-  if (!project) return null;
+  if (notFound || !project) {
+    return (
+      <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center gap-4">
+        <span className="text-5xl">🔍</span>
+        <h1 className="text-xl font-bold text-zinc-900">Projekt nicht gefunden</h1>
+        <p className="text-sm text-zinc-500">Dieses Projekt existiert nicht oder wurde entfernt.</p>
+        <Link href="/en/explore" className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
+          Alle Projekte →
+        </Link>
+      </div>
+    );
+  }
 
-  // ── Stealth view ──────────────────────────────────────────────────────────
   if (project.stealth) {
     return (
       <div className="min-h-screen bg-zinc-50">
@@ -158,36 +118,24 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         <main className="mx-auto max-w-2xl px-6 py-16 text-center">
           <span className="text-5xl">🥷</span>
           <h1 className="mt-4 text-2xl font-extrabold text-zinc-900">Stealth-Projekt</h1>
-          <p className="mt-3 text-zinc-500 text-lg">
-            Dieses Projekt ist im Stealth-Modus. Der Gründer teilt noch keine Details.
-          </p>
+          <p className="mt-3 text-zinc-500 text-lg">Dieses Projekt ist im Stealth-Modus.</p>
           <div className="mt-8 rounded-2xl border border-indigo-200 bg-indigo-50 p-6 text-left">
-            <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">Was wir wissen</p>
             <div className="flex flex-wrap gap-2 mb-3">
-              <span className="rounded-full bg-indigo-600 text-white px-3 py-1 text-sm font-semibold">
-                {project.stealthCategory}
-              </span>
+              <span className="rounded-full bg-indigo-600 text-white px-3 py-1 text-sm font-semibold">{project.stealthCategory}</span>
               {project.stealthProblems?.map(p => (
-                <span key={p} className="rounded-full bg-white border border-indigo-200 text-indigo-700 px-3 py-1 text-sm">
-                  {p}
-                </span>
+                <span key={p} className="rounded-full bg-white border border-indigo-200 text-indigo-700 px-3 py-1 text-sm">{p}</span>
               ))}
             </div>
-            <p className="text-sm text-indigo-700">„Wir lösen <strong>{project.stealthProblems?.join(" & ")}</strong> im Bereich <strong>{project.stealthCategory}</strong>."</p>
           </div>
           <div className="mt-6">
             {interested ? (
-              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">
-                ✓ Anfrage gesendet — sie melden sich wenn der Zeitpunkt passt
-              </span>
+              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ Interesse bekundet</span>
             ) : (
-              <button onClick={() => setInterested(true)}
-                className="rounded-xl bg-indigo-600 px-8 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
+              <button onClick={() => setInterested(true)} className="rounded-xl bg-indigo-600 px-8 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
                 Interesse bekunden →
               </button>
             )}
           </div>
-          <p className="mt-4 text-xs text-zinc-400">Du siehst keine weiteren Details bis der Gründer deine Anfrage akzeptiert.</p>
         </main>
       </div>
     );
@@ -195,74 +143,46 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      {/* Header */}
       <header className="border-b border-zinc-200 bg-white px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <Link href="/" className="text-xl font-extrabold text-indigo-600">DADORI</Link>
           <div className="flex items-center gap-3">
             <LangSwitcher />
-            <Link href="/en/login" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-              Mitmachen
-            </Link>
+            <Link href="/en/login" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">Mitmachen</Link>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl px-6 py-10">
-        {/* Hero */}
         <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm mb-6">
           <div className="flex items-start gap-5">
-            <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-4xl border border-indigo-100">
-              {project.icon}
-            </span>
+            <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-4xl border border-indigo-100">{project.icon}</span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-extrabold text-zinc-900">{project.name}</h1>
-                <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">
-                  {project.category}
-                </span>
-                <span className="rounded-full bg-zinc-50 border border-zinc-200 px-3 py-0.5 text-xs font-medium text-zinc-500">
-                  {project.regionFlag} {project.region}
-                </span>
+                <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">{project.category}</span>
+                <span className="rounded-full bg-zinc-50 border border-zinc-200 px-3 py-0.5 text-xs font-medium text-zinc-500">{project.regionFlag} {project.region}</span>
               </div>
               <p className="mt-1 text-base text-zinc-600">{project.tagline}</p>
               <div className="mt-3 flex items-center gap-3 flex-wrap text-xs text-zinc-400">
                 <span>Gegründet {project.foundedYear}</span>
-                <span>·</span>
-                <span>👥 Team: {project.teamSize}</span>
+                {project.teamSize && <><span>·</span><span>👥 Team: {project.teamSize}</span></>}
                 <span>·</span>
                 <span>{project.stageEmoji} {project.stage}</span>
-                {project.mrr !== "Kein Umsatz" && (
-                  <>
-                    <span>·</span>
-                    <span>💰 MRR: {project.mrr}</span>
-                  </>
-                )}
               </div>
             </div>
           </div>
-
-          {/* CTA */}
           <div className="mt-6 flex gap-3 flex-wrap">
             {interested ? (
-              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">
-                ✓ Anfrage gesendet — {project.name} wird benachrichtigt
-              </span>
+              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ Anfrage gesendet</span>
             ) : (
-              <button
-                onClick={() => setInterested(true)}
-                className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors"
-              >
+              <button onClick={() => setInterested(true)} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
                 Interesse bekunden
               </button>
             )}
             {project.website && (
-              <a
-                href={project.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl border border-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-600 hover:border-indigo-300 transition-colors"
-              >
+              <a href={project.website} target="_blank" rel="noopener noreferrer"
+                className="rounded-xl border border-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-600 hover:border-indigo-300 transition-colors">
                 🌐 Website
               </a>
             )}
@@ -270,57 +190,50 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Left: main content */}
           <div className="lg:col-span-2 flex flex-col gap-6">
-
-            {/* About */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-3 font-bold text-zinc-900">Über das Projekt</h2>
-              <p className="text-sm leading-relaxed text-zinc-600">{project.description}</p>
-            </div>
-
-            {/* Team */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 font-bold text-zinc-900">Team</h2>
-              <div className="flex flex-col gap-3">
-                {project.founders.map(f => (
-                  <div key={f.name} className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 border border-indigo-100 text-xl">
-                      {f.avatar}
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-zinc-900">{f.name}</p>
-                      <p className="text-xs text-zinc-500">{f.role}</p>
+            {project.description && (
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-3 font-bold text-zinc-900">Über das Projekt</h2>
+                <p className="text-sm leading-relaxed text-zinc-600">{project.description}</p>
+              </div>
+            )}
+            {project.founders.length > 0 && (
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-4 font-bold text-zinc-900">Team</h2>
+                <div className="flex flex-col gap-3">
+                  {project.founders.map(f => (
+                    <div key={f.name} className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 border border-indigo-100 text-xl">{f.avatar}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-zinc-900">{f.name}</p>
+                        <p className="text-xs text-zinc-500">{f.role}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-
-            {/* Open Roles */}
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
-              <h2 className="mb-3 font-bold text-indigo-900">Wir suchen</h2>
-              <div className="flex flex-col gap-2 mb-4">
-                {project.lookingFor.map(role => (
-                  <div key={role} className="flex items-center gap-2">
-                    <span className="text-indigo-400">→</span>
-                    <span className="text-sm font-semibold text-indigo-800">{role}</span>
-                  </div>
-                ))}
+            )}
+            {project.lookingFor.length > 0 && (
+              <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
+                <h2 className="mb-3 font-bold text-indigo-900">Wir suchen</h2>
+                <div className="flex flex-col gap-2 mb-4">
+                  {project.lookingFor.map(role => (
+                    <div key={role} className="flex items-center gap-2">
+                      <span className="text-indigo-400">→</span>
+                      <span className="text-sm font-semibold text-indigo-800">{role}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.neededSkills.map(id => (
+                    <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">{getSkillLabel(id)}</span>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {project.neededSkills.map(id => (
-                  <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">
-                    {getSkillLabel(id)}
-                  </span>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Right: sidebar */}
           <div className="flex flex-col gap-4">
-            {/* Stage card */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Phase</p>
               <div className="flex items-center gap-2 mb-2">
@@ -334,51 +247,25 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 </div>
               )}
             </div>
-
-            {/* Investor visibility */}
             {project.investorVisible && (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
                 <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">Investor-Status</p>
                 <p className="text-sm font-semibold text-amber-900">🟢 Offen für Investoren</p>
-                <p className="mt-1 text-xs text-amber-700">Dieses Startup sucht aktiv nach Investoren.</p>
-                <Link
-                  href="/en/signup"
-                  className="mt-3 block w-full rounded-lg bg-amber-500 py-2 text-center text-xs font-bold text-white hover:bg-amber-600 transition-colors"
-                >
+                <Link href="/en/signup" className="mt-3 block w-full rounded-lg bg-amber-500 py-2 text-center text-xs font-bold text-white hover:bg-amber-600 transition-colors">
                   Als Investor Kontakt aufnehmen
                 </Link>
               </div>
             )}
-
-            {/* Upgrade to Startup CTA */}
-            {project.type === "project" && (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-                <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">Nächste Stufe</p>
-                <p className="text-sm font-bold text-amber-900">🚀 Zu Startup upgraden</p>
-                <p className="mt-1 text-xs text-amber-700">
-                  Funding Stage, Investor-Pitch & Business Plan freischalten.
-                </p>
-                <Link href="/en/startup/billing"
-                  className="mt-3 block w-full rounded-lg bg-amber-500 py-2 text-center text-xs font-bold text-white hover:bg-amber-600 transition-colors">
-                  Upgrade — 10 € / Mo
-                </Link>
-              </div>
-            )}
-
-            {/* Share */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Teilen</p>
-              <button
-                onClick={() => navigator.clipboard?.writeText(window.location.href)}
-                className="w-full rounded-lg border border-zinc-200 py-2 text-xs font-semibold text-zinc-600 hover:border-indigo-300 transition-colors"
-              >
+              <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
+                className="w-full rounded-lg border border-zinc-200 py-2 text-xs font-semibold text-zinc-600 hover:border-indigo-300 transition-colors">
                 🔗 Link kopieren
               </button>
             </div>
           </div>
         </div>
 
-        {/* Back nav */}
         <p className="mt-8 text-center text-sm text-zinc-400">
           Auf DADORI entdecken:{" "}
           <Link href="/en/explore" className="text-indigo-600 hover:underline">Alle Projekte & Startups →</Link>

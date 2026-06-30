@@ -1,33 +1,23 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/firebase/session";
-import { adminDb, DEV_MODE } from "@/lib/firebase/admin";
+import { adminDb } from "@/lib/firebase/admin";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import type { Profile } from "@/lib/firebase/collections";
-
-const DEV_INVESTOR_PROFILE: Profile = {
-  uid: "dev-investor",
-  role: "investor",
-  full_name: "Max Investor",
-  plan_tier: "pro",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-} as Profile;
 
 export default async function InvestorDashboard() {
   const session = await getServerSession();
   if (!session) redirect("/login");
 
-  const profile: Profile | undefined = DEV_MODE
-    ? DEV_INVESTOR_PROFILE
-    : (await adminDb!.collection("profiles").doc(session.uid).get()).data() as Profile | undefined;
+  const snap = await adminDb!.collection("profiles").doc(session.uid).get();
+  const profile = snap.data() as Profile | undefined;
   if (!profile || profile.role !== "investor") redirect("/login");
 
   const cards = [
     { href: "/investor/dealflow",  icon: "📬", title: "Deal Flow",          desc: "Neue Startups & Stealth-Projekte",      tier: "Angel+" },
     { href: "/investor/discover",  icon: "🔭", title: "Startups entdecken", desc: "Filtern nach Stage, MRR, Fokus",        tier: null },
     { href: "/investor/portfolio", icon: "📊", title: "Portfolio-Tracker",  desc: "Deals verfolgen & Notizen",             tier: "Pro+" },
-    { href: "/investor/watchlist", icon: "⭐", title: "Watchlist",          desc: "Gemerkté Startups auf einen Blick",     tier: null },
+    { href: "/investor/watchlist", icon: "⭐", title: "Watchlist",          desc: "Gemerkte Startups auf einen Blick",     tier: null },
     { href: "/investor/profile",   icon: "💼", title: "Mein Profil",        desc: "Investment-Fokus & Check-Size",         tier: null },
     { href: "/investor/billing",   icon: "💳", title: "Abo & Tier",         desc: "Scout → Angel → Pro → Lead → Elite",   tier: null },
   ];
