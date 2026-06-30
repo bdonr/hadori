@@ -135,24 +135,24 @@ export default function SignupPage() {
           <h1 className="text-2xl font-bold text-zinc-900">Konto erstellen</h1>
           <form onSubmit={handleSignup} className="mt-6 flex flex-col gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-zinc-700">Name</label>
+              <label htmlFor="signup-name" className="mb-1 block text-sm font-medium text-zinc-700">Name</label>
               <input
-                type="text" required value={name} onChange={(e) => setName(e.target.value)}
+                id="signup-name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
                 className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 placeholder="Max Mustermann"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-zinc-700">E-Mail</label>
+              <label htmlFor="signup-email" className="mb-1 block text-sm font-medium text-zinc-700">E-Mail</label>
               <input
-                type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+                id="signup-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-zinc-700">Passwort</label>
+              <label htmlFor="signup-password" className="mb-1 block text-sm font-medium text-zinc-700">Passwort</label>
               <input
-                type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
+                id="signup-password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 placeholder="Min. 8 Zeichen"
               />

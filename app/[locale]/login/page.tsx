@@ -61,16 +61,16 @@ export default function LoginPage() {
         <p className="mt-1 text-sm text-zinc-500">{t("login_sub")}</p>
         <form onSubmit={handleLogin} className="mt-6 flex flex-col gap-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-zinc-700">{t("email")}</label>
+            <label htmlFor="login-email" className="mb-1 block text-sm font-medium text-zinc-700">{t("email")}</label>
             <input
-              type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+              id="login-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-zinc-700">{t("password")}</label>
+            <label htmlFor="login-password" className="mb-1 block text-sm font-medium text-zinc-700">{t("password")}</label>
             <input
-              type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
+              id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             />
           </div>
