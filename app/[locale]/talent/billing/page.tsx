@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { TALENT_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
+import { useCurrency } from "@/hooks/useCurrency";
+import { formatPrice } from "@/lib/currency";
 
 const CURRENT: string = "free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
@@ -20,6 +22,7 @@ const ACCENT: Record<string, { ring: string; btn: string; badge: string }> = {
 export default function TalentBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const currency = useCurrency();
 
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];
@@ -30,7 +33,7 @@ export default function TalentBillingPage() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, successUrl: "/talent", cancelUrl: "/talent/billing" }),
+        body: JSON.stringify({ priceId, currency, successUrl: "/talent", cancelUrl: "/talent/billing" }),
       });
       const { url } = await res.json();
       if (url) window.location.href = url;
@@ -73,7 +76,7 @@ export default function TalentBillingPage() {
                 <div className="mt-1 flex items-baseline gap-1 mb-5">
                   {tier.price === 0
                     ? <span className="text-2xl font-black text-zinc-900">Gratis</span>
-                    : <><span className="text-2xl font-black text-zinc-900">{tier.price} €</span><span className="text-sm text-zinc-400">/ Mo</span></>}
+                    : <><span className="text-2xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-sm text-zinc-400">/ Mo</span></>}
                 </div>
                 <ul className="flex-1 flex flex-col gap-2 mb-7">
                   {tier.features.map(f => (

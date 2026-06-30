@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { PROJECT_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
+import { useCurrency } from "@/hooks/useCurrency";
+import { formatPrice } from "@/lib/currency";
 
 const CURRENT: string = "project";
 const STRIPE_PRICE_IDS: Record<string, string> = {
@@ -21,6 +23,7 @@ const ACCENT: Record<string, { ring: string; btn: string }> = {
 export default function StartupBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const currency = useCurrency();
 
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];
@@ -31,7 +34,7 @@ export default function StartupBillingPage() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, successUrl: "/startup", cancelUrl: "/startup/billing" }),
+        body: JSON.stringify({ priceId, currency, successUrl: "/startup", cancelUrl: "/startup/billing" }),
       });
       const { url } = await res.json();
       if (url) window.location.href = url;
@@ -65,7 +68,7 @@ export default function StartupBillingPage() {
           {PROJECT_TIERS.map((t, i) => (
             <span key={t.id} className="flex items-center gap-3">
               <span className={`rounded-full px-3 py-1 text-xs font-semibold border ${t.id === CURRENT ? "bg-indigo-600 text-white border-indigo-600" : "bg-white border-zinc-200 text-zinc-500"}`}>
-                {t.emoji} {t.name} · {t.price} €
+                {t.emoji} {t.name} · {formatPrice(t.price, currency)}
               </span>
               {i < PROJECT_TIERS.length - 1 && <span className="text-zinc-200">→</span>}
             </span>
@@ -87,7 +90,7 @@ export default function StartupBillingPage() {
                 <span className="text-3xl">{tier.emoji}</span>
                 <h3 className="mt-2 text-xl font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-5">
-                  <span className="text-2xl font-black text-zinc-900">{tier.price} €</span>
+                  <span className="text-2xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span>
                   <span className="text-sm text-zinc-400">/ Mo</span>
                 </div>
                 <ul className="flex-1 flex flex-col gap-2 mb-7">

@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { INVESTOR_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
+import { useCurrency } from "@/hooks/useCurrency";
+import { formatPrice } from "@/lib/currency";
 
 const CURRENT: string = "investor_free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
@@ -24,6 +26,7 @@ const ACCENT: Record<string, { ring: string; btn: string }> = {
 export default function InvestorBillingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const currency = useCurrency();
 
   async function handleUpgrade(tierId: string) {
     if (tierId === "investor_elite") {
@@ -38,7 +41,7 @@ export default function InvestorBillingPage() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, successUrl: "/investor", cancelUrl: "/investor/billing" }),
+        body: JSON.stringify({ priceId, currency, successUrl: "/investor", cancelUrl: "/investor/billing" }),
       });
       const { url } = await res.json();
       if (url) window.location.href = url;
@@ -75,7 +78,7 @@ export default function InvestorBillingPage() {
           {INVESTOR_TIERS.map((t, i) => (
             <span key={t.id} className="flex items-center gap-2">
               <span className={`rounded-full px-3 py-1 font-semibold border ${t.id === CURRENT ? "bg-emerald-600 text-white border-emerald-600" : "bg-white border-zinc-200 text-zinc-500"}`}>
-                {t.emoji} {t.name} · {t.price === 0 ? "Gratis" : `${t.price} €`}
+                {t.emoji} {t.name} · {formatPrice(t.price, currency)}
               </span>
               {i < INVESTOR_TIERS.length - 1 && <span className="text-zinc-300">→</span>}
             </span>
@@ -107,7 +110,7 @@ export default function InvestorBillingPage() {
                 <div className="mt-1 flex items-baseline gap-1 mb-4">
                   {tier.price === 0
                     ? <span className="text-xl font-black text-zinc-900">Gratis</span>
-                    : <><span className="text-xl font-black text-zinc-900">{tier.price} €</span><span className="text-xs text-zinc-400">/ Mo</span></>}
+                    : <><span className="text-xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-xs text-zinc-400">/ Mo</span></>}
                 </div>
                 <ul className="flex-1 flex flex-col gap-1.5 mb-5">
                   {tier.features.map(f => (
@@ -148,7 +151,7 @@ export default function InvestorBillingPage() {
                 </div>
                 <h3 className="text-lg font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-4">
-                  <span className="text-xl font-black text-zinc-900">{tier.price} €</span>
+                  <span className="text-xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span>
                   <span className="text-xs text-zinc-400">/ Mo</span>
                 </div>
                 <ul className="flex-1 grid grid-cols-2 gap-x-4 gap-y-1.5 mb-5">
