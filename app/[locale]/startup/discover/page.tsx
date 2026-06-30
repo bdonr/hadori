@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { INVESTOR_FOCUS, CHECK_SIZES } from "@/lib/funding";
 
 export default function DiscoverInvestorsPage() {
+  const { locale } = useParams<{ locale: string }>();
   const [focusFilter, setFocusFilter] = useState<string[]>([]);
 
   function toggleFocus(id: string) {
@@ -15,7 +17,7 @@ export default function DiscoverInvestorsPage() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center gap-4">
-          <Link href="/startup" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
+          <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
           <h1 className="text-lg font-semibold text-zinc-900">Investoren entdecken</h1>
           <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-semibold text-indigo-700 ml-auto">Pro</span>
         </div>

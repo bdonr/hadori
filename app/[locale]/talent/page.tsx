@@ -7,24 +7,25 @@ import { LangSwitcher } from "@/components/LangSwitcher";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 
-export default async function TalentDashboard() {
+export default async function TalentDashboard({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await getServerSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(`/${locale}/login`);
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || profile.role !== "talent") redirect("/login");
+  if (!profile || profile.role !== "talent") redirect(`/${locale}/login`);
 
   const t = await getTranslations("talent");
   const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
   const tier = profile.plan_tier ?? "free";
 
   const cards = [
-    { href: "/talent/skills",    icon: "⚡", title: "Meine Skills",      desc: "Skills, Erfahrung & Verfügbarkeit", badge: null },
-    { href: "/talent/portfolio", icon: "🎨", title: "Portfolio",         desc: isPro ? "Bis zu 10 Werke zeigen" : "1 Werk kostenlos · Pro für 10", badge: !isPro ? "1 / 1" : null },
-    { href: "/talent/jobs",      icon: "🔍", title: "Stellen & Projekte", desc: "Passende Rollen bei Startups & Creatorn", badge: null },
-    { href: "/talent/applications", icon: "📋", title: "Meine Bewerbungen", desc: "Status deiner Anfragen", badge: null },
-    { href: "/talent/billing",   icon: "💳", title: "Abo verwalten",     desc: isPro ? `Aktuell: ${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "Upgrade für Priority-Matching", badge: null },
+    { href: `/${locale}/talent/skills`,       icon: "⚡", title: "Meine Skills",      desc: "Skills, Erfahrung & Verfügbarkeit", badge: null },
+    { href: `/${locale}/talent/portfolio`,    icon: "🎨", title: "Portfolio",         desc: isPro ? "Bis zu 10 Werke zeigen" : "1 Werk kostenlos · Pro für 10", badge: !isPro ? "1 / 1" : null },
+    { href: `/${locale}/talent/jobs`,         icon: "🔍", title: "Stellen & Projekte", desc: "Passende Rollen bei Startups & Creatorn", badge: null },
+    { href: `/${locale}/talent/applications`, icon: "📋", title: "Meine Bewerbungen", desc: "Status deiner Anfragen", badge: null },
+    { href: `/${locale}/talent/billing`,      icon: "💳", title: "Abo verwalten",     desc: isPro ? `Aktuell: ${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "Upgrade für Priority-Matching", badge: null },
   ];
 
   return (
@@ -53,7 +54,7 @@ export default async function TalentDashboard() {
               <p className="text-sm font-semibold text-indigo-900">Du bist im Free-Plan</p>
               <p className="text-sm text-indigo-600">Starter ab 2 €/Mo · Pro ab 10 €/Mo · Scale ab 49 €/Mo — monatlich kündbar</p>
             </div>
-            <Link href="/talent/billing" className="shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
+            <Link href={`/${locale}/talent/billing`} className="shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
               Auf Pro upgraden
             </Link>
           </div>
@@ -78,9 +79,9 @@ export default async function TalentDashboard() {
           <h2 className="mb-4 font-semibold text-zinc-900">Erste Schritte</h2>
           <ol className="space-y-3">
             {[
-              { text: "Skills & Verfügbarkeit eintragen", href: "/talent/skills" },
-              { text: "Ersten Portfolio-Eintrag hinzufügen", href: "/talent/portfolio" },
-              { text: "Offene Rollen & Projekte durchstöbern", href: "/talent/jobs" },
+              { text: "Skills & Verfügbarkeit eintragen", href: `/${locale}/talent/skills` },
+              { text: "Ersten Portfolio-Eintrag hinzufügen", href: `/${locale}/talent/portfolio` },
+              { text: "Offene Rollen & Projekte durchstöbern", href: `/${locale}/talent/jobs` },
             ].map((step, i) => (
               <li key={i} className="flex items-center gap-3">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-zinc-300 text-xs font-bold text-zinc-400">{i + 1}</span>

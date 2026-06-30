@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { SKILL_CATEGORIES, getSkillLabel, ALL_SKILLS } from "@/lib/skills";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query } from "firebase/firestore";
@@ -20,6 +21,7 @@ const AVAILABILITY_LABEL: Record<string, string> = {
 };
 
 export default function TalentSearchPage() {
+  const { locale } = useParams<{ locale: string }>();
   const [talents, setTalents] = useState<Talent[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -75,7 +77,7 @@ export default function TalentSearchPage() {
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center gap-4">
-          <Link href="/startup" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
+          <Link href={`/${locale}/startup`} className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
           <h1 className="text-lg font-semibold text-zinc-900">Talent-Suche</h1>
         </div>
       </header>

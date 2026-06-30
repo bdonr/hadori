@@ -5,6 +5,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LivePulse } from "@/components/LivePulse";
+import { AuthRefresh } from "@/components/AuthRefresh";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
@@ -34,6 +35,7 @@ export default async function LocaleLayout({
       <body className={`${inter.className} bg-white text-zinc-900 antialiased`}>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <AuthRefresh />
           <LivePulse />
         </NextIntlClientProvider>
       </body>

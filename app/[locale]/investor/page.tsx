@@ -5,21 +5,22 @@ import { adminDb } from "@/lib/firebase/admin";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import type { Profile } from "@/lib/firebase/collections";
 
-export default async function InvestorDashboard() {
+export default async function InvestorDashboard({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await getServerSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(`/${locale}/login`);
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || profile.role !== "investor") redirect("/login");
+  if (!profile || profile.role !== "investor") redirect(`/${locale}/login`);
 
   const cards = [
-    { href: "/investor/dealflow",  icon: "📬", title: "Deal Flow",          desc: "Neue Startups & Stealth-Projekte",      tier: "Angel+" },
-    { href: "/investor/discover",  icon: "🔭", title: "Startups entdecken", desc: "Filtern nach Stage, MRR, Fokus",        tier: null },
-    { href: "/investor/portfolio", icon: "📊", title: "Portfolio-Tracker",  desc: "Deals verfolgen & Notizen",             tier: "Pro+" },
-    { href: "/investor/watchlist", icon: "⭐", title: "Watchlist",          desc: "Gemerkte Startups auf einen Blick",     tier: null },
-    { href: "/investor/profile",   icon: "💼", title: "Mein Profil",        desc: "Investment-Fokus & Check-Size",         tier: null },
-    { href: "/investor/billing",   icon: "💳", title: "Abo & Tier",         desc: "Scout → Angel → Pro → Lead → Elite",   tier: null },
+    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",          desc: "Neue Startups & Stealth-Projekte",      tier: "Angel+" },
+    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Startups entdecken", desc: "Filtern nach Stage, MRR, Fokus",        tier: null },
+    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio-Tracker",  desc: "Deals verfolgen & Notizen",             tier: "Pro+" },
+    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",          desc: "Gemerkte Startups auf einen Blick",     tier: null },
+    { href: `/${locale}/investor/profile`,   icon: "💼", title: "Mein Profil",        desc: "Investment-Fokus & Check-Size",         tier: null },
+    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Abo & Tier",         desc: "Scout → Angel → Pro → Lead → Elite",   tier: null },
   ];
 
   return (

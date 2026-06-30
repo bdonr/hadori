@@ -8,13 +8,14 @@ import { LangSwitcher } from "@/components/LangSwitcher";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 
-export default async function StartupDashboard() {
+export default async function StartupDashboard({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await getServerSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(`/${locale}/login`);
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || profile.role !== "startup") redirect("/login");
+  if (!profile || profile.role !== "startup") redirect(`/${locale}/login`);
 
   const t = await getTranslations("startup");
   const tNav = await getTranslations("nav");
@@ -24,12 +25,12 @@ export default async function StartupDashboard() {
   const isVisible = profile.investor_visible ?? false;
 
   const cards = [
-    { href: "/startup/plan",       icon: "📄", title: t("card_plan"),       desc: t("card_plan_desc") },
-    { href: "/startup/pitchdeck",  icon: "🎯", title: t("card_pitchdeck"),   desc: isPro ? t("card_pitchdeck_desc_pro") : t("card_pitchdeck_desc_free") },
-    { href: "/startup/visibility", icon: isVisible ? "🟢" : "🔒", title: t("card_visibility"), desc: isVisible ? t("card_visibility_active") : isPro ? t("card_visibility_pro_off") : t("card_visibility_upgrade") },
-    { href: "/startup/roles",      icon: "👥", title: t("card_roles"),       desc: t("card_roles_desc") },
-    { href: "/startup/profile",    icon: "🏢", title: t("card_profile"),     desc: t("card_profile_desc") },
-    { href: "/startup/billing",    icon: "💳", title: t("card_billing"),     desc: isPro ? t("card_billing_desc_pro", { tier: profile.plan_tier }) : t("card_billing_desc_free") },
+    { href: `/${locale}/startup/plan`,       icon: "📄", title: t("card_plan"),       desc: t("card_plan_desc") },
+    { href: `/${locale}/startup/pitchdeck`,  icon: "🎯", title: t("card_pitchdeck"),   desc: isPro ? t("card_pitchdeck_desc_pro") : t("card_pitchdeck_desc_free") },
+    { href: `/${locale}/startup/visibility`, icon: isVisible ? "🟢" : "🔒", title: t("card_visibility"), desc: isVisible ? t("card_visibility_active") : isPro ? t("card_visibility_pro_off") : t("card_visibility_upgrade") },
+    { href: `/${locale}/startup/roles`,      icon: "👥", title: t("card_roles"),       desc: t("card_roles_desc") },
+    { href: `/${locale}/startup/profile`,    icon: "🏢", title: t("card_profile"),     desc: t("card_profile_desc") },
+    { href: `/${locale}/startup/billing`,    icon: "💳", title: t("card_billing"),     desc: isPro ? t("card_billing_desc_pro", { tier: profile.plan_tier }) : t("card_billing_desc_free") },
   ];
 
   const steps = [t("step1"), t("step2"), t("step3"), t("step4")];

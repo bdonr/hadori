@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { auth, db } from "@/lib/firebase/client";
 import { collection, getDocs, addDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
@@ -29,6 +30,7 @@ interface PortfolioItem {
 }
 
 export default function PortfolioPage() {
+  const { locale } = useParams<{ locale: string }>();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [tier, setTier] = useState(DEFAULT_TIER);
   const [showForm, setShowForm] = useState(false);
@@ -97,7 +99,7 @@ export default function PortfolioPage() {
       <header className="border-b border-zinc-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/talent" className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
+            <Link href={`/${locale}/talent`} className="text-sm text-zinc-400 hover:text-zinc-600">← Dashboard</Link>
             <h1 className="text-lg font-semibold text-zinc-900">Mein Portfolio</h1>
           </div>
           <div className="flex items-center gap-3">
@@ -125,7 +127,7 @@ export default function PortfolioPage() {
               </p>
             </div>
             <Button asChild className="shrink-0 bg-amber-600 hover:bg-amber-700">
-              <Link href="/talent/billing">{tier === "free" ? "Auf Pro upgraden" : "Auf Scale upgraden"}</Link>
+              <Link href={`/${locale}/talent/billing`}>{tier === "free" ? "Auf Pro upgraden" : "Auf Scale upgraden"}</Link>
             </Button>
           </div>
         )}
@@ -249,7 +251,7 @@ export default function PortfolioPage() {
                 <span className="text-3xl">🔒</span>
                 <p className="text-sm font-semibold text-zinc-500">+9 weitere Einträge im Pro-Plan</p>
                 <Button size="sm" asChild variant="outline">
-                  <Link href="/talent/billing">Pro für 19 €/Monat</Link>
+                  <Link href={`/${locale}/talent/billing`}>Pro für 19 €/Monat</Link>
                 </Button>
               </div>
             )}
