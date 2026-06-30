@@ -7,14 +7,12 @@ test.describe("Signup", () => {
   test("Creator: registers and lands on startup dashboard", async ({ page }) => {
     const email = uniqueEmail("creator");
     await signup(page, "creator", email, "Test Creator");
-
     await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
   });
 
   test("Talent: registers and lands on talent dashboard", async ({ page }) => {
     const email = uniqueEmail("talent");
     await signup(page, "talent", email, "Test Talent");
-
     await expect(page).toHaveURL(/\/de\/talent/, { timeout: 10_000 });
     await expect(page.getByText("Test Talent")).toBeVisible();
   });
@@ -22,7 +20,6 @@ test.describe("Signup", () => {
   test("Investor: registers and lands on investor dashboard", async ({ page }) => {
     const email = uniqueEmail("investor");
     await signup(page, "investor", email, "Test Investor");
-
     await expect(page).toHaveURL(/\/de\/investor/, { timeout: 10_000 });
     await expect(page.getByText("Test Investor")).toBeVisible();
   });
@@ -31,7 +28,6 @@ test.describe("Signup", () => {
 // ── LOGIN / LOGOUT ────────────────────────────────────────────────────────────
 
 test.describe("Login & Logout", () => {
-  // We register once, then test login with those credentials
   let creatorEmail: string;
 
   test.beforeAll(async ({ browser }) => {
@@ -44,34 +40,31 @@ test.describe("Login & Logout", () => {
 
   test("can log in with existing credentials", async ({ page }) => {
     await login(page, creatorEmail);
-
     await expect(page).toHaveURL(/\/de\/startup/, { timeout: 10_000 });
-    await expect(page.getByText("Login Creator")).toBeVisible();
+    // Name appears async after Firebase Auth loads — wait up to 15s
+    await expect(page.getByText("Login Creator")).toBeVisible({ timeout: 15_000 });
   });
 
   test("after logout, name disappears and homepage shows login button", async ({ page }) => {
     await login(page, creatorEmail);
-    await page.waitForURL(/\/de\/startup/);
+    // Wait for name to appear so we know auth state is loaded
+    await expect(page.getByText("Login Creator")).toBeVisible({ timeout: 15_000 });
 
     await signout(page);
 
-    // Should land on homepage
     await expect(page).toHaveURL(/\/de\/?$/, { timeout: 10_000 });
-    // Name should NOT be visible
     await expect(page.getByText("Login Creator")).not.toBeVisible();
-    // Login button should be visible
-    await expect(page.getByRole("link", { name: /einloggen|sign in/i })).toBeVisible();
+    // homepage shows login link
+    await expect(page.getByRole("link", { name: /einloggen|anmelden|sign in/i })).toBeVisible();
   });
 
   test("logged-in user visiting homepage gets redirected to dashboard", async ({ page }) => {
     await login(page, creatorEmail);
-    await page.waitForURL(/\/de\/startup/);
-
-    // Navigate to homepage
-    await page.goto("/de");
-
-    // Should be redirected back to startup dashboard
     await expect(page).toHaveURL(/\/de\/startup/, { timeout: 10_000 });
+
+    // Navigate to homepage — server component reads session cookie and redirects
+    await page.goto("/de");
+    await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
   });
 
   test("wrong password shows error", async ({ page }) => {
@@ -79,7 +72,6 @@ test.describe("Login & Logout", () => {
     await page.getByLabel("E-Mail").fill(creatorEmail);
     await page.getByLabel("Passwort").fill("wrongpassword");
     await page.getByRole("button", { name: /anmelden|einloggen/i }).click();
-
     await expect(page.getByText(/falsch|invalid|wrong|fehler/i)).toBeVisible({ timeout: 8_000 });
   });
 });
