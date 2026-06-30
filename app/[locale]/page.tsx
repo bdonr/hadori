@@ -15,7 +15,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     try {
       const snap = await adminDb.collection("profiles").doc(session.uid).get();
       const profile = snap.data();
-      if (profile?.role === "startup") redirect(`/${locale}/startup`);
+      if (profile?.role === "startup" || profile?.role === "creator") redirect(`/${locale}/startup`);
       if (profile?.role === "talent") redirect(`/${locale}/talent`);
       if (profile?.role === "investor") redirect(`/${locale}/investor`);
     } catch {

@@ -65,6 +65,7 @@ export function Navbar() {
     if (!user) return `/${locale}`;
     if (user.role === "talent") return `/${locale}/talent`;
     if (user.role === "investor") return `/${locale}/investor`;
+    if (user.role === "creator") return `/${locale}/startup`;
     return `/${locale}/startup`;
   }
 

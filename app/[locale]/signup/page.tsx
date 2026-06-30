@@ -8,16 +8,37 @@ import { auth } from "@/lib/firebase/client";
 import { profileDoc } from "@/lib/firebase/refs";
 import type { UserRole, Profile } from "@/lib/firebase/collections";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
-const roles: { value: UserRole; label: string; desc: string; icon: string }[] = [
-  { value: "startup", label: "Startup", desc: "Ich gründe ein Unternehmen", icon: "🚀" },
-  { value: "talent", label: "Talent", desc: "Ich suche spannende Projekte", icon: "🎯" },
-  { value: "investor", label: "Investor", desc: "Ich investiere in Startups", icon: "💼" },
+const roles: { value: UserRole; label: string; desc: string; icon: string; sub: string }[] = [
+  {
+    value: "creator",
+    label: "Gründer / Creator",
+    desc: "Ich habe eine Idee oder ein Projekt",
+    sub: "Starte als Projekt, baue ein Team auf, werde zum Startup",
+    icon: "🎯",
+  },
+  {
+    value: "talent",
+    label: "Talent",
+    desc: "Ich suche spannende Projekte & Startups",
+    sub: "Biete deine Skills an, bewirb dich auf Rollen",
+    icon: "⚡",
+  },
+  {
+    value: "investor",
+    label: "Investor",
+    desc: "Ich investiere in Startups",
+    sub: "Entdecke validierte Projekte & Startups",
+    icon: "💼",
+  },
 ];
 
 export default function SignupPage() {
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) ?? "de";
+
   const [step, setStep] = useState<"role" | "form">("role");
   const [role, setRole] = useState<UserRole | null>(null);
   const [email, setEmail] = useState("");
@@ -44,14 +65,15 @@ export default function SignupPage() {
         updated_at: now,
       };
       await setDoc(profileDoc(user.uid), profile);
-      // Store ID token in cookie for server-side session
       const token = await user.getIdToken();
       await fetch("/api/auth/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
       });
-      router.push(`/${role}`);
+      // creator → startup dashboard (same flow)
+      const dest = role === "creator" ? "startup" : role;
+      router.push(`/${locale}/${dest}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Fehler beim Registrieren");
     } finally {
@@ -61,36 +83,55 @@ export default function SignupPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 py-16">
-      <Link href="/" className="mb-8 text-2xl font-extrabold text-indigo-600">DADORI</Link>
+      <Link href={`/${locale}`} className="mb-8 text-2xl font-extrabold text-indigo-600">DADORI</Link>
 
       {step === "role" ? (
         <div className="w-full max-w-md">
           <h1 className="text-center text-2xl font-bold text-zinc-900">Wer bist du?</h1>
           <p className="mt-2 text-center text-sm text-zinc-500">Wähle deine Rolle — du kannst sie später nicht ändern.</p>
-          <div className="mt-8 grid gap-4">
+          <div className="mt-8 grid gap-3">
             {roles.map((r) => (
               <button
                 key={r.value}
                 onClick={() => setRole(r.value)}
-                className={`flex items-center gap-4 rounded-xl border-2 p-4 text-left transition-all ${
-                  role === r.value ? "border-indigo-600 bg-indigo-50" : "border-zinc-200 bg-white hover:border-zinc-300"
+                className={`flex items-start gap-4 rounded-xl border-2 p-4 text-left transition-all ${
+                  role === r.value
+                    ? "border-indigo-600 bg-indigo-50"
+                    : "border-zinc-200 bg-white hover:border-zinc-300"
                 }`}
               >
-                <span className="text-3xl">{r.icon}</span>
+                <span className="text-3xl mt-0.5">{r.icon}</span>
                 <div>
                   <p className="font-semibold text-zinc-900">{r.label}</p>
-                  <p className="text-sm text-zinc-500">{r.desc}</p>
+                  <p className="text-sm text-zinc-600">{r.desc}</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">{r.sub}</p>
                 </div>
               </button>
             ))}
           </div>
           <Button className="mt-6 w-full" disabled={!role} onClick={() => setStep("form")}>
-            Weiter
+            Weiter →
           </Button>
+          <p className="mt-4 text-center text-sm text-zinc-500">
+            Bereits Mitglied?{" "}
+            <Link href={`/${locale}/login`} className="text-indigo-600 hover:underline">Einloggen</Link>
+          </p>
         </div>
       ) : (
         <div className="w-full max-w-md">
           <button onClick={() => setStep("role")} className="mb-6 text-sm text-zinc-500 hover:text-zinc-700">← Zurück</button>
+
+          {/* Selected role recap */}
+          {role && (
+            <div className="mb-6 flex items-center gap-3 rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3">
+              <span className="text-2xl">{roles.find(r => r.value === role)?.icon}</span>
+              <div>
+                <p className="text-sm font-semibold text-indigo-900">{roles.find(r => r.value === role)?.label}</p>
+                <p className="text-xs text-indigo-600">{roles.find(r => r.value === role)?.desc}</p>
+              </div>
+            </div>
+          )}
+
           <h1 className="text-2xl font-bold text-zinc-900">Konto erstellen</h1>
           <form onSubmit={handleSignup} className="mt-6 flex flex-col gap-4">
             <div>
@@ -123,12 +164,12 @@ export default function SignupPage() {
           </form>
           <p className="mt-6 text-center text-sm text-zinc-500">
             Bereits Mitglied?{" "}
-            <Link href="/login" className="text-indigo-600 hover:underline">Einloggen</Link>
+            <Link href={`/${locale}/login`} className="text-indigo-600 hover:underline">Einloggen</Link>
           </p>
           <p className="mt-4 text-center text-xs text-zinc-400">
             Mit der Registrierung stimmst du unseren{" "}
-            <Link href="/terms" className="underline">AGB</Link> und der{" "}
-            <Link href="/privacy" className="underline">Datenschutzerklärung</Link> zu.
+            <Link href={`/${locale}/terms`} className="underline">AGB</Link> und der{" "}
+            <Link href={`/${locale}/privacy`} className="underline">Datenschutzerklärung</Link> zu.
           </p>
         </div>
       )}

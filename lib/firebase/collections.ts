@@ -11,7 +11,7 @@ import type {
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
-export type UserRole = "startup" | "talent" | "investor";
+export type UserRole = "startup" | "talent" | "investor" | "creator";
 export type PlanTier = "free" | "pro" | "scale";
 export type PlanStatus = "draft" | "generating" | "complete" | "failed";
 export type JobType = "full_time" | "part_time" | "contract" | "co_founder";
