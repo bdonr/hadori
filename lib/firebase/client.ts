@@ -1,27 +1,21 @@
 "use client";
 
-import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import type { Auth } from "firebase/auth";
-import type { Firestore } from "firebase/firestore";
-import type { FirebaseStorage } from "firebase/storage";
+import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
-// Firebase App Hosting preparer injects FIREBASE_WEBAPP_CONFIG at build time.
-// Note: NEXT_PUBLIC_* vars must be set in the App Hosting console for runtime.
-const hosted = process.env.FIREBASE_WEBAPP_CONFIG
-  ? JSON.parse(process.env.FIREBASE_WEBAPP_CONFIG)
-  : null;
-
+// Firebase App Hosting bakes FIREBASE_WEBAPP_CONFIG into NEXT_PUBLIC_* vars
+// via next.config.ts at build time — no manual env setup needed.
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? hosted?.apiKey,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? hosted?.authDomain,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? hosted?.projectId,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? hosted?.storageBucket,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? hosted?.messagingSenderId,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? hosted?.appId,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Use a named app so we never accidentally reuse the Firebase App Hosting
-// adapter's own default app (which has no apiKey).
 const CLIENT_APP_NAME = "dadori-client";
 
 let _app: FirebaseApp | null = null;
@@ -29,19 +23,10 @@ let _auth: Auth | null = null;
 let _db: Firestore | null = null;
 let _storage: FirebaseStorage | null = null;
 
-// getAuth/getFirestore/getStorage are imported lazily inside the guard to prevent
-// Turbopack from evaluating them during server-side module loading.
 if (typeof window !== "undefined" && firebaseConfig.apiKey) {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getAuth } = require("firebase/auth") as typeof import("firebase/auth");
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getFirestore } = require("firebase/firestore") as typeof import("firebase/firestore");
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getStorage } = require("firebase/storage") as typeof import("firebase/storage");
-
-  const apps = getApps();
-  _app = apps.find((a) => a.name === CLIENT_APP_NAME)
-    ?? initializeApp(firebaseConfig, CLIENT_APP_NAME);
+  _app =
+    getApps().find((a) => a.name === CLIENT_APP_NAME) ??
+    initializeApp(firebaseConfig, CLIENT_APP_NAME);
   _auth = getAuth(_app);
   _db = getFirestore(_app);
   _storage = getStorage(_app);
