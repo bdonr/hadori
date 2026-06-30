@@ -29,13 +29,8 @@ export function detectCurrency(): SupportedCurrency {
   const region = locale.split("-")[1]?.toUpperCase();
   const currency = region ? REGION_CURRENCY[region] : undefined;
   if (currency && currency in CURRENCY_RATES) return currency as SupportedCurrency;
-  // Fallback: try Intl to resolve currency
-  try {
-    const resolved = new Intl.NumberFormat(locale, { style: "currency", currency: "USD" })
-      .resolvedOptions();
-    // Not reliable for currency detection — just use EUR as fallback
-  } catch {}
-  return "eur";
+  // Default: USD (most common international currency)
+  return "usd";
 }
 
 export function formatPrice(priceEur: number, currency: SupportedCurrency): string {
