@@ -7,6 +7,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
+import { WorkspaceCreateCard } from "@/components/workspace/WorkspaceCreateCard";
 
 export default async function StartupDashboard({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -23,6 +24,15 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
   const name = profile.full_name ?? "Gründer";
   const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
   const isVisible = profile.investor_visible ?? false;
+
+  // Load the first workspace this user belongs to (if any)
+  let workspaceId: string | null = null;
+  if (adminDb) {
+    const wsSnap = await adminDb.collectionGroup("members").where("uid", "==", session.uid).limit(1).get();
+    if (!wsSnap.empty) {
+      workspaceId = wsSnap.docs[0].ref.parent.parent!.id;
+    }
+  }
 
   const cards = [
     { href: `/${locale}/startup/plan`,       icon: "📄", title: t("card_plan"),       desc: t("card_plan_desc") },
@@ -71,7 +81,26 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
             </Link>
           ))}
         </div>
-        <div className="mt-12 rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
+        {/* Workspace card */}
+        <div className="mt-8">
+          {workspaceId ? (
+            <Link
+              href={`/${locale}/workspace/${workspaceId}`}
+              className="flex items-center gap-4 rounded-2xl border border-violet-200 bg-violet-50 p-6 hover:border-violet-400 transition-all"
+            >
+              <span className="text-3xl">🚀</span>
+              <div>
+                <h2 className="font-semibold text-violet-900">Workspace öffnen</h2>
+                <p className="text-sm text-violet-600">Kanban, Team, Milestones & KI Co-Founder</p>
+              </div>
+              <span className="ml-auto text-violet-400">→</span>
+            </Link>
+          ) : (
+            <WorkspaceCreateCard locale={locale} uid={session.uid} />
+          )}
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
           <h2 className="font-semibold text-indigo-900">{t("steps_title")}</h2>
           <ul className="mt-4 space-y-2 text-sm text-indigo-800">
             {steps.map((s, i) => (

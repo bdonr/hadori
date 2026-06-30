@@ -299,5 +299,19 @@
     "join_btn": "Créer un profil talent →",
     "looking_for": "Nous cherchons :",
     "investor_badge": "Ouvert aux investisseurs"
+  },
+  "workspace": {
+    "board": "Tableau",
+    "team": "Équipe",
+    "milestones": "Jalons",
+    "ai": "IA Co-Fondateur",
+    "dataroom": "Salle des données",
+    "settings": "Paramètres",
+    "back_dashboard": "Retour au tableau de bord",
+    "pro_only": "Pro seulement",
+    "create_title": "Créer un espace de travail",
+    "create_placeholder": "Nom de l'espace...",
+    "create_btn": "Créer",
+    "open_btn": "Ouvrir l'espace"
   }
 }

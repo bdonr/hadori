@@ -299,5 +299,19 @@
     "join_btn": "创建人才档案 →",
     "looking_for": "我们在寻找：",
     "investor_badge": "对投资者开放"
+  },
+  "workspace": {
+    "board": "看板",
+    "team": "团队",
+    "milestones": "里程碑",
+    "ai": "AI联合创始人",
+    "dataroom": "数据室",
+    "settings": "设置",
+    "back_dashboard": "返回仪表板",
+    "pro_only": "仅Pro",
+    "create_title": "创建工作空间",
+    "create_placeholder": "工作空间名称...",
+    "create_btn": "创建",
+    "open_btn": "打开工作空间"
   }
 }

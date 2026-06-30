@@ -299,5 +299,19 @@
     "join_btn": "Создать профиль таланта →",
     "looking_for": "Ищем:",
     "investor_badge": "Открыты для инвесторов"
+  },
+  "workspace": {
+    "board": "Доска",
+    "team": "Команда",
+    "milestones": "Вехи",
+    "ai": "ИИ Сооснователь",
+    "dataroom": "Комната данных",
+    "settings": "Настройки",
+    "back_dashboard": "Вернуться к панели",
+    "pro_only": "Только Pro",
+    "create_title": "Создать рабочее пространство",
+    "create_placeholder": "Название...",
+    "create_btn": "Создать",
+    "open_btn": "Открыть рабочее пространство"
   }
 }

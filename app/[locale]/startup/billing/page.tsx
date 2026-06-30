@@ -3,12 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PROJECT_TIERS } from "@/lib/tiers";
+import { STRIPE_PRICES } from "@/lib/stripe-prices";
 
 const CURRENT: string = "project";
 const STRIPE_PRICE_IDS: Record<string, string> = {
-  project:     "price_project",
-  startup:     "price_startup",
-  startup_pro: "price_startup_pro",
+  project:     STRIPE_PRICES.project,
+  startup:     STRIPE_PRICES.startup,
+  startup_pro: STRIPE_PRICES.startup_pro,
 };
 
 const ACCENT: Record<string, { ring: string; btn: string }> = {

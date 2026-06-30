@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { INVESTOR_TIERS } from "@/lib/tiers";
+import { STRIPE_PRICES } from "@/lib/stripe-prices";
 
 const CURRENT: string = "investor_free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
-  investor_basic:   "price_investor_angel",
-  investor_pro:     "price_investor_pro",
-  investor_premium: "price_investor_lead",
-  investor_elite:   "price_investor_elite",
+  investor_basic:   STRIPE_PRICES.investor_angel,
+  investor_pro:     STRIPE_PRICES.investor_pro,
+  investor_premium: STRIPE_PRICES.investor_premium,
+  investor_elite:   STRIPE_PRICES.investor_elite,
 };
 
 const ACCENT: Record<string, { ring: string; btn: string }> = {

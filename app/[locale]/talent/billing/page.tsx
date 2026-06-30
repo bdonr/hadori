@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { TALENT_TIERS } from "@/lib/tiers";
+import { STRIPE_PRICES } from "@/lib/stripe-prices";
 
 const CURRENT: string = "free";
 const STRIPE_PRICE_IDS: Record<string, string> = {
-  plus: "price_talent_plus",
-  pro:  "price_talent_pro",
+  plus: STRIPE_PRICES.talent_plus,
+  pro:  STRIPE_PRICES.talent_pro,
 };
 
 const ACCENT: Record<string, { ring: string; btn: string; badge: string }> = {

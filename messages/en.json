@@ -299,5 +299,19 @@
     "join_btn": "Create talent profile →",
     "looking_for": "Looking for:",
     "investor_badge": "Open to investors"
+  },
+  "workspace": {
+    "board": "Board",
+    "team": "Team",
+    "milestones": "Milestones",
+    "ai": "AI Co-Founder",
+    "dataroom": "Data Room",
+    "settings": "Settings",
+    "back_dashboard": "Back to dashboard",
+    "pro_only": "Pro only",
+    "create_title": "Create workspace",
+    "create_placeholder": "Workspace name...",
+    "create_btn": "Create",
+    "open_btn": "Open workspace"
   }
 }

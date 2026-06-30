@@ -299,5 +299,19 @@
     "join_btn": "タレントプロフィールを作成 →",
     "looking_for": "募集中：",
     "investor_badge": "投資家オープン"
+  },
+  "workspace": {
+    "board": "ボード",
+    "team": "チーム",
+    "milestones": "マイルストーン",
+    "ai": "AI共同創業者",
+    "dataroom": "データルーム",
+    "settings": "設定",
+    "back_dashboard": "ダッシュボードに戻る",
+    "pro_only": "Proのみ",
+    "create_title": "ワークスペースを作成",
+    "create_placeholder": "ワークスペース名...",
+    "create_btn": "作成",
+    "open_btn": "ワークスペースを開く"
   }
 }

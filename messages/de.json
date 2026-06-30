@@ -299,5 +299,19 @@
     "join_btn": "Talent-Profil erstellen →",
     "looking_for": "Wir suchen:",
     "investor_badge": "Offen für Investoren"
+  },
+  "workspace": {
+    "board": "Board",
+    "team": "Team",
+    "milestones": "Meilensteine",
+    "ai": "KI Co-Founder",
+    "dataroom": "Datenraum",
+    "settings": "Einstellungen",
+    "back_dashboard": "Zurück zum Dashboard",
+    "pro_only": "Nur Pro",
+    "create_title": "Workspace erstellen",
+    "create_placeholder": "Workspace-Name...",
+    "create_btn": "Erstellen",
+    "open_btn": "Workspace öffnen"
   }
 }
