@@ -41,5 +41,7 @@ export async function login(page: Page, email: string) {
 }
 
 export async function signout(page: Page) {
+  // Navbar loads user async — wait for signout button to appear first
+  await page.getByRole("button", { name: /abmelden|ausloggen|sign out|logout/i }).waitFor({ timeout: 20_000 });
   await page.getByRole("button", { name: /abmelden|ausloggen|sign out|logout/i }).click();
 }

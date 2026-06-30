@@ -36,7 +36,12 @@ export function Navbar() {
             role: data?.role ?? "startup",
           });
         } catch {
-          setUser(null);
+          // Firestore read failed — still show user as logged-in using Firebase Auth data
+          setUser({
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName ?? firebaseUser.email ?? "?",
+            role: "startup",
+          });
         }
       } else {
         setUser(null);

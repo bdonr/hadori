@@ -14,14 +14,14 @@ test.describe("Signup", () => {
     const email = uniqueEmail("talent");
     await signup(page, "talent", email, "Test Talent");
     await expect(page).toHaveURL(/\/de\/talent/, { timeout: 10_000 });
-    await expect(page.getByText("Test Talent")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Test Talent/ })).toBeVisible({ timeout: 10_000 });
   });
 
   test("Investor: registers and lands on investor dashboard", async ({ page }) => {
     const email = uniqueEmail("investor");
     await signup(page, "investor", email, "Test Investor");
     await expect(page).toHaveURL(/\/de\/investor/, { timeout: 10_000 });
-    await expect(page.getByText("Test Investor")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Test Investor/ })).toBeVisible({ timeout: 10_000 });
   });
 });
 
