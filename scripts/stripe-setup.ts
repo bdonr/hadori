@@ -181,7 +181,7 @@ async function run() {
       product: product.id,
       currency: "eur",
       active: true,
-      recurring: { interval: "month" } as Stripe.PriceListParams,
+      recurring: { interval: "month" } as Stripe.PriceListParams["recurring"],
     });
 
     let eurPrice: Stripe.Price;
