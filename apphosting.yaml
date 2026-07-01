@@ -36,3 +36,13 @@ env:
   - variable: NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_ELITE
     value: price_1To4jeLyMUHVuOGsPJHcItHb
     availability: [BUILD, RUNTIME]
+
+  # Secrets — stored in Cloud Secret Manager, injected at RUNTIME.
+  # Without these references the server never receives the keys, so
+  # /api/billing/checkout (Stripe) and the AI routes fail server-side.
+  - variable: STRIPE_SECRET_KEY
+    secret: STRIPE_SECRET_KEY
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET
+  - variable: ANTHROPIC_API_KEY
+    secret: ANTHROPIC_API_KEY
