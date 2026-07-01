@@ -82,7 +82,8 @@
     "btn_login": "ログイン",
     "btn_signup": "アカウントを作成",
     "switch_to_signup": "アカウントをお持ちでない方はこちら 登録",
-    "switch_to_login": "すでに登録済みの方はこちら ログイン"
+    "switch_to_login": "すでに登録済みの方はこちら ログイン",
+    "login_failed": "ログインに失敗しました"
   },
   "startup": {
     "dashboard_title": "あなたのDADORIダッシュボード",
@@ -120,7 +121,11 @@
     "roles_add": "求人を掲載",
     "roles_empty": "まだ求人がありません",
     "card_overview": "概要",
-    "card_overview_desc": "プロフィール、ピッチデック、プランをひとつに — 社内ビューと公開ビュー。"
+    "card_overview_desc": "プロフィール、ピッチデック、プランをひとつに — 社内ビューと公開ビュー。",
+    "default_name": "創業者",
+    "greeting": "こんにちは、{name}さん",
+    "workspace_open": "ワークスペースを開く",
+    "workspace_open_desc": "Kanban、チーム、マイルストーン & AI共同創業者"
   },
   "talent": {
     "dashboard_title": "こんにちは、{name}さん 👋",
@@ -608,9 +613,29 @@
       "create_profile": "プロフィールを作成 →",
       "share": "共有",
       "copy_link": "リンクをコピー",
-      "discover_startups_projects": "スタートアップ＆プロジェクトを見つける:"
+      "discover_startups_projects": "スタートアップ＆プロジェクトを見つける:",
+      "avail_immediately": "今すぐ対応可能",
+      "avail_part_time": "パートタイムで対応可能",
+      "avail_project_based": "プロジェクト単位",
+      "avail_1_month": "来月から",
+      "avail_3_months": "3か月後",
+      "avail_not_available": "対応不可",
+      "avail_not_looking": "現在は対応していません",
+      "exp_beginner": "初心者（1年未満）",
+      "exp_intermediate": "中級（1〜3年）",
+      "exp_experienced": "経験者（3〜5年）",
+      "exp_expert": "エキスパート（5年以上）",
+      "exp_junior": "ジュニア"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "無効または期限切れの招待",
+      "invalid_desc": "この招待リンクは無効になりました。",
+      "expired_title": "招待の有効期限が切れました",
+      "expired_desc": "ワークスペースのオーナーに新しい招待を送るよう依頼してください。",
+      "error_title": "問題が発生しました",
+      "error_desc": "招待を承認できませんでした。もう一度お試しください。",
+      "go_home": "ホームページへ移動"
+    },
     "notification_bell": {
       "notifications": "通知",
       "no_new_notifications": "新しい通知はありません"
@@ -866,7 +891,14 @@
       "open_to_intros": "DADORI Introsを歓迎",
       "open_to_intros_desc": "創業者が紹介リクエストを送れます。",
       "saved": "保存しました ✓",
-      "save_profile": "プロフィールを保存"
+      "save_profile": "プロフィールを保存",
+      "role_angel": "エンジェル投資家",
+      "role_vc_partner": "VCパートナー",
+      "role_vc_associate": "VCアソシエイト",
+      "role_family_office": "ファミリーオフィス",
+      "role_corporate_vc": "コーポレートVC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP（リミテッド・パートナー）"
     },
     "watchlist": {
       "empty_title": "まだ何も保存されていません",
@@ -886,6 +918,24 @@
       "portfolio": "ポートフォリオ",
       "notice_label": "ご注意:",
       "notice_text": "DADORIは紹介を仲介します。成功報酬や取引への関与はありません。"
+    },
+    "dashboard": {
+      "greeting": "こんにちは、{name}さん",
+      "subtitle": "DADORIが検証したスタートアップを見つけましょう。",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "新規スタートアップ & ステルスプロジェクト",
+      "card_discover": "スタートアップを探す",
+      "card_discover_desc": "ステージ、MRR、フォーカスで絞り込み",
+      "card_portfolio": "ポートフォリオ・トラッカー",
+      "card_portfolio_desc": "ディールとメモを管理",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "保存したスタートアップを一目で",
+      "card_profile": "マイプロフィール",
+      "card_profile_desc": "投資フォーカス & チェックサイズ",
+      "card_billing": "サブスクリプション",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "法的注記：",
+      "legal_text": "DADORIは創業者と投資家の紹介のみを仲介します。成功報酬なし、取引への参加なし。"
     }
   },
   "startup_pages": {

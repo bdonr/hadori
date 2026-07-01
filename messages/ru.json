@@ -82,7 +82,8 @@
     "btn_login": "Войти",
     "btn_signup": "Создать аккаунт",
     "switch_to_signup": "Ещё нет аккаунта? Зарегистрироваться",
-    "switch_to_login": "Уже зарегистрирован? Войти"
+    "switch_to_login": "Уже зарегистрирован? Войти",
+    "login_failed": "Не удалось войти"
   },
   "startup": {
     "dashboard_title": "Твой дашборд DADORI",
@@ -120,7 +121,11 @@
     "roles_add": "Опубликовать вакансию",
     "roles_empty": "Пока нет вакансий",
     "card_overview": "Обзор",
-    "card_overview_desc": "Профиль, pitch deck и план в одном месте — внутренний и публичный вид."
+    "card_overview_desc": "Профиль, pitch deck и план в одном месте — внутренний и публичный вид.",
+    "default_name": "Основатель",
+    "greeting": "Здравствуйте, {name}",
+    "workspace_open": "Открыть рабочее пространство",
+    "workspace_open_desc": "Kanban, команда, вехи и AI-сооснователь"
   },
   "talent": {
     "dashboard_title": "Привет, {name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "Создать профиль →",
       "share": "Поделиться",
       "copy_link": "Скопировать ссылку",
-      "discover_startups_projects": "Найти стартапы и проекты:"
+      "discover_startups_projects": "Найти стартапы и проекты:",
+      "avail_immediately": "Доступен сейчас",
+      "avail_part_time": "Доступен на неполную занятость",
+      "avail_project_based": "Проектная занятость",
+      "avail_1_month": "Со следующего месяца",
+      "avail_3_months": "Через 3 месяца",
+      "avail_not_available": "Недоступен",
+      "avail_not_looking": "Сейчас недоступен",
+      "exp_beginner": "Начинающий (< 1 года)",
+      "exp_intermediate": "Средний (1–3 года)",
+      "exp_experienced": "Опытный (3–5 лет)",
+      "exp_expert": "Эксперт (5+ лет)",
+      "exp_junior": "Junior"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "Недействительное или просроченное приглашение",
+      "invalid_desc": "Эта ссылка-приглашение больше недействительна.",
+      "expired_title": "Приглашение просрочено",
+      "expired_desc": "Попросите владельца рабочего пространства отправить новое приглашение.",
+      "error_title": "Что-то пошло не так",
+      "error_desc": "Не удалось принять приглашение. Пожалуйста, попробуйте ещё раз.",
+      "go_home": "На главную страницу"
+    },
     "notification_bell": {
       "notifications": "Уведомления",
       "no_new_notifications": "Нет новых уведомлений"
@@ -866,7 +891,14 @@
       "open_to_intros": "Открыт для DADORI Intros",
       "open_to_intros_desc": "Основатели могут отправить запрос на интро.",
       "saved": "Сохранено ✓",
-      "save_profile": "Сохранить профиль"
+      "save_profile": "Сохранить профиль",
+      "role_angel": "Бизнес-ангел",
+      "role_vc_partner": "Партнёр VC",
+      "role_vc_associate": "Ассоциат VC",
+      "role_family_office": "Family Office",
+      "role_corporate_vc": "Corporate VC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP (Limited Partner)"
     },
     "watchlist": {
       "empty_title": "Пока ничего не сохранено",
@@ -886,6 +918,24 @@
       "portfolio": "Портфель",
       "notice_label": "Примечание:",
       "notice_text": "DADORI организует интро. Никаких комиссий за успех, никакого участия в сделках."
+    },
+    "dashboard": {
+      "greeting": "Здравствуйте, {name}",
+      "subtitle": "Открывайте стартапы, проверенные DADORI.",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "Новые стартапы и стелс-проекты",
+      "card_discover": "Найти стартапы",
+      "card_discover_desc": "Фильтр по стадии, MRR, фокусу",
+      "card_portfolio": "Трекер портфеля",
+      "card_portfolio_desc": "Отслеживайте сделки и заметки",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "Сохранённые стартапы с первого взгляда",
+      "card_profile": "Мой профиль",
+      "card_profile_desc": "Фокус инвестиций и размер чека",
+      "card_billing": "Подписка",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "Правовое уведомление:",
+      "legal_text": "DADORI исключительно способствует знакомству основателей и инвесторов. Никаких комиссий за успех, никакого участия в сделках."
     }
   },
   "startup_pages": {

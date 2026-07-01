@@ -82,7 +82,8 @@
     "btn_login": "로그인",
     "btn_signup": "계정 만들기",
     "switch_to_signup": "아직 계정이 없으신가요? 회원가입",
-    "switch_to_login": "이미 가입하셨나요? 로그인"
+    "switch_to_login": "이미 가입하셨나요? 로그인",
+    "login_failed": "로그인에 실패했습니다"
   },
   "startup": {
     "dashboard_title": "당신의 DADORI 대시보드",
@@ -120,7 +121,11 @@
     "roles_add": "채용 공고 올리기",
     "roles_empty": "아직 공고가 없습니다",
     "card_overview": "개요",
-    "card_overview_desc": "프로필, 피치덱, 플랜을 한곳에 — 내부 뷰와 공개 뷰."
+    "card_overview_desc": "프로필, 피치덱, 플랜을 한곳에 — 내부 뷰와 공개 뷰.",
+    "default_name": "창업자",
+    "greeting": "안녕하세요, {name}님",
+    "workspace_open": "워크스페이스 열기",
+    "workspace_open_desc": "Kanban, 팀, 마일스톤 & AI 공동창업자"
   },
   "talent": {
     "dashboard_title": "안녕하세요, {name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "프로필 만들기 →",
       "share": "공유",
       "copy_link": "링크 복사",
-      "discover_startups_projects": "스타트업 및 프로젝트 발견하기:"
+      "discover_startups_projects": "스타트업 및 프로젝트 발견하기:",
+      "avail_immediately": "지금 가능",
+      "avail_part_time": "파트타임 가능",
+      "avail_project_based": "프로젝트 단위",
+      "avail_1_month": "다음 달부터",
+      "avail_3_months": "3개월 후",
+      "avail_not_available": "불가능",
+      "avail_not_looking": "현재 불가능",
+      "exp_beginner": "초급 (< 1년)",
+      "exp_intermediate": "중급 (1–3년)",
+      "exp_experienced": "숙련 (3–5년)",
+      "exp_expert": "전문가 (5년 이상)",
+      "exp_junior": "주니어"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "유효하지 않거나 만료된 초대",
+      "invalid_desc": "이 초대 링크는 더 이상 유효하지 않습니다.",
+      "expired_title": "초대가 만료되었습니다",
+      "expired_desc": "워크스페이스 소유자에게 새 초대를 보내달라고 요청하세요.",
+      "error_title": "문제가 발생했습니다",
+      "error_desc": "초대를 수락할 수 없습니다. 다시 시도해 주세요.",
+      "go_home": "홈페이지로 이동"
+    },
     "notification_bell": {
       "notifications": "알림",
       "no_new_notifications": "새 알림이 없습니다"
@@ -866,7 +891,14 @@
       "open_to_intros": "DADORI 소개에 열려 있음",
       "open_to_intros_desc": "창업자가 소개 요청을 보낼 수 있습니다.",
       "saved": "저장되었습니다 ✓",
-      "save_profile": "프로필 저장"
+      "save_profile": "프로필 저장",
+      "role_angel": "엔젤 투자자",
+      "role_vc_partner": "VC 파트너",
+      "role_vc_associate": "VC 어소시에이트",
+      "role_family_office": "패밀리 오피스",
+      "role_corporate_vc": "기업형 VC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP (Limited Partner)"
     },
     "watchlist": {
       "empty_title": "아직 저장한 항목이 없습니다",
@@ -886,6 +918,24 @@
       "portfolio": "포트폴리오",
       "notice_label": "안내:",
       "notice_text": "DADORI는 소개를 중개합니다. 성공 수수료도, 거래 참여도 없습니다."
+    },
+    "dashboard": {
+      "greeting": "안녕하세요, {name}님",
+      "subtitle": "DADORI가 검증한 스타트업을 발견하세요.",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "신규 스타트업 & 스텔스 프로젝트",
+      "card_discover": "스타트업 탐색",
+      "card_discover_desc": "단계, MRR, 포커스로 필터링",
+      "card_portfolio": "포트폴리오 트래커",
+      "card_portfolio_desc": "딜과 메모 관리",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "저장한 스타트업 한눈에 보기",
+      "card_profile": "내 프로필",
+      "card_profile_desc": "투자 포커스 & 체크 사이즈",
+      "card_billing": "구독",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "법적 고지:",
+      "legal_text": "DADORI는 창업자와 투자자 간의 소개만을 중개합니다. 성공 보수 없음, 거래 참여 없음."
     }
   },
   "startup_pages": {

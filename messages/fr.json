@@ -82,7 +82,8 @@
     "btn_login": "Se connecter",
     "btn_signup": "Créer un compte",
     "switch_to_signup": "Pas encore de compte ? S'inscrire",
-    "switch_to_login": "Déjà inscrit ? Se connecter"
+    "switch_to_login": "Déjà inscrit ? Se connecter",
+    "login_failed": "Échec de la connexion"
   },
   "startup": {
     "dashboard_title": "Ton tableau de bord DADORI",
@@ -120,7 +121,11 @@
     "roles_add": "Publier un poste",
     "roles_empty": "Aucun poste pour l'instant",
     "card_overview": "Vue d'ensemble",
-    "card_overview_desc": "Profil, pitch deck et plan au même endroit — vue interne et publique."
+    "card_overview_desc": "Profil, pitch deck et plan au même endroit — vue interne et publique.",
+    "default_name": "Fondateur",
+    "greeting": "Bonjour, {name}",
+    "workspace_open": "Ouvrir l'espace de travail",
+    "workspace_open_desc": "Kanban, équipe, jalons & Co-Fondateur IA"
   },
   "talent": {
     "dashboard_title": "Salut, {name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "Créer un profil →",
       "share": "Partager",
       "copy_link": "Copier le lien",
-      "discover_startups_projects": "Découvrir startups & projets :"
+      "discover_startups_projects": "Découvrir startups & projets :",
+      "avail_immediately": "Disponible maintenant",
+      "avail_part_time": "Disponible à temps partiel",
+      "avail_project_based": "Au projet",
+      "avail_1_month": "À partir du mois prochain",
+      "avail_3_months": "Dans 3 mois",
+      "avail_not_available": "Non disponible",
+      "avail_not_looking": "Actuellement non disponible",
+      "exp_beginner": "Débutant (< 1 an)",
+      "exp_intermediate": "Intermédiaire (1–3 ans)",
+      "exp_experienced": "Expérimenté (3–5 ans)",
+      "exp_expert": "Expert (5+ ans)",
+      "exp_junior": "Junior"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "Invitation invalide ou expirée",
+      "invalid_desc": "Ce lien d'invitation n'est plus valide.",
+      "expired_title": "Invitation expirée",
+      "expired_desc": "Demandez au propriétaire de l'espace de travail d'envoyer une nouvelle invitation.",
+      "error_title": "Une erreur s'est produite",
+      "error_desc": "Impossible d'accepter l'invitation. Veuillez réessayer.",
+      "go_home": "Aller à la page d'accueil"
+    },
     "notification_bell": {
       "notifications": "Notifications",
       "no_new_notifications": "Aucune nouvelle notification"
@@ -866,7 +891,14 @@
       "open_to_intros": "Ouvert aux DADORI Intros",
       "open_to_intros_desc": "Les fondateurs peuvent envoyer une demande d'intro.",
       "saved": "Enregistré ✓",
-      "save_profile": "Enregistrer le profil"
+      "save_profile": "Enregistrer le profil",
+      "role_angel": "Business Angel",
+      "role_vc_partner": "Partner VC",
+      "role_vc_associate": "Associate VC",
+      "role_family_office": "Family Office",
+      "role_corporate_vc": "Corporate VC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP (Limited Partner)"
     },
     "watchlist": {
       "empty_title": "Rien d'enregistré pour l'instant",
@@ -886,6 +918,24 @@
       "portfolio": "Portfolio",
       "notice_label": "Remarque :",
       "notice_text": "DADORI facilite les introductions. Aucune commission de succès, aucune participation aux transactions."
+    },
+    "dashboard": {
+      "greeting": "Bonjour, {name}",
+      "subtitle": "Découvrez des startups validées par DADORI.",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "Nouvelles startups & projets stealth",
+      "card_discover": "Découvrir des startups",
+      "card_discover_desc": "Filtrer par stade, MRR, focus",
+      "card_portfolio": "Suivi de portefeuille",
+      "card_portfolio_desc": "Suivez les deals & notes",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "Startups enregistrées en un coup d'œil",
+      "card_profile": "Mon profil",
+      "card_profile_desc": "Focus d'investissement & ticket",
+      "card_billing": "Abonnement",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "Mention légale :",
+      "legal_text": "DADORI facilite exclusivement les mises en relation entre fondateurs et investisseurs. Aucune commission de succès, aucune participation aux transactions."
     }
   },
   "startup_pages": {

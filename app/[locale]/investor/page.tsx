@@ -17,24 +17,25 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
   if (!profile || profile.role !== "investor") redirect(`/${locale}/login`);
 
   const t = await getTranslations("investor");
+  const td = await getTranslations("investor_pages.dashboard");
 
   const caps = planCaps(profile.plan_tier);
 
   const cards = [
-    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",         desc: "New Startups & Stealth Projects", tier: "Angel+", locked: !caps.startupDetails },
-    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Discover Startups", desc: "Filter by stage, MRR, focus",     tier: null,     locked: false },
-    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio Tracker", desc: "Track deals & notes",             tier: "Pro+",   locked: !caps.portfolioTracker },
-    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",         desc: "Saved startups at a glance",      tier: null,     locked: false },
-    { href: `/${locale}/investor/profile`,   icon: "💼", title: "My Profile",        desc: "Investment focus & check size",   tier: null,     locked: false },
-    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Subscription",      desc: "Scout → Angel → Pro → Lead → Elite", tier: null,  locked: false },
+    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: td("card_dealflow"),   desc: td("card_dealflow_desc"),   tier: "Angel+", locked: !caps.startupDetails },
+    { href: `/${locale}/investor/discover`,  icon: "🔭", title: td("card_discover"),   desc: td("card_discover_desc"),   tier: null,     locked: false },
+    { href: `/${locale}/investor/portfolio`, icon: "📊", title: td("card_portfolio"),  desc: td("card_portfolio_desc"),  tier: "Pro+",   locked: !caps.portfolioTracker },
+    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: td("card_watchlist"),  desc: td("card_watchlist_desc"),  tier: null,     locked: false },
+    { href: `/${locale}/investor/profile`,   icon: "💼", title: td("card_profile"),    desc: td("card_profile_desc"),    tier: null,     locked: false },
+    { href: `/${locale}/investor/billing`,   icon: "💳", title: td("card_billing"),    desc: td("card_billing_desc"),    tier: null,     locked: false },
   ];
 
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
       <main className="mx-auto max-w-6xl px-6 py-12">
-        <h1 className="text-2xl font-bold text-zinc-900">Hello, {profile.full_name} 💼</h1>
-        <p className="mt-1 text-zinc-500">Discover DADORI-validated startups.</p>
+        <h1 className="text-2xl font-bold text-zinc-900">{td("greeting", { name: profile.full_name })} 💼</h1>
+        <p className="mt-1 text-zinc-500">{td("subtitle")}</p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((c) => (
             <Link key={c.href} href={c.href}
@@ -54,7 +55,7 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
           ))}
         </div>
         <div className="mt-12 rounded-2xl border border-amber-100 bg-amber-50 p-6 text-sm text-amber-800">
-          <strong>Legal notice:</strong> DADORI exclusively facilitates introductions between founders and investors. No success fees, no transaction participation.
+          <strong>{td("legal_label")}</strong> {td("legal_text")}
         </div>
       </main>
     </div>

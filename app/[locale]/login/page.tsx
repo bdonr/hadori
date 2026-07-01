@@ -42,7 +42,7 @@ export default function LoginPage() {
       else if (role === "investor") router.push(`/${locale}/investor`);
       else router.push(`/${locale}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login fehlgeschlagen");
+      setError(err instanceof Error ? err.message : t("login_failed"));
     } finally {
       setLoading(false);
     }

@@ -15,13 +15,13 @@ import { HelpTip } from "@/components/HelpTip";
 import { Navbar } from "@/components/layout/navbar";
 
 const ROLES = [
-  { id: "angel", label: "Angel Investor" },
-  { id: "vc_partner", label: "VC Partner" },
-  { id: "vc_associate", label: "VC Associate" },
-  { id: "family_office", label: "Family Office" },
-  { id: "corporate_vc", label: "Corporate VC" },
-  { id: "micro_vc", label: "Micro-VC" },
-  { id: "lp", label: "LP (Limited Partner)" },
+  { id: "angel", labelKey: "role_angel" },
+  { id: "vc_partner", labelKey: "role_vc_partner" },
+  { id: "vc_associate", labelKey: "role_vc_associate" },
+  { id: "family_office", labelKey: "role_family_office" },
+  { id: "corporate_vc", labelKey: "role_corporate_vc" },
+  { id: "micro_vc", labelKey: "role_micro_vc" },
+  { id: "lp", labelKey: "role_lp" },
 ];
 
 const STAGE_PREFS = [
@@ -134,7 +134,7 @@ export default function InvestorProfilePage() {
                 {ROLES.map(r => (
                   <button key={r.id} type="button" onClick={() => setRole(r.id)}
                     className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${role === r.id ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-emerald-300"}`}>
-                    {r.label}
+                    {t(r.labelKey)}
                   </button>
                 ))}
               </div>

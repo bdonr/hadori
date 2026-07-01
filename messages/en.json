@@ -82,7 +82,8 @@
     "btn_login": "Log in",
     "btn_signup": "Create account",
     "switch_to_signup": "No account yet? Sign up",
-    "switch_to_login": "Already registered? Log in"
+    "switch_to_login": "Already registered? Log in",
+    "login_failed": "Login failed"
   },
   "startup": {
     "dashboard_title": "Your DADORI dashboard",
@@ -120,7 +121,11 @@
     "roles_add": "Post a role",
     "roles_empty": "No roles yet",
     "card_overview": "Overview",
-    "card_overview_desc": "Profile, pitch deck & plan in one place — internal and public view."
+    "card_overview_desc": "Profile, pitch deck & plan in one place — internal and public view.",
+    "default_name": "Founder",
+    "greeting": "Hello, {name}",
+    "workspace_open": "Open Workspace",
+    "workspace_open_desc": "Kanban, Team, Milestones & AI Co-Founder"
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "Create profile →",
       "share": "Share",
       "copy_link": "Copy link",
-      "discover_startups_projects": "Discover startups & projects:"
+      "discover_startups_projects": "Discover startups & projects:",
+      "avail_immediately": "Available now",
+      "avail_part_time": "Available part-time",
+      "avail_project_based": "Project-based",
+      "avail_1_month": "From next month",
+      "avail_3_months": "In 3 months",
+      "avail_not_available": "Not available",
+      "avail_not_looking": "Not currently available",
+      "exp_beginner": "Beginner (< 1 yr)",
+      "exp_intermediate": "Intermediate (1–3 yrs)",
+      "exp_experienced": "Experienced (3–5 yrs)",
+      "exp_expert": "Expert (5+ yrs)",
+      "exp_junior": "Junior"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "Invalid or expired invite",
+      "invalid_desc": "This invite link is no longer valid.",
+      "expired_title": "Invite expired",
+      "expired_desc": "Ask the workspace owner to send a new invite.",
+      "error_title": "Something went wrong",
+      "error_desc": "Could not accept the invite. Please try again.",
+      "go_home": "Go to homepage"
+    },
     "notification_bell": {
       "notifications": "Notifications",
       "no_new_notifications": "No new notifications"
@@ -866,7 +891,14 @@
       "open_to_intros": "Open to DADORI Intros",
       "open_to_intros_desc": "Founders can send you an intro request.",
       "saved": "Saved ✓",
-      "save_profile": "Save profile"
+      "save_profile": "Save profile",
+      "role_angel": "Angel Investor",
+      "role_vc_partner": "VC Partner",
+      "role_vc_associate": "VC Associate",
+      "role_family_office": "Family Office",
+      "role_corporate_vc": "Corporate VC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP (Limited Partner)"
     },
     "watchlist": {
       "empty_title": "Nothing saved yet",
@@ -886,6 +918,24 @@
       "portfolio": "Portfolio",
       "notice_label": "Note:",
       "notice_text": "DADORI facilitates introductions. No success fees, no transaction stake."
+    },
+    "dashboard": {
+      "greeting": "Hello, {name}",
+      "subtitle": "Discover DADORI-validated startups.",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "New Startups & Stealth Projects",
+      "card_discover": "Discover Startups",
+      "card_discover_desc": "Filter by stage, MRR, focus",
+      "card_portfolio": "Portfolio Tracker",
+      "card_portfolio_desc": "Track deals & notes",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "Saved startups at a glance",
+      "card_profile": "My Profile",
+      "card_profile_desc": "Investment focus & check size",
+      "card_billing": "Subscription",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "Legal notice:",
+      "legal_text": "DADORI exclusively facilitates introductions between founders and investors. No success fees, no transaction participation."
     }
   },
   "startup_pages": {

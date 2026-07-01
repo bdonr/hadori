@@ -19,7 +19,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
 
   const t = await getTranslations("startup");
 
-  const name = profile.full_name ?? "Gründer";
+  const name = profile.full_name ?? t("default_name");
   const isPro = isStartupPaid(profile.plan_tier);
   const isVisible = profile.investor_visible ?? false;
 
@@ -49,7 +49,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
       <main className="mx-auto max-w-6xl px-6 py-12">
-        <h1 className="text-2xl font-bold text-zinc-900">Hallo, {name} 👋</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("greeting", { name })} 👋</h1>
         <p className="mt-1 text-zinc-500">{t("dashboard_sub")}</p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((c) => (
@@ -69,8 +69,8 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
             >
               <span className="text-3xl">🚀</span>
               <div>
-                <h2 className="font-semibold text-violet-900">Workspace öffnen</h2>
-                <p className="text-sm text-violet-600">Kanban, Team, Milestones & KI Co-Founder</p>
+                <h2 className="font-semibold text-violet-900">{t("workspace_open")}</h2>
+                <p className="text-sm text-violet-600">{t("workspace_open_desc")}</p>
               </div>
               <span className="ml-auto text-violet-400">→</span>
             </Link>

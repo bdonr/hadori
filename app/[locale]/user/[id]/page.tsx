@@ -14,21 +14,21 @@ import type { Profile } from "@/lib/firebase/collections";
 import { Navbar } from "@/components/layout/navbar";
 
 const AVAIL_META = {
-  immediately:   { label: "Sofort verfügbar",      color: "bg-green-50 border-green-200 text-green-700" },
-  part_time:     { label: "Nebenbei verfügbar",     color: "bg-amber-50 border-amber-200 text-amber-700" },
-  project_based: { label: "Projektbasiert",         color: "bg-amber-50 border-amber-200 text-amber-700" },
-  "1_month":     { label: "Ab nächstem Monat",      color: "bg-amber-50 border-amber-200 text-amber-700" },
-  "3_months":    { label: "Ab in 3 Monaten",        color: "bg-zinc-100 border-zinc-200 text-zinc-500" },
-  not_available: { label: "Nicht verfügbar",        color: "bg-zinc-100 border-zinc-200 text-zinc-400" },
-  not_looking:   { label: "Gerade nicht verfügbar", color: "bg-zinc-100 border-zinc-200 text-zinc-400" },
+  immediately:   { labelKey: "avail_immediately",   color: "bg-green-50 border-green-200 text-green-700" },
+  part_time:     { labelKey: "avail_part_time",      color: "bg-amber-50 border-amber-200 text-amber-700" },
+  project_based: { labelKey: "avail_project_based",  color: "bg-amber-50 border-amber-200 text-amber-700" },
+  "1_month":     { labelKey: "avail_1_month",        color: "bg-amber-50 border-amber-200 text-amber-700" },
+  "3_months":    { labelKey: "avail_3_months",       color: "bg-zinc-100 border-zinc-200 text-zinc-500" },
+  not_available: { labelKey: "avail_not_available",  color: "bg-zinc-100 border-zinc-200 text-zinc-400" },
+  not_looking:   { labelKey: "avail_not_looking",    color: "bg-zinc-100 border-zinc-200 text-zinc-400" },
 } as const;
 
 const EXPERIENCE_LABEL: Record<string, string> = {
-  beginner:     "Einsteiger (< 1 J.)",
-  intermediate: "Fortgeschritten (1–3 J.)",
-  experienced:  "Erfahren (3–5 J.)",
-  expert:       "Experte (5+ J.)",
-  junior:       "Junior",
+  beginner:     "exp_beginner",
+  intermediate: "exp_intermediate",
+  experienced:  "exp_experienced",
+  expert:       "exp_expert",
+  junior:       "exp_junior",
 };
 
 interface TalentData {
@@ -197,7 +197,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
               <div className="mt-2 flex flex-wrap gap-2">
                 {avail && (
                   <span className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${avail.color}`}>
-                    {avail.label}
+                    {t(avail.labelKey)}
                   </span>
                 )}
                 {talent?.remote && (
@@ -207,7 +207,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                 )}
                 {showExperience && talent?.experience && EXPERIENCE_LABEL[talent.experience] && (
                   <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-600">
-                    {EXPERIENCE_LABEL[talent.experience]}
+                    {t(EXPERIENCE_LABEL[talent.experience])}
                   </span>
                 )}
               </div>
@@ -351,13 +351,13 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                   {avail && (
                     <div className="flex items-center justify-between">
                       <dt className="text-zinc-500">{t("availability")}</dt>
-                      <dd className="font-medium text-zinc-800">{avail.label}</dd>
+                      <dd className="font-medium text-zinc-800">{t(avail.labelKey)}</dd>
                     </div>
                   )}
                   {showExperience && talent.experience && EXPERIENCE_LABEL[talent.experience] && (
                     <div className="flex items-center justify-between">
                       <dt className="text-zinc-500">{t("experience")}</dt>
-                      <dd className="font-medium text-zinc-800">{EXPERIENCE_LABEL[talent.experience]}</dd>
+                      <dd className="font-medium text-zinc-800">{t(EXPERIENCE_LABEL[talent.experience])}</dd>
                     </div>
                   )}
                   {talent.remote !== undefined && (

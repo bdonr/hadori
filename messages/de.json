@@ -82,7 +82,8 @@
     "btn_login": "Anmelden",
     "btn_signup": "Konto erstellen",
     "switch_to_signup": "Noch kein Konto? Registrieren",
-    "switch_to_login": "Bereits registriert? Anmelden"
+    "switch_to_login": "Bereits registriert? Anmelden",
+    "login_failed": "Anmeldung fehlgeschlagen"
   },
   "startup": {
     "dashboard_title": "Dein DADORI Dashboard",
@@ -120,7 +121,11 @@
     "roles_add": "Stelle ausschreiben",
     "roles_empty": "Noch keine Stellen",
     "card_overview": "Übersicht",
-    "card_overview_desc": "Profil, Pitchdeck & Plan an einem Ort — Innen- und Außenansicht."
+    "card_overview_desc": "Profil, Pitchdeck & Plan an einem Ort — Innen- und Außenansicht.",
+    "default_name": "Gründer",
+    "greeting": "Hallo, {name}",
+    "workspace_open": "Workspace öffnen",
+    "workspace_open_desc": "Kanban, Team, Milestones & KI Co-Founder"
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "Profil erstellen →",
       "share": "Teilen",
       "copy_link": "Link kopieren",
-      "discover_startups_projects": "Startups & Projekte entdecken:"
+      "discover_startups_projects": "Startups & Projekte entdecken:",
+      "avail_immediately": "Sofort verfügbar",
+      "avail_part_time": "Nebenbei verfügbar",
+      "avail_project_based": "Projektbasiert",
+      "avail_1_month": "Ab nächstem Monat",
+      "avail_3_months": "Ab in 3 Monaten",
+      "avail_not_available": "Nicht verfügbar",
+      "avail_not_looking": "Gerade nicht verfügbar",
+      "exp_beginner": "Einsteiger (< 1 J.)",
+      "exp_intermediate": "Fortgeschritten (1–3 J.)",
+      "exp_experienced": "Erfahren (3–5 J.)",
+      "exp_expert": "Experte (5+ J.)",
+      "exp_junior": "Junior"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "Ungültige oder abgelaufene Einladung",
+      "invalid_desc": "Dieser Einladungslink ist nicht mehr gültig.",
+      "expired_title": "Einladung abgelaufen",
+      "expired_desc": "Bitte den Workspace-Inhaber um eine neue Einladung.",
+      "error_title": "Etwas ist schiefgelaufen",
+      "error_desc": "Einladung konnte nicht angenommen werden. Bitte erneut versuchen.",
+      "go_home": "Zur Startseite"
+    },
     "notification_bell": {
       "notifications": "Benachrichtigungen",
       "no_new_notifications": "Keine neuen Benachrichtigungen"
@@ -866,7 +891,14 @@
       "open_to_intros": "Offen für DADORI Intros",
       "open_to_intros_desc": "Gründer können eine Intro-Anfrage stellen.",
       "saved": "Gespeichert ✓",
-      "save_profile": "Profil speichern"
+      "save_profile": "Profil speichern",
+      "role_angel": "Angel Investor",
+      "role_vc_partner": "VC Partner",
+      "role_vc_associate": "VC Associate",
+      "role_family_office": "Family Office",
+      "role_corporate_vc": "Corporate VC",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP (Limited Partner)"
     },
     "watchlist": {
       "empty_title": "Noch nichts gespeichert",
@@ -886,6 +918,24 @@
       "portfolio": "Portfolio",
       "notice_label": "Hinweis:",
       "notice_text": "DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung."
+    },
+    "dashboard": {
+      "greeting": "Hallo, {name}",
+      "subtitle": "Entdecke DADORI-validierte Startups.",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "Neue Startups & Stealth-Projekte",
+      "card_discover": "Startups entdecken",
+      "card_discover_desc": "Nach Phase, MRR, Fokus filtern",
+      "card_portfolio": "Portfolio-Tracker",
+      "card_portfolio_desc": "Deals & Notizen verfolgen",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "Gespeicherte Startups auf einen Blick",
+      "card_profile": "Mein Profil",
+      "card_profile_desc": "Investmentfokus & Ticketgröße",
+      "card_billing": "Abo",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "Rechtlicher Hinweis:",
+      "legal_text": "DADORI vermittelt ausschließlich Kontakte zwischen Gründern und Investoren. Keine Erfolgsprovisionen, keine Transaktionsbeteiligung."
     }
   },
   "startup_pages": {

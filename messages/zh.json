@@ -82,7 +82,8 @@
     "btn_login": "登录",
     "btn_signup": "创建账户",
     "switch_to_signup": "还没有账户？立即注册",
-    "switch_to_login": "已有账户？立即登录"
+    "switch_to_login": "已有账户？立即登录",
+    "login_failed": "登录失败"
   },
   "startup": {
     "dashboard_title": "你的 DADORI 仪表盘",
@@ -120,7 +121,11 @@
     "roles_add": "发布职位",
     "roles_empty": "暂无职位",
     "card_overview": "总览",
-    "card_overview_desc": "个人资料、Pitch deck 和计划集中一处 — 内部视图与公开视图。"
+    "card_overview_desc": "个人资料、Pitch deck 和计划集中一处 — 内部视图与公开视图。",
+    "default_name": "创始人",
+    "greeting": "你好，{name}",
+    "workspace_open": "打开工作区",
+    "workspace_open_desc": "Kanban、团队、里程碑与 AI 联合创始人"
   },
   "talent": {
     "dashboard_title": "嗨，{name} 👋",
@@ -608,9 +613,29 @@
       "create_profile": "创建档案 →",
       "share": "分享",
       "copy_link": "复制链接",
-      "discover_startups_projects": "发现初创企业与项目："
+      "discover_startups_projects": "发现初创企业与项目：",
+      "avail_immediately": "现在可加入",
+      "avail_part_time": "可兼职",
+      "avail_project_based": "按项目合作",
+      "avail_1_month": "从下月起",
+      "avail_3_months": "3 个月后",
+      "avail_not_available": "不可加入",
+      "avail_not_looking": "当前不可加入",
+      "exp_beginner": "初学者（< 1 年）",
+      "exp_intermediate": "中级（1–3 年）",
+      "exp_experienced": "资深（3–5 年）",
+      "exp_expert": "专家（5 年以上）",
+      "exp_junior": "初级"
     },
-    "invite": {},
+    "invite": {
+      "invalid_title": "邀请无效或已过期",
+      "invalid_desc": "此邀请链接已失效。",
+      "expired_title": "邀请已过期",
+      "expired_desc": "请让工作区所有者发送新的邀请。",
+      "error_title": "出现了问题",
+      "error_desc": "无法接受邀请。请重试。",
+      "go_home": "前往主页"
+    },
     "notification_bell": {
       "notifications": "通知",
       "no_new_notifications": "没有新通知"
@@ -866,7 +891,14 @@
       "open_to_intros": "对 DADORI 引荐开放",
       "open_to_intros_desc": "创始人可以发起引荐请求。",
       "saved": "已保存 ✓",
-      "save_profile": "保存档案"
+      "save_profile": "保存档案",
+      "role_angel": "天使投资人",
+      "role_vc_partner": "VC合伙人",
+      "role_vc_associate": "VC投资经理",
+      "role_family_office": "家族办公室",
+      "role_corporate_vc": "企业风投",
+      "role_micro_vc": "Micro-VC",
+      "role_lp": "LP（有限合伙人）"
     },
     "watchlist": {
       "empty_title": "尚未保存任何内容",
@@ -886,6 +918,24 @@
       "portfolio": "投资组合",
       "notice_label": "提示：",
       "notice_text": "DADORI 负责撮合引荐。不收取成功佣金，不参与交易分成。"
+    },
+    "dashboard": {
+      "greeting": "你好，{name}",
+      "subtitle": "发现经 DADORI 验证的初创企业。",
+      "card_dealflow": "Deal Flow",
+      "card_dealflow_desc": "新初创企业与隐形项目",
+      "card_discover": "发现初创企业",
+      "card_discover_desc": "按阶段、MRR、领域筛选",
+      "card_portfolio": "投资组合追踪",
+      "card_portfolio_desc": "追踪交易与备注",
+      "card_watchlist": "Watchlist",
+      "card_watchlist_desc": "一览已保存的初创企业",
+      "card_profile": "我的资料",
+      "card_profile_desc": "投资领域与投资额度",
+      "card_billing": "订阅",
+      "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
+      "legal_label": "法律声明：",
+      "legal_text": "DADORI 仅促成创始人与投资者之间的引荐。不收取成功佣金，不参与交易。"
     }
   },
   "startup_pages": {

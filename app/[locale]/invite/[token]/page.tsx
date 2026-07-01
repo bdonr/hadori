@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/firebase/session";
 import { adminDb } from "@/lib/firebase/admin";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 export default async function InviteAcceptPage({
@@ -15,6 +16,8 @@ export default async function InviteAcceptPage({
     redirect(`/${locale}/login?redirect=/invite/${token}`);
   }
 
+  const t = await getTranslations("misc_pages.invite");
+
   // Look up the invite
   const invitesSnap = await adminDb!
     .collectionGroup("invites")
@@ -27,10 +30,10 @@ export default async function InviteAcceptPage({
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
         <span className="text-5xl">😕</span>
-        <h1 className="mt-4 text-xl font-bold text-zinc-900">Invalid or expired invite</h1>
-        <p className="mt-2 text-sm text-zinc-500">This invite link is no longer valid.</p>
+        <h1 className="mt-4 text-xl font-bold text-zinc-900">{t("invalid_title")}</h1>
+        <p className="mt-2 text-sm text-zinc-500">{t("invalid_desc")}</p>
         <Link href={`/${locale}`} className="mt-6 text-sm text-indigo-600 hover:underline">
-          Go to homepage
+          {t("go_home")}
         </Link>
       </div>
     );
@@ -44,10 +47,10 @@ export default async function InviteAcceptPage({
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
         <span className="text-5xl">⏰</span>
-        <h1 className="mt-4 text-xl font-bold text-zinc-900">Invite expired</h1>
-        <p className="mt-2 text-sm text-zinc-500">Ask the workspace owner to send a new invite.</p>
+        <h1 className="mt-4 text-xl font-bold text-zinc-900">{t("expired_title")}</h1>
+        <p className="mt-2 text-sm text-zinc-500">{t("expired_desc")}</p>
         <Link href={`/${locale}`} className="mt-6 text-sm text-indigo-600 hover:underline">
-          Go to homepage
+          {t("go_home")}
         </Link>
       </div>
     );
@@ -72,10 +75,10 @@ export default async function InviteAcceptPage({
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
       <span className="text-5xl">⚠️</span>
-      <h1 className="mt-4 text-xl font-bold text-zinc-900">Something went wrong</h1>
-      <p className="mt-2 text-sm text-zinc-500">Could not accept the invite. Please try again.</p>
+      <h1 className="mt-4 text-xl font-bold text-zinc-900">{t("error_title")}</h1>
+      <p className="mt-2 text-sm text-zinc-500">{t("error_desc")}</p>
       <Link href={`/${locale}`} className="mt-6 text-sm text-indigo-600 hover:underline">
-        Go to homepage
+        {t("go_home")}
       </Link>
     </div>
   );
