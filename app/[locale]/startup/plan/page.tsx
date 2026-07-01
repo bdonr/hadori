@@ -81,8 +81,22 @@ export default function PlanPage() {
 
   useEffect(() => onAuthStateChanged(auth, async (u) => {
     if (!u) { setTier("free"); return; }
-    try { const s = await getDoc(doc(db, "profiles", u.uid)); setTier((s.data()?.plan_tier as string) ?? "free"); }
-    catch { setTier("free"); }
+    try {
+      const [s, bp] = await Promise.all([
+        getDoc(doc(db, "profiles", u.uid)),
+        getDoc(doc(db, "businessplans", u.uid)),
+      ]);
+      setTier((s.data()?.plan_tier as string) ?? "free");
+      // Load a previously generated plan so it is never "lost" on reload.
+      if (bp.exists()) {
+        const d = bp.data() as { external?: External; internal?: Internal };
+        if (d.external && d.internal) {
+          setExternal(d.external);
+          setInternal(d.internal);
+          setStep("result");
+        }
+      }
+    } catch { setTier("free"); }
   }), []);
 
   const paid = isStartupPaid(tier);
@@ -246,7 +260,6 @@ export default function PlanPage() {
                   </ul>
                 </div>
               )}
-              <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">{t("market_unverified")}</p>
             </section>
 
             <div className="flex gap-3">
