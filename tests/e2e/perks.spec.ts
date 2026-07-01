@@ -24,9 +24,9 @@ test.describe("Perks gating (free tier locked)", () => {
 
     await page.goto("/de/talent/portfolio");
     await waitForAuthReady(page);
-    // Free tier: 1 slot. The locked placeholder / Pro upsell must be present.
-    await expect(page.getByText(/Pro-Plan|Pro für|Pro freischalten|weitere Einträge/i).first())
-      .toBeVisible({ timeout: 15_000 });
+    // Free tier limit = 1 (from planCaps). On an empty portfolio the tier
+    // indicator shows exactly one free slot remaining.
+    await expect(page.getByText(/Noch 1 frei/i).first()).toBeVisible({ timeout: 15_000 });
   });
 
   test("free investor: deal flow is gated behind Angel+", async ({ page }) => {
