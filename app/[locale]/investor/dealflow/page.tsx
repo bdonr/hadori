@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, getDoc, doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, doc, setDoc, deleteDoc, addDoc, serverTimestamp } from "firebase/firestore";
 import { isInvestorPaid, planCaps } from "@/lib/entitlements";
 import { REGIONS } from "@/lib/regions";
 import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
@@ -31,6 +31,9 @@ export default function DealFlowPage() {
   const [uid, setUid] = useState<string | null>(null);
   const [tier, setTier] = useState<string | null>(null);
   const [limitHit, setLimitHit] = useState(false);
+  const [myName, setMyName] = useState("");
+  const [requestedIds, setRequestedIds] = useState<string[]>([]);
+  const [introsThisMonth, setIntrosThisMonth] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -87,6 +90,26 @@ export default function DealFlowPage() {
       } catch {
         // ignore
       }
+      try {
+        const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+        if (myPubSnap.exists()) setMyName((myPubSnap.data().full_name as string) ?? "");
+        const reqSnap = await getDocs(
+          query(collection(db, "applications"), where("fromUid", "==", user.uid))
+        );
+        const myReqs = reqSnap.docs
+          .map(d => d.data() as Record<string, unknown>)
+          .filter(d => d.type === "startup_request");
+        setRequestedIds(myReqs.map(d => d.toUid as string));
+        const now = new Date();
+        setIntrosThisMonth(myReqs.filter(d => {
+          const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+          if (!ts?.toDate) return true;
+          const created = ts.toDate();
+          return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+        }).length);
+      } catch {
+        // ignore
+      }
       setLoading(false);
     });
     return () => unsub();
@@ -98,8 +121,30 @@ export default function DealFlowPage() {
   const canSeeFunding = caps.fundingData;          // Pro+ (MRR/stage)
   const maxWatchlist = caps.watchlistLimit;
 
+  const introCap = caps.introsPerMonth;
+  const atIntroLimit = introsThisMonth >= introCap;
+
   const newCount = deals.filter(d => d.isNew).length;
   const items = filter === "new" ? deals.filter(d => d.isNew) : deals;
+
+  async function requestIntro(deal: Deal) {
+    if (!uid || requestedIds.includes(deal.id) || atIntroLimit) return;
+    setRequestedIds(prev => [...prev, deal.id]);
+    setIntrosThisMonth(prev => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: uid,
+        toUid: deal.id,
+        type: "startup_request",
+        fromName: myName,
+        toName: deal.name,
+        subjectTitle: deal.name,
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
+  }
 
   async function toggleSave(deal: Deal) {
     const isSaved = saved.has(deal.id);
@@ -208,6 +253,14 @@ export default function DealFlowPage() {
                               className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${saved.has(deal.id) ? "bg-amber-100 text-amber-700" : "border border-zinc-200 text-zinc-500 hover:border-amber-300"}`}>
                               {saved.has(deal.id) ? t("saved") : t("save")}
                             </button>
+                            {requestedIds.includes(deal.id) ? (
+                              <span className="rounded-lg bg-green-50 border border-green-200 px-3 py-1.5 text-xs font-semibold text-green-700">{t("intro_requested")}</span>
+                            ) : (
+                              <button onClick={() => requestIntro(deal)} disabled={atIntroLimit}
+                                className="rounded-lg border border-emerald-300 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                {t("request_intro")}
+                              </button>
+                            )}
                             <Link href={`/${locale}/project/${deal.id}`}
                               className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-colors">
                               {t("details")}

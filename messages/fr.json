@@ -591,7 +591,9 @@
       "share": "Partager",
       "copy_link": "Copier le lien",
       "discover_on_dadori": "Découvrir sur DADORI :",
-      "all_projects_startups": "Tous les projets & startups →"
+      "all_projects_startups": "Tous les projets & startups →",
+      "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
+      "intro_limit_reached": "Limite mensuelle d'intros atteinte"
     },
     "matches": {
       "no_matches": "Aucun match pour l'instant",
@@ -872,7 +874,9 @@
       "empty_title": "Aucune startup dans le deal flow pour le moment",
       "empty_desc": "Dès que des startups se rendront visibles auprès des investisseurs, elles apparaîtront ici.",
       "watchlist_limit_hit": "Limite de la watchlist atteinte",
-      "featured_chip": "★ En vedette"
+      "featured_chip": "★ En vedette",
+      "request_intro": "🤝 Demander une intro",
+      "intro_requested": "✓ Intro demandée"
     },
     "portfolio": {
       "gate_title": "Tracker de portefeuille à partir de Pro (49 €/mois)",
@@ -951,7 +955,9 @@
       "about": "À propos de {name}",
       "portfolio": "Portfolio",
       "notice_label": "Remarque :",
-      "notice_text": "DADORI facilite les introductions. Aucune commission de succès, aucune participation aux transactions."
+      "notice_text": "DADORI facilite les introductions. Aucune commission de succès, aucune participation aux transactions.",
+      "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
+      "intro_limit_reached": "Limite mensuelle d'intros atteinte"
     },
     "dashboard": {
       "greeting": "Bonjour, {name}",
@@ -970,6 +976,21 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "Mention légale :",
       "legal_text": "DADORI facilite exclusivement les mises en relation entre fondateurs et investisseurs. Aucune commission de succès, aucune participation aux transactions."
+    },
+    "requests": {
+      "title": "Demandes",
+      "subtitle": "Les startups qui vous ont sollicité et celles que vous avez sollicitées.",
+      "loading": "Chargement…",
+      "received_title": "Intérêt des startups",
+      "received_empty": "Aucune startup ne vous a encore sollicité.",
+      "sent_title": "Demandes envoyées",
+      "sent_empty": "Vous n'avez encore sollicité aucune startup.",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "someone": "Quelqu'un",
+      "status_pending": "En attente",
+      "status_accepted": "Acceptée",
+      "status_declined": "Refusée"
     }
   },
   "startup_pages": {
@@ -1017,7 +1038,9 @@
       "view_profile": "Voir le profil",
       "gate_title": "Découvrir des investisseurs",
       "gate_desc": "Découvrez et contactez des investisseurs pertinents avec un forfait Startup payant.",
-      "upgrade_cta": "Passer à un forfait supérieur"
+      "upgrade_cta": "Passer à un forfait supérieur",
+      "request_intro": "🤝 Demander une intro",
+      "intro_requested": "✓ Intro demandée"
     },
     "pitchdeck": {
       "slide_problem_title": "Le problème",
@@ -1433,7 +1456,11 @@
       "someone": "Quelqu'un",
       "status_pending": "En attente",
       "status_accepted": "Acceptée",
-      "status_declined": "Refusée"
+      "status_declined": "Refusée",
+      "investor_interest_title": "Intérêt des investisseurs",
+      "investor_interest_empty": "Aucun investisseur ne vous a encore sollicité.",
+      "investors_requested_title": "Investisseurs sollicités",
+      "investors_requested_empty": "Vous n'avez encore sollicité aucun investisseur."
     }
   },
   "glossary": {
@@ -1500,7 +1527,11 @@
     "empty_title": "Rien de public pour le moment",
     "empty_desc": "Cette startup n'a encore rien partagé publiquement.",
     "explore_cta": "Découvrir d'autres startups",
-    "verified_badge": "Vérifié par l’incubateur"
+    "verified_badge": "Vérifié par l’incubateur",
+    "request_intro": "🤝 Demander une intro",
+    "intro_requested": "✓ Intro demandée",
+    "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
+    "intro_limit_reached": "Limite mensuelle d'intros atteinte"
   },
   "taxonomy": {
     "skills": {
@@ -1755,5 +1786,9 @@
       "it": "Italien",
       "any": "Peu importe / Tous"
     }
+  },
+  "investor": {
+    "requests_link": "Demandes",
+    "requests_link_desc": "Intérêt des startups & demandes envoyées"
   }
 }

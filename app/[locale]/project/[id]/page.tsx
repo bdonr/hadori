@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState, useEffect, use } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
+import { collection, addDoc, getDocs, query, where, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
+import { isInvestorPaid, planCaps } from "@/lib/entitlements";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
-import { LangSwitcher } from "@/components/LangSwitcher";
 import { Navbar } from "@/components/layout/navbar";
 import { useTaxonomy } from "@/lib/taxonomy";
 
@@ -79,6 +80,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [interested, setInterested] = useState(false);
+  const [authUid, setAuthUid] = useState<string | null>(null);
+  const [myRole, setMyRole] = useState<string | null>(null);
+  const [myTier, setMyTier] = useState<string | null>(null);
+  const [myName, setMyName] = useState("");
+  const [introsThisMonth, setIntrosThisMonth] = useState(0);
+  const [requestedToUids, setRequestedToUids] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -155,6 +162,38 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     return () => { cancelled = true; };
   }, [id]);
 
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      setAuthUid(user?.uid ?? null);
+      if (!user) return;
+      try {
+        const myProfileSnap = await getDoc(doc(db, "profiles", user.uid));
+        if (myProfileSnap.exists()) {
+          setMyRole((myProfileSnap.data().role as string) ?? null);
+          setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+        }
+        const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+        if (myPubSnap.exists()) setMyName((myPubSnap.data().full_name as string) ?? "");
+
+        const reqSnap = await getDocs(
+          query(collection(db, "applications"), where("fromUid", "==", user.uid))
+        );
+        const myReqs = reqSnap.docs
+          .map(d => d.data() as Record<string, unknown>)
+          .filter(d => d.type === "startup_request");
+        setRequestedToUids(myReqs.map(d => d.toUid as string));
+        const now = new Date();
+        setIntrosThisMonth(myReqs.filter(d => {
+          const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+          if (!ts?.toDate) return true;
+          const created = ts.toDate();
+          return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+        }).length);
+      } catch { /* ignore */ }
+    });
+    return () => unsub();
+  }, [id]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
@@ -206,6 +245,33 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     );
   }
 
+  const isOwner = !!authUid && !!project.ownerId && authUid === project.ownerId;
+  const isInvestorViewer = myRole === "investor";
+  const canRequestIntro = isInvestorPaid(myTier);
+  const introCap = planCaps(myTier).introsPerMonth;
+  const atIntroLimit = introsThisMonth >= introCap;
+  const alreadyRequested = interested || (!!project.ownerId && requestedToUids.includes(project.ownerId));
+  const showIntroButton = isInvestorViewer && !isOwner && !!project.ownerId;
+
+  async function requestIntro() {
+    if (!authUid || !project?.ownerId || !canRequestIntro || atIntroLimit || alreadyRequested) return;
+    setInterested(true);
+    setIntrosThisMonth(prev => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: authUid,
+        toUid: project.ownerId,
+        type: "startup_request",
+        fromName: myName,
+        toName: (project.founders[0]?.name ?? project.name ?? ""),
+        subjectTitle: project.name || "",
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50">
 
@@ -231,12 +297,23 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             </div>
           </div>
           <div className="mt-6 flex gap-3 flex-wrap">
-            {interested ? (
-              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ {t("request_sent")}</span>
-            ) : (
-              <button onClick={() => setInterested(true)} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                {t("show_interest")}
-              </button>
+            {showIntroButton && (
+              alreadyRequested ? (
+                <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ {t("request_sent")}</span>
+              ) : !canRequestIntro ? (
+                <div className="flex flex-col gap-1">
+                  <button disabled className="rounded-xl bg-zinc-200 px-6 py-3 text-sm font-bold text-zinc-400 cursor-not-allowed">
+                    {t("show_interest")}
+                  </button>
+                  <Link href={`/${locale}/investor/billing`} className="text-xs font-semibold text-indigo-600 hover:underline">
+                    {t("intro_requires_paid")}
+                  </Link>
+                </div>
+              ) : (
+                <button onClick={requestIntro} disabled={atIntroLimit} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {atIntroLimit ? t("intro_limit_reached") : t("show_interest")}
+                </button>
+              )
             )}
             {project.website && (
               <a href={project.website} target="_blank" rel="noopener noreferrer"

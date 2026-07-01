@@ -591,7 +591,9 @@
       "share": "Share",
       "copy_link": "Copy link",
       "discover_on_dadori": "Discover on DADORI:",
-      "all_projects_startups": "All projects & startups →"
+      "all_projects_startups": "All projects & startups →",
+      "intro_requires_paid": "Upgrade to request intros →",
+      "intro_limit_reached": "Monthly intro limit reached"
     },
     "matches": {
       "no_matches": "No matches yet",
@@ -872,7 +874,9 @@
       "empty_title": "No startups in the deal flow yet",
       "empty_desc": "Once startups make themselves visible to investors, they will show up here.",
       "watchlist_limit_hit": "Watchlist limit reached",
-      "featured_chip": "★ Featured"
+      "featured_chip": "★ Featured",
+      "request_intro": "🤝 Request intro",
+      "intro_requested": "✓ Intro requested"
     },
     "portfolio": {
       "gate_title": "Portfolio tracker from Pro (€49/mo)",
@@ -951,7 +955,9 @@
       "about": "About {name}",
       "portfolio": "Portfolio",
       "notice_label": "Note:",
-      "notice_text": "DADORI facilitates introductions. No success fees, no transaction stake."
+      "notice_text": "DADORI facilitates introductions. No success fees, no transaction stake.",
+      "intro_requires_paid": "Upgrade to request intros →",
+      "intro_limit_reached": "Monthly intro limit reached"
     },
     "dashboard": {
       "greeting": "Hello, {name}",
@@ -970,7 +976,26 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "Legal notice:",
       "legal_text": "DADORI exclusively facilitates introductions between founders and investors. No success fees, no transaction participation."
+    },
+    "requests": {
+      "title": "Requests",
+      "subtitle": "Startups that requested you and the startups you requested.",
+      "loading": "Loading…",
+      "received_title": "Startup interest",
+      "received_empty": "No startups have requested you yet.",
+      "sent_title": "Sent requests",
+      "sent_empty": "You haven't requested any startups yet.",
+      "accept": "Accept",
+      "decline": "Decline",
+      "someone": "Someone",
+      "status_pending": "Pending",
+      "status_accepted": "Accepted",
+      "status_declined": "Declined"
     }
+  },
+  "investor": {
+    "requests_link": "Requests",
+    "requests_link_desc": "Startup interest & requests you sent"
   },
   "startup_pages": {
     "applicants": {
@@ -981,6 +1006,10 @@
       "received_empty": "No applications yet.",
       "sent_title": "Sent contact requests",
       "sent_empty": "You haven't sent any contact requests yet.",
+      "investor_interest_title": "Investor interest",
+      "investor_interest_empty": "No investors have requested you yet.",
+      "investors_requested_title": "Investors requested",
+      "investors_requested_empty": "You haven't requested any investors yet.",
       "accept": "Accept",
       "decline": "Decline",
       "someone": "Someone",
@@ -1032,7 +1061,9 @@
       "view_profile": "View profile",
       "gate_title": "Discover investors",
       "gate_desc": "Discover and request matching investors with a paid startup plan.",
-      "upgrade_cta": "Upgrade now"
+      "upgrade_cta": "Upgrade now",
+      "request_intro": "🤝 Request intro",
+      "intro_requested": "✓ Intro requested"
     },
     "pitchdeck": {
       "slide_problem_title": "The problem",
@@ -1500,7 +1531,11 @@
     "empty_title": "Nothing shared publicly yet",
     "empty_desc": "This startup hasnt shared anything public yet.",
     "explore_cta": "Explore other startups",
-    "verified_badge": "Incubator-verified"
+    "verified_badge": "Incubator-verified",
+    "request_intro": "🤝 Request intro",
+    "intro_requested": "✓ Intro requested",
+    "intro_requires_paid": "Upgrade to request intros →",
+    "intro_limit_reached": "Monthly intro limit reached"
   },
   "taxonomy": {
     "skills": {

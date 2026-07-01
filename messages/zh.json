@@ -591,7 +591,9 @@
       "share": "分享",
       "copy_link": "复制链接",
       "discover_on_dadori": "在 DADORI 上发现：",
-      "all_projects_startups": "所有项目与初创企业 →"
+      "all_projects_startups": "所有项目与初创企业 →",
+      "intro_requires_paid": "升级以请求引荐 →",
+      "intro_limit_reached": "已达本月引荐上限"
     },
     "matches": {
       "no_matches": "尚无匹配",
@@ -872,7 +874,9 @@
       "empty_title": "Deal Flow 中暂无初创公司",
       "empty_desc": "当初创公司向投资者展示自己后，它们将显示在这里。",
       "watchlist_limit_hit": "已达到 Watchlist 上限",
-      "featured_chip": "★ 精选"
+      "featured_chip": "★ 精选",
+      "request_intro": "🤝 请求引荐",
+      "intro_requested": "✓ 已请求引荐"
     },
     "portfolio": {
       "gate_title": "投资组合追踪器从 Pro 起（每月 49 €）",
@@ -951,7 +955,9 @@
       "about": "关于 {name}",
       "portfolio": "投资组合",
       "notice_label": "提示：",
-      "notice_text": "DADORI 负责撮合引荐。不收取成功佣金，不参与交易分成。"
+      "notice_text": "DADORI 负责撮合引荐。不收取成功佣金，不参与交易分成。",
+      "intro_requires_paid": "升级以请求引荐 →",
+      "intro_limit_reached": "已达本月引荐上限"
     },
     "dashboard": {
       "greeting": "你好，{name}",
@@ -970,6 +976,21 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "法律声明：",
       "legal_text": "DADORI 仅促成创始人与投资者之间的引荐。不收取成功佣金，不参与交易。"
+    },
+    "requests": {
+      "title": "请求",
+      "subtitle": "向你发出请求的初创公司，以及你请求过的初创公司。",
+      "loading": "加载中…",
+      "received_title": "初创公司的兴趣",
+      "received_empty": "还没有初创公司向你发出请求。",
+      "sent_title": "已发送的请求",
+      "sent_empty": "你还没有请求过任何初创公司。",
+      "accept": "接受",
+      "decline": "拒绝",
+      "someone": "某人",
+      "status_pending": "待处理",
+      "status_accepted": "已接受",
+      "status_declined": "已拒绝"
     }
   },
   "startup_pages": {
@@ -1017,7 +1038,9 @@
       "view_profile": "查看档案",
       "gate_title": "发现投资者",
       "gate_desc": "使用付费 Startup 套餐，发现并联系匹配的投资者。",
-      "upgrade_cta": "立即升级"
+      "upgrade_cta": "立即升级",
+      "request_intro": "🤝 请求引荐",
+      "intro_requested": "✓ 已请求引荐"
     },
     "pitchdeck": {
       "slide_problem_title": "问题",
@@ -1433,7 +1456,11 @@
       "someone": "某人",
       "status_pending": "待处理",
       "status_accepted": "已接受",
-      "status_declined": "已拒绝"
+      "status_declined": "已拒绝",
+      "investor_interest_title": "投资人的兴趣",
+      "investor_interest_empty": "还没有投资人向你发出请求。",
+      "investors_requested_title": "已请求的投资人",
+      "investors_requested_empty": "你还没有请求过任何投资人。"
     }
   },
   "glossary": {
@@ -1500,7 +1527,11 @@
     "empty_title": "尚未公开分享任何内容",
     "empty_desc": "这家初创公司还没有分享任何公开内容。",
     "explore_cta": "探索其他初创公司",
-    "verified_badge": "孵化器认证"
+    "verified_badge": "孵化器认证",
+    "request_intro": "🤝 请求引荐",
+    "intro_requested": "✓ 已请求引荐",
+    "intro_requires_paid": "升级以请求引荐 →",
+    "intro_limit_reached": "已达本月引荐上限"
   },
   "taxonomy": {
     "skills": {
@@ -1755,5 +1786,9 @@
       "it": "意大利语",
       "any": "不限 / 全部"
     }
+  },
+  "investor": {
+    "requests_link": "请求",
+    "requests_link_desc": "初创公司的兴趣及你发送的请求"
   }
 }

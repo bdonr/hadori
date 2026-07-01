@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import { INVESTOR_FOCUS } from "@/lib/funding";
 import { REGIONS } from "@/lib/regions";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
 import { useTaxonomy } from "@/lib/taxonomy";
-import { isStartupPaid } from "@/lib/entitlements";
+import { isStartupPaid, isStartupProPlus } from "@/lib/entitlements";
 
 interface Match {
   uid: string; name: string; firm: string; role: string; region: string;
@@ -26,16 +26,42 @@ export default function DiscoverInvestorsPage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [locked, setLocked] = useState(false);
+  const [myUid, setMyUid] = useState<string | null>(null);
+  const [myTier, setMyTier] = useState<string | null>(null);
+  const [myName, setMyName] = useState("");
+  const [requestedIds, setRequestedIds] = useState<string[]>([]);
+  const [introsThisMonth, setIntrosThisMonth] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setMyUid(user.uid);
         try {
           const snap = await getDoc(doc(db, "profiles", user.uid));
-          if (!isStartupPaid(snap.data()?.plan_tier as string | undefined)) setLocked(true);
+          const tier = snap.data()?.plan_tier as string | undefined;
+          setMyTier(tier ?? null);
+          if (!isStartupPaid(tier)) setLocked(true);
         } catch {
           // ignore — API is the authoritative gate
         }
+        try {
+          const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+          if (myPubSnap.exists()) setMyName((myPubSnap.data().full_name as string) ?? "");
+          const reqSnap = await getDocs(
+            query(collection(db, "applications"), where("fromUid", "==", user.uid))
+          );
+          const myReqs = reqSnap.docs
+            .map(d => d.data() as Record<string, unknown>)
+            .filter(d => d.type === "investor_request");
+          setRequestedIds(myReqs.map(d => d.toUid as string));
+          const now = new Date();
+          setIntrosThisMonth(myReqs.filter(d => {
+            const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+            if (!ts?.toDate) return true;
+            const created = ts.toDate();
+            return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+          }).length);
+        } catch { /* ignore */ }
       }
       fetch("/api/startup/matches")
         .then((r) => r.json())
@@ -51,6 +77,28 @@ export default function DiscoverInvestorsPage() {
 
   function toggleFocus(id: string) {
     setFocusFilter((prev) => (prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]));
+  }
+
+  const introCap = isStartupProPlus(myTier) ? Infinity : 20;
+  const atIntroLimit = introsThisMonth >= introCap;
+
+  async function requestIntro(m: Match) {
+    if (!myUid || requestedIds.includes(m.uid) || atIntroLimit) return;
+    setRequestedIds((prev) => [...prev, m.uid]);
+    setIntrosThisMonth((prev) => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: myUid,
+        toUid: m.uid,
+        type: "investor_request",
+        fromName: myName,
+        toName: m.name,
+        subjectTitle: m.firm || "",
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
   }
 
   const filtered = focusFilter.length
@@ -142,10 +190,20 @@ export default function DiscoverInvestorsPage() {
                       {m.checkSize && <span>{t("check_label")}: {m.checkSize}</span>}
                     </div>
 
-                    <Link href={`/${locale}/investor/${m.uid}`}
-                      className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-700">
-                      {t("view_profile")}
-                    </Link>
+                    <div className="mt-4 flex gap-2">
+                      <Link href={`/${locale}/investor/${m.uid}`}
+                        className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-700">
+                        {t("view_profile")}
+                      </Link>
+                      {requestedIds.includes(m.uid) ? (
+                        <span className="rounded-lg bg-green-50 border border-green-200 px-4 py-2 text-sm font-semibold text-green-700">{t("intro_requested")}</span>
+                      ) : (
+                        <button onClick={() => requestIntro(m)} disabled={atIntroLimit}
+                          className="rounded-lg border border-amber-300 px-4 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                          {t("request_intro")}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}

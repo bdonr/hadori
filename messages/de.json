@@ -591,7 +591,9 @@
       "share": "Teilen",
       "copy_link": "Link kopieren",
       "discover_on_dadori": "Auf DADORI entdecken:",
-      "all_projects_startups": "Alle Projekte & Startups →"
+      "all_projects_startups": "Alle Projekte & Startups →",
+      "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
+      "intro_limit_reached": "Monatliches Intro-Limit erreicht"
     },
     "matches": {
       "no_matches": "Noch keine Matches",
@@ -872,7 +874,9 @@
       "empty_title": "Noch keine Startups im Deal Flow",
       "empty_desc": "Sobald Startups sich für Investoren sichtbar schalten, erscheinen sie hier.",
       "watchlist_limit_hit": "Watchlist-Limit erreicht",
-      "featured_chip": "★ Empfohlen"
+      "featured_chip": "★ Empfohlen",
+      "request_intro": "🤝 Intro anfragen",
+      "intro_requested": "✓ Intro angefragt"
     },
     "portfolio": {
       "gate_title": "Portfolio-Tracker ab Pro (49 €/Mo)",
@@ -951,7 +955,9 @@
       "about": "Über {name}",
       "portfolio": "Portfolio",
       "notice_label": "Hinweis:",
-      "notice_text": "DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung."
+      "notice_text": "DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.",
+      "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
+      "intro_limit_reached": "Monatliches Intro-Limit erreicht"
     },
     "dashboard": {
       "greeting": "Hallo, {name}",
@@ -970,7 +976,26 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "Rechtlicher Hinweis:",
       "legal_text": "DADORI vermittelt ausschließlich Kontakte zwischen Gründern und Investoren. Keine Erfolgsprovisionen, keine Transaktionsbeteiligung."
+    },
+    "requests": {
+      "title": "Anfragen",
+      "subtitle": "Startups, die dich angefragt haben, und die von dir angefragten Startups.",
+      "loading": "Lädt…",
+      "received_title": "Startup-Interesse",
+      "received_empty": "Noch keine Startups haben dich angefragt.",
+      "sent_title": "Gesendete Anfragen",
+      "sent_empty": "Du hast noch keine Startups angefragt.",
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "someone": "Jemand",
+      "status_pending": "Ausstehend",
+      "status_accepted": "Angenommen",
+      "status_declined": "Abgelehnt"
     }
+  },
+  "investor": {
+    "requests_link": "Anfragen",
+    "requests_link_desc": "Startup-Interesse & gesendete Anfragen"
   },
   "startup_pages": {
     "applicants": {
@@ -981,6 +1006,10 @@
       "received_empty": "Noch keine Bewerbungen.",
       "sent_title": "Gesendete Kontaktanfragen",
       "sent_empty": "Du hast noch keine Kontaktanfragen gesendet.",
+      "investor_interest_title": "Investoren-Interesse",
+      "investor_interest_empty": "Noch keine Investoren haben dich angefragt.",
+      "investors_requested_title": "Angefragte Investoren",
+      "investors_requested_empty": "Du hast noch keine Investoren angefragt.",
       "accept": "Annehmen",
       "decline": "Ablehnen",
       "someone": "Jemand",
@@ -1032,7 +1061,9 @@
       "view_profile": "Profil ansehen",
       "gate_title": "Investoren entdecken",
       "gate_desc": "Entdecke und kontaktiere passende Investoren mit einem bezahlten Startup-Plan.",
-      "upgrade_cta": "Jetzt upgraden"
+      "upgrade_cta": "Jetzt upgraden",
+      "request_intro": "🤝 Intro anfragen",
+      "intro_requested": "✓ Intro angefragt"
     },
     "pitchdeck": {
       "slide_problem_title": "Das Problem",
@@ -1500,7 +1531,11 @@
     "empty_title": "Noch nichts öffentlich geteilt",
     "empty_desc": "Dieses Startup hat noch keine öffentlichen Inhalte freigegeben.",
     "explore_cta": "Andere Startups entdecken",
-    "verified_badge": "Inkubator-verifiziert"
+    "verified_badge": "Inkubator-verifiziert",
+    "request_intro": "🤝 Intro anfragen",
+    "intro_requested": "✓ Intro angefragt",
+    "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
+    "intro_limit_reached": "Monatliches Intro-Limit erreicht"
   },
   "taxonomy": {
     "skills": {

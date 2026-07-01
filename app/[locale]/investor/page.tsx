@@ -23,6 +23,7 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
 
   const cards = [
     { href: `/${locale}/investor/dealflow`,  icon: "📬", title: td("card_dealflow"),   desc: td("card_dealflow_desc"),   tier: "Angel+", locked: !caps.startupDetails },
+    { href: `/${locale}/investor/requests`,  icon: "🤝", title: t("requests_link"),    desc: t("requests_link_desc"),    tier: null,     locked: false },
     { href: `/${locale}/investor/discover`,  icon: "🔭", title: td("card_discover"),   desc: td("card_discover_desc"),   tier: null,     locked: false },
     { href: `/${locale}/investor/portfolio`, icon: "📊", title: td("card_portfolio"),  desc: td("card_portfolio_desc"),  tier: "Pro+",   locked: !caps.portfolioTracker },
     { href: `/${locale}/investor/watchlist`, icon: "⭐", title: td("card_watchlist"),  desc: td("card_watchlist_desc"),  tier: null,     locked: false },

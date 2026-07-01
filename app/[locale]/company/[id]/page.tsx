@@ -4,8 +4,10 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
+import { collection, addDoc, getDocs, query, where, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
+import { isInvestorPaid, planCaps } from "@/lib/entitlements";
 import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS } from "@/lib/regions";
 import { Navbar } from "@/components/layout/navbar";
@@ -131,6 +133,12 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
   const [deck, setDeck] = useState<PitchDeckDoc | null>(null);
   const [plan, setPlan] = useState<BusinessPlanDoc | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authUid, setAuthUid] = useState<string | null>(null);
+  const [myRole, setMyRole] = useState<string | null>(null);
+  const [myTier, setMyTier] = useState<string | null>(null);
+  const [myName, setMyName] = useState("");
+  const [requested, setRequested] = useState(false);
+  const [introsThisMonth, setIntrosThisMonth] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -152,6 +160,62 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
     })();
     return () => { cancelled = true; };
   }, [id]);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      setAuthUid(user?.uid ?? null);
+      if (!user) return;
+      try {
+        const myProfileSnap = await getDoc(doc(db, "profiles", user.uid));
+        if (myProfileSnap.exists()) {
+          setMyRole((myProfileSnap.data().role as string) ?? null);
+          setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+        }
+        const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+        if (myPubSnap.exists()) setMyName((myPubSnap.data().full_name as string) ?? "");
+
+        const reqSnap = await getDocs(
+          query(collection(db, "applications"), where("fromUid", "==", user.uid))
+        );
+        const myReqs = reqSnap.docs
+          .map(d => d.data() as Record<string, unknown>)
+          .filter(d => d.type === "startup_request");
+        if (myReqs.some(d => d.toUid === id)) setRequested(true);
+        const now = new Date();
+        setIntrosThisMonth(myReqs.filter(d => {
+          const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+          if (!ts?.toDate) return true;
+          const created = ts.toDate();
+          return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+        }).length);
+      } catch { /* ignore */ }
+    });
+    return () => unsub();
+  }, [id]);
+
+  const isInvestorViewer = myRole === "investor";
+  const canRequestIntro = isInvestorPaid(myTier);
+  const introCap = planCaps(myTier).introsPerMonth;
+  const atIntroLimit = introsThisMonth >= introCap;
+
+  async function requestIntro() {
+    if (!authUid || !canRequestIntro || atIntroLimit || requested || authUid === id) return;
+    setRequested(true);
+    setIntrosThisMonth(prev => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: authUid,
+        toUid: id,
+        type: "startup_request",
+        fromName: myName,
+        toName: (startup?.name || profile?.full_name || ""),
+        subjectTitle: startup?.name || "",
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
+  }
 
   if (loading) {
     return (
@@ -247,6 +311,27 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
                 <span className="font-semibold text-zinc-800">{profile.full_name}</span>
                 {profile.role && <span className="text-zinc-400"> · {profile.role}</span>}
               </div>
+            </div>
+          )}
+          {isInvestorViewer && authUid !== id && (
+            <div className="mt-5">
+              {requested ? (
+                <span className="inline-block rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">{t("intro_requested")}</span>
+              ) : !canRequestIntro ? (
+                <div className="flex flex-col gap-1">
+                  <button disabled className="w-fit rounded-xl bg-zinc-200 px-6 py-3 text-sm font-bold text-zinc-400 cursor-not-allowed">
+                    {t("request_intro")}
+                  </button>
+                  <Link href={`/${locale}/investor/billing`} className="text-xs font-semibold text-emerald-600 hover:underline">
+                    {t("intro_requires_paid")}
+                  </Link>
+                </div>
+              ) : (
+                <button onClick={requestIntro} disabled={atIntroLimit}
+                  className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {atIntroLimit ? t("intro_limit_reached") : t("request_intro")}
+                </button>
+              )}
             </div>
           )}
         </div>

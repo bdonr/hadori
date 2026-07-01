@@ -591,7 +591,9 @@
       "share": "Поделиться",
       "copy_link": "Скопировать ссылку",
       "discover_on_dadori": "Открой на DADORI:",
-      "all_projects_startups": "Все проекты и стартапы →"
+      "all_projects_startups": "Все проекты и стартапы →",
+      "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
+      "intro_limit_reached": "Достигнут месячный лимит интро"
     },
     "matches": {
       "no_matches": "Пока нет совпадений",
@@ -872,7 +874,9 @@
       "empty_title": "В Deal Flow пока нет стартапов",
       "empty_desc": "Как только стартапы станут видимыми для инвесторов, они появятся здесь.",
       "watchlist_limit_hit": "Достигнут лимит Watchlist",
-      "featured_chip": "★ Рекомендуемое"
+      "featured_chip": "★ Рекомендуемое",
+      "request_intro": "🤝 Запросить интро",
+      "intro_requested": "✓ Интро запрошено"
     },
     "portfolio": {
       "gate_title": "Трекер портфеля от Pro (49 €/мес)",
@@ -951,7 +955,9 @@
       "about": "О {name}",
       "portfolio": "Портфель",
       "notice_label": "Примечание:",
-      "notice_text": "DADORI организует интро. Никаких комиссий за успех, никакого участия в сделках."
+      "notice_text": "DADORI организует интро. Никаких комиссий за успех, никакого участия в сделках.",
+      "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
+      "intro_limit_reached": "Достигнут месячный лимит интро"
     },
     "dashboard": {
       "greeting": "Здравствуйте, {name}",
@@ -970,6 +976,21 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "Правовое уведомление:",
       "legal_text": "DADORI исключительно способствует знакомству основателей и инвесторов. Никаких комиссий за успех, никакого участия в сделках."
+    },
+    "requests": {
+      "title": "Запросы",
+      "subtitle": "Стартапы, которые запросили вас, и стартапы, которые запросили вы.",
+      "loading": "Загрузка…",
+      "received_title": "Интерес стартапов",
+      "received_empty": "Пока ни один стартап не запросил вас.",
+      "sent_title": "Отправленные запросы",
+      "sent_empty": "Вы ещё не запросили ни одного стартапа.",
+      "accept": "Принять",
+      "decline": "Отклонить",
+      "someone": "Кто-то",
+      "status_pending": "В ожидании",
+      "status_accepted": "Принято",
+      "status_declined": "Отклонено"
     }
   },
   "startup_pages": {
@@ -1017,7 +1038,9 @@
       "view_profile": "Посмотреть профиль",
       "gate_title": "Найти инвесторов",
       "gate_desc": "Находите и запрашивайте подходящих инвесторов с платным тарифом Startup.",
-      "upgrade_cta": "Обновить сейчас"
+      "upgrade_cta": "Обновить сейчас",
+      "request_intro": "🤝 Запросить интро",
+      "intro_requested": "✓ Интро запрошено"
     },
     "pitchdeck": {
       "slide_problem_title": "Проблема",
@@ -1433,7 +1456,11 @@
       "someone": "Кто-то",
       "status_pending": "В ожидании",
       "status_accepted": "Принята",
-      "status_declined": "Отклонена"
+      "status_declined": "Отклонена",
+      "investor_interest_title": "Интерес инвесторов",
+      "investor_interest_empty": "Пока ни один инвестор не запросил вас.",
+      "investors_requested_title": "Запрошенные инвесторы",
+      "investors_requested_empty": "Вы ещё не запросили ни одного инвестора."
     }
   },
   "glossary": {
@@ -1500,7 +1527,11 @@
     "empty_title": "Пока ничего не опубликовано",
     "empty_desc": "Этот стартап ещё не поделился публичным контентом.",
     "explore_cta": "Смотреть другие стартапы",
-    "verified_badge": "Проверено инкубатором"
+    "verified_badge": "Проверено инкубатором",
+    "request_intro": "🤝 Запросить интро",
+    "intro_requested": "✓ Интро запрошено",
+    "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
+    "intro_limit_reached": "Достигнут месячный лимит интро"
   },
   "taxonomy": {
     "skills": {
@@ -1755,5 +1786,9 @@
       "it": "Итальянский",
       "any": "Неважно / Все"
     }
+  },
+  "investor": {
+    "requests_link": "Запросы",
+    "requests_link_desc": "Интерес стартапов и отправленные вами запросы"
   }
 }

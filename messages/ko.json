@@ -591,7 +591,9 @@
       "share": "공유",
       "copy_link": "링크 복사",
       "discover_on_dadori": "DADORI에서 발견하기:",
-      "all_projects_startups": "모든 프로젝트 및 스타트업 →"
+      "all_projects_startups": "모든 프로젝트 및 스타트업 →",
+      "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
+      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
     },
     "matches": {
       "no_matches": "아직 매칭이 없습니다",
@@ -872,7 +874,9 @@
       "empty_title": "아직 딜 플로우에 스타트업이 없습니다",
       "empty_desc": "스타트업이 투자자에게 자신을 공개하면 여기에 표시됩니다.",
       "watchlist_limit_hit": "워치리스트 한도에 도달했습니다",
-      "featured_chip": "★ 추천"
+      "featured_chip": "★ 추천",
+      "request_intro": "🤝 소개 요청",
+      "intro_requested": "✓ 소개 요청됨"
     },
     "portfolio": {
       "gate_title": "포트폴리오 트래커는 Pro부터 (월 49€)",
@@ -951,7 +955,9 @@
       "about": "{name}에 대하여",
       "portfolio": "포트폴리오",
       "notice_label": "안내:",
-      "notice_text": "DADORI는 소개를 중개합니다. 성공 수수료도, 거래 참여도 없습니다."
+      "notice_text": "DADORI는 소개를 중개합니다. 성공 수수료도, 거래 참여도 없습니다.",
+      "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
+      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
     },
     "dashboard": {
       "greeting": "안녕하세요, {name}님",
@@ -970,6 +976,21 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "법적 고지:",
       "legal_text": "DADORI는 창업자와 투자자 간의 소개만을 중개합니다. 성공 보수 없음, 거래 참여 없음."
+    },
+    "requests": {
+      "title": "요청",
+      "subtitle": "회원님에게 요청한 스타트업과 회원님이 요청한 스타트업입니다.",
+      "loading": "불러오는 중…",
+      "received_title": "스타트업 관심",
+      "received_empty": "아직 회원님에게 요청한 스타트업이 없습니다.",
+      "sent_title": "보낸 요청",
+      "sent_empty": "아직 어떤 스타트업에도 요청하지 않았습니다.",
+      "accept": "수락",
+      "decline": "거절",
+      "someone": "누군가",
+      "status_pending": "대기 중",
+      "status_accepted": "수락됨",
+      "status_declined": "거절됨"
     }
   },
   "startup_pages": {
@@ -1017,7 +1038,9 @@
       "view_profile": "프로필 보기",
       "gate_title": "투자자 탐색",
       "gate_desc": "유료 스타트업 플랜으로 적합한 투자자를 찾고 요청하세요.",
-      "upgrade_cta": "지금 업그레이드"
+      "upgrade_cta": "지금 업그레이드",
+      "request_intro": "🤝 소개 요청",
+      "intro_requested": "✓ 소개 요청됨"
     },
     "pitchdeck": {
       "slide_problem_title": "문제",
@@ -1433,7 +1456,11 @@
       "someone": "익명",
       "status_pending": "대기 중",
       "status_accepted": "수락됨",
-      "status_declined": "거절됨"
+      "status_declined": "거절됨",
+      "investor_interest_title": "투자자 관심",
+      "investor_interest_empty": "아직 회원님에게 요청한 투자자가 없습니다.",
+      "investors_requested_title": "요청한 투자자",
+      "investors_requested_empty": "아직 어떤 투자자에도 요청하지 않았습니다."
     }
   },
   "glossary": {
@@ -1500,7 +1527,11 @@
     "empty_title": "아직 공개된 내용이 없습니다",
     "empty_desc": "이 스타트업은 아직 공개 콘텐츠를 공유하지 않았습니다.",
     "explore_cta": "다른 스타트업 둘러보기",
-    "verified_badge": "인큐베이터 인증됨"
+    "verified_badge": "인큐베이터 인증됨",
+    "request_intro": "🤝 소개 요청",
+    "intro_requested": "✓ 소개 요청됨",
+    "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
+    "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
   },
   "taxonomy": {
     "skills": {
@@ -1755,5 +1786,9 @@
       "it": "이탈리아어",
       "any": "상관없음 / 전체"
     }
+  },
+  "investor": {
+    "requests_link": "요청",
+    "requests_link_desc": "스타트업 관심 및 보낸 요청"
   }
 }

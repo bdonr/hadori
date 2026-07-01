@@ -591,7 +591,9 @@
       "share": "共有",
       "copy_link": "リンクをコピー",
       "discover_on_dadori": "DADORIで見つける:",
-      "all_projects_startups": "すべてのプロジェクト＆スタートアップ →"
+      "all_projects_startups": "すべてのプロジェクト＆スタートアップ →",
+      "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
+      "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
     },
     "matches": {
       "no_matches": "まだマッチがありません",
@@ -872,7 +874,9 @@
       "empty_title": "ディールフローにまだスタートアップがありません",
       "empty_desc": "スタートアップが投資家に自身を公開すると、ここに表示されます。",
       "watchlist_limit_hit": "ウォッチリストの上限に達しました",
-      "featured_chip": "★ おすすめ"
+      "featured_chip": "★ おすすめ",
+      "request_intro": "🤝 紹介をリクエスト",
+      "intro_requested": "✓ 紹介をリクエスト済み"
     },
     "portfolio": {
       "gate_title": "Pro（月49€）以上でポートフォリオトラッカー",
@@ -951,7 +955,9 @@
       "about": "{name}について",
       "portfolio": "ポートフォリオ",
       "notice_label": "ご注意:",
-      "notice_text": "DADORIは紹介を仲介します。成功報酬や取引への関与はありません。"
+      "notice_text": "DADORIは紹介を仲介します。成功報酬や取引への関与はありません。",
+      "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
+      "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
     },
     "dashboard": {
       "greeting": "こんにちは、{name}さん",
@@ -970,6 +976,21 @@
       "card_billing_desc": "Scout → Angel → Pro → Lead → Elite",
       "legal_label": "法的注記：",
       "legal_text": "DADORIは創業者と投資家の紹介のみを仲介します。成功報酬なし、取引への参加なし。"
+    },
+    "requests": {
+      "title": "リクエスト",
+      "subtitle": "あなたにリクエストしたスタートアップと、あなたがリクエストしたスタートアップ。",
+      "loading": "読み込み中…",
+      "received_title": "スタートアップの関心",
+      "received_empty": "まだあなたにリクエストしたスタートアップはありません。",
+      "sent_title": "送信したリクエスト",
+      "sent_empty": "まだどのスタートアップにもリクエストしていません。",
+      "accept": "承認",
+      "decline": "辞退",
+      "someone": "誰か",
+      "status_pending": "保留中",
+      "status_accepted": "承認済み",
+      "status_declined": "辞退済み"
     }
   },
   "startup_pages": {
@@ -1017,7 +1038,9 @@
       "view_profile": "プロフィールを見る",
       "gate_title": "投資家を探す",
       "gate_desc": "有料のスタートアッププランで、適した投資家を見つけてコンタクトできます。",
-      "upgrade_cta": "今すぐアップグレード"
+      "upgrade_cta": "今すぐアップグレード",
+      "request_intro": "🤝 紹介をリクエスト",
+      "intro_requested": "✓ 紹介をリクエスト済み"
     },
     "pitchdeck": {
       "slide_problem_title": "課題",
@@ -1433,7 +1456,11 @@
       "someone": "匿名",
       "status_pending": "保留中",
       "status_accepted": "承認済み",
-      "status_declined": "辞退済み"
+      "status_declined": "辞退済み",
+      "investor_interest_title": "投資家の関心",
+      "investor_interest_empty": "まだあなたにリクエストした投資家はいません。",
+      "investors_requested_title": "リクエストした投資家",
+      "investors_requested_empty": "まだどの投資家にもリクエストしていません。"
     }
   },
   "glossary": {
@@ -1500,7 +1527,11 @@
     "empty_title": "まだ公開されているものはありません",
     "empty_desc": "このスタートアップはまだ公開コンテンツを共有していません。",
     "explore_cta": "他のスタートアップを見る",
-    "verified_badge": "インキュベーター認証済み"
+    "verified_badge": "インキュベーター認証済み",
+    "request_intro": "🤝 紹介をリクエスト",
+    "intro_requested": "✓ 紹介をリクエスト済み",
+    "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
+    "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
   },
   "taxonomy": {
     "skills": {
@@ -1755,5 +1786,9 @@
       "it": "イタリア語",
       "any": "指定なし / すべて"
     }
+  },
+  "investor": {
+    "requests_link": "リクエスト",
+    "requests_link_desc": "スタートアップの関心と送信したリクエスト"
   }
 }
