@@ -11,6 +11,7 @@ import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { planCaps } from "@/lib/entitlements";
+import { HelpTip } from "@/components/HelpTip";
 import { Navbar } from "@/components/layout/navbar";
 
 const ROLES = [
@@ -161,7 +162,7 @@ export default function InvestorProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">{t("preferred_stages")}</label>
+              <label className="text-sm font-medium text-zinc-700">{t("preferred_stages")}<HelpTip term="funding_stage" /></label>
               <div className="flex flex-wrap gap-2">
                 {STAGE_PREFS.map(s => (
                   <button key={s.id} type="button" onClick={() => toggle(setStages, s.id)}
@@ -172,7 +173,7 @@ export default function InvestorProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">{t("typical_check_size")}</label>
+              <label className="text-sm font-medium text-zinc-700">{t("typical_check_size")}<HelpTip term="check_size" /></label>
               <div className="flex flex-wrap gap-2">
                 {CHECK_SIZES.map(c => (
                   <button key={c.id} type="button" onClick={() => setCheckSize(c.id === checkSize ? "" : c.id)}

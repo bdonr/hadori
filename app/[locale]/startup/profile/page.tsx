@@ -11,6 +11,7 @@ import { REGIONS } from "@/lib/regions";
 import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
 import { isStartupPaid } from "@/lib/entitlements";
+import { HelpTip } from "@/components/HelpTip";
 import { useTranslations } from "next-intl";
 
 const TEAM_SIZES = ["1", "2–5", "6–15", "16–50", "50+"];
@@ -221,7 +222,7 @@ export default function StartupProfilePage() {
           <div className="relative">
             <div className={`flex flex-col gap-4 ${!isPro ? "blur-sm pointer-events-none select-none" : ""}`}>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-zinc-700">{t("funding_stage")}</label>
+                <label className="text-sm font-medium text-zinc-700">{t("funding_stage")}<HelpTip term="funding_stage" /></label>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {FUNDING_STAGES.map((s) => (
                     <button key={s.id} type="button" onClick={() => setStage(s.id === stage ? "" : s.id)}
@@ -238,7 +239,7 @@ export default function StartupProfilePage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-zinc-700">{t("current_mrr")}</label>
+                <label className="text-sm font-medium text-zinc-700">{t("current_mrr")}<HelpTip term="mrr" /></label>
                 <div className="flex flex-wrap gap-2">
                   {MRR_RANGES.map((m) => (
                     <button key={m.id} type="button" onClick={() => setMrrRange(m.id === mrrRange ? "" : m.id)}

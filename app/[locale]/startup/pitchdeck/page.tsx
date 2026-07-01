@@ -10,6 +10,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase/client";
 import { Navbar } from "@/components/layout/navbar";
+import { HelpTip } from "@/components/HelpTip";
 import { useTranslations } from "next-intl";
 
 /* ──────────────────────────────────────────────
@@ -21,7 +22,7 @@ interface Slide {
   icon: string;
   titleKey: string;
   proOnly: boolean;
-  fields: { labelKey: string; placeholderKey: string; multiline?: boolean }[];
+  fields: { labelKey: string; placeholderKey: string; multiline?: boolean; help?: string }[];
 }
 
 const SLIDES: Slide[] = [
@@ -42,7 +43,7 @@ const SLIDES: Slide[] = [
     proOnly: false,
     fields: [
       { labelKey: "slide_solution_f1_label", placeholderKey: "slide_solution_f1_placeholder", multiline: true },
-      { labelKey: "slide_solution_f2_label", placeholderKey: "slide_solution_f2_placeholder" },
+      { labelKey: "slide_solution_f2_label", placeholderKey: "slide_solution_f2_placeholder", help: "usp" },
     ],
   },
   {
@@ -61,8 +62,8 @@ const SLIDES: Slide[] = [
     titleKey: "slide_market_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_market_f1_label", placeholderKey: "slide_market_f1_placeholder" },
-      { labelKey: "slide_market_f2_label", placeholderKey: "slide_market_f2_placeholder" },
+      { labelKey: "slide_market_f1_label", placeholderKey: "slide_market_f1_placeholder", help: "tam" },
+      { labelKey: "slide_market_f2_label", placeholderKey: "slide_market_f2_placeholder", help: "sam_som" },
     ],
   },
   {
@@ -71,7 +72,7 @@ const SLIDES: Slide[] = [
     titleKey: "slide_traction_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_traction_f1_label", placeholderKey: "slide_traction_f1_placeholder", multiline: true },
+      { labelKey: "slide_traction_f1_label", placeholderKey: "slide_traction_f1_placeholder", multiline: true, help: "traction" },
       { labelKey: "slide_traction_f2_label", placeholderKey: "slide_traction_f2_placeholder" },
     ],
   },
@@ -82,7 +83,7 @@ const SLIDES: Slide[] = [
     proOnly: true,
     fields: [
       { labelKey: "slide_competitors_f1_label", placeholderKey: "slide_competitors_f1_placeholder" },
-      { labelKey: "slide_competitors_f2_label", placeholderKey: "slide_competitors_f2_placeholder" },
+      { labelKey: "slide_competitors_f2_label", placeholderKey: "slide_competitors_f2_placeholder", help: "moat" },
     ],
   },
   {
@@ -101,7 +102,7 @@ const SLIDES: Slide[] = [
     titleKey: "slide_ask_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_ask_f1_label", placeholderKey: "slide_ask_f1_placeholder" },
+      { labelKey: "slide_ask_f1_label", placeholderKey: "slide_ask_f1_placeholder", help: "ask" },
       { labelKey: "slide_ask_f2_label", placeholderKey: "slide_ask_f2_placeholder", multiline: true },
     ],
   },
@@ -369,7 +370,7 @@ function SlideCard({
         {slide.fields.map((f) =>
           f.multiline ? (
             <div key={f.labelKey}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}</label>
+              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}{f.help && <HelpTip term={f.help} />}</label>
               <textarea
                 rows={3}
                 placeholder={t(f.placeholderKey)}
@@ -380,7 +381,7 @@ function SlideCard({
             </div>
           ) : (
             <div key={f.labelKey}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}</label>
+              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}{f.help && <HelpTip term={f.help} />}</label>
               <input
                 type="text"
                 placeholder={t(f.placeholderKey)}

@@ -65,9 +65,19 @@ service cloud.firestore {
       allow update, delete: if isAuth() && resource.data.ownerId == request.auth.uid;
     }
 
-    // Portfolios: talent-owned nested items
+    // Portfolios: talent-owned nested items. Shown on public talent profiles,
+    // so any authenticated user may read; only the owner writes.
     match /portfolios/{uid}/items/{itemId} {
-      allow read, write: if isOwner(uid);
+      allow read: if isAuth();
+      allow write: if isOwner(uid);
+    }
+
+    // Job roles (top-level collection). Authenticated users browse open roles;
+    // only the role's owner can create/edit/delete it.
+    match /roles/{roleId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.ownerId == request.auth.uid;
     }
 
     // Talent profiles: owner reads/writes, startups read to match
@@ -85,9 +95,16 @@ service cloud.firestore {
       );
     }
 
-    // Investor profiles: owner only (never public)
+    // Investor profiles: discoverable to authenticated users (matching + detail
+    // page); only the owner writes. Financial secrets never live here.
     match /investors/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isAuth();
+      allow write: if isOwner(uid);
+
+      // Personal watchlist — owner only.
+      match /watchlist/{itemId} {
+        allow read, write: if isOwner(uid);
+      }
     }
 
     // Investor interests: investor creates, startup owner reads via Admin SDK
