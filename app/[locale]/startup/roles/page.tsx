@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SkillPicker } from "@/components/SkillPicker";
-import { getSkillLabel } from "@/lib/skills";
+import { getSkillLabel, SKILL_CATEGORIES } from "@/lib/skills";
+
+// Predefined roles/positions (shared taxonomy) — so a role posting matches the
+// same tags a talent uses to describe themselves. No free-text titles.
+const ROLE_OPTIONS = SKILL_CATEGORIES.find(c => c.id === "roles")?.skills ?? [];
 import { REGIONS, LANGUAGES, getRegion } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -104,11 +108,15 @@ export default function RolesPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (atLimit) return; // enforce active-job-postings cap
+    // The sought role itself is a match tag — include it in skills so it
+    // matches talent who tagged themselves with that role/position.
+    const roleTag = ROLE_OPTIONS.find(r => r.label === title)?.id;
+    const skills = roleTag && !neededSkills.includes(roleTag) ? [roleTag, ...neededSkills] : neededSkills;
     const roleData = {
       title, category, description,
       compensation: selectedComp,
       commitment, remote,
-      skills: neededSkills,
+      skills,
       region, language,
       ownerId: uid ?? "",
     };
@@ -169,13 +177,17 @@ export default function RolesPage() {
                 <label className="mb-1 block text-sm font-medium text-zinc-700">
                   {t("what_seeking")}
                 </label>
-                <input
+                <select
                   required
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  placeholder={t("what_seeking_placeholder")}
                   className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                />
+                >
+                  <option value="">{t("what_seeking_placeholder")}</option>
+                  {ROLE_OPTIONS.map(r => (
+                    <option key={r.id} value={r.label}>{r.label}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
