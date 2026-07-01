@@ -1,108 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
-
-// ── Picker data ─────────────────────────────────────────────────────────────
+import { isStartupPaid } from "@/lib/entitlements";
 
 const CATEGORIES = [
-  { id: "saas", labelKey: "cat_saas", emoji: "💻" },
-  { id: "marketplace", labelKey: "cat_marketplace", emoji: "🛒" },
-  { id: "ecommerce", labelKey: "cat_ecommerce", emoji: "📦" },
-  { id: "fintech", labelKey: "cat_fintech", emoji: "💳" },
-  { id: "health", labelKey: "cat_health", emoji: "🏥" },
-  { id: "edtech", labelKey: "cat_edtech", emoji: "📚" },
-  { id: "climate", labelKey: "cat_climate", emoji: "🌍" },
-  { id: "creator", labelKey: "cat_creator", emoji: "🎬" },
-  { id: "gaming", labelKey: "cat_gaming", emoji: "🎮" },
-  { id: "ai", labelKey: "cat_ai", emoji: "🤖" },
-  { id: "logistics", labelKey: "cat_logistics", emoji: "🚚" },
-  { id: "other", labelKey: "cat_other", emoji: "💡" },
+  { id: "saas", labelKey: "cat_saas", emoji: "💻" }, { id: "marketplace", labelKey: "cat_marketplace", emoji: "🛒" },
+  { id: "ecommerce", labelKey: "cat_ecommerce", emoji: "📦" }, { id: "fintech", labelKey: "cat_fintech", emoji: "💳" },
+  { id: "health", labelKey: "cat_health", emoji: "🏥" }, { id: "edtech", labelKey: "cat_edtech", emoji: "📚" },
+  { id: "climate", labelKey: "cat_climate", emoji: "🌍" }, { id: "creator", labelKey: "cat_creator", emoji: "🎬" },
+  { id: "gaming", labelKey: "cat_gaming", emoji: "🎮" }, { id: "ai", labelKey: "cat_ai", emoji: "🤖" },
+  { id: "logistics", labelKey: "cat_logistics", emoji: "🚚" }, { id: "other", labelKey: "cat_other", emoji: "💡" },
 ];
-
 const PROBLEM_AREAS = [
-  { id: "efficiency", labelKey: "prob_efficiency" },
-  { id: "cost", labelKey: "prob_cost" },
-  { id: "access", labelKey: "prob_access" },
-  { id: "information", labelKey: "prob_information" },
-  { id: "coordination", labelKey: "prob_coordination" },
-  { id: "trust", labelKey: "prob_trust" },
-  { id: "quality", labelKey: "prob_quality" },
-  { id: "compliance", labelKey: "prob_compliance" },
-  { id: "engagement", labelKey: "prob_engagement" },
-  { id: "other", labelKey: "prob_other" },
+  { id: "efficiency", labelKey: "prob_efficiency" }, { id: "cost", labelKey: "prob_cost" }, { id: "access", labelKey: "prob_access" },
+  { id: "information", labelKey: "prob_information" }, { id: "coordination", labelKey: "prob_coordination" }, { id: "trust", labelKey: "prob_trust" },
+  { id: "quality", labelKey: "prob_quality" }, { id: "compliance", labelKey: "prob_compliance" }, { id: "engagement", labelKey: "prob_engagement" }, { id: "other", labelKey: "prob_other" },
 ];
-
 const TARGET_GROUPS = [
-  { id: "smb", labelKey: "target_smb" },
-  { id: "enterprise", labelKey: "target_enterprise" },
-  { id: "freelancer", labelKey: "target_freelancer" },
-  { id: "consumer", labelKey: "target_consumer" },
-  { id: "creator", labelKey: "target_creator" },
-  { id: "student", labelKey: "target_student" },
-  { id: "hr", labelKey: "target_hr" },
-  { id: "founder", labelKey: "target_founder" },
-  { id: "dev", labelKey: "target_dev" },
-  { id: "health_pro", labelKey: "target_health_pro" },
+  { id: "smb", labelKey: "target_smb" }, { id: "enterprise", labelKey: "target_enterprise" }, { id: "freelancer", labelKey: "target_freelancer" },
+  { id: "consumer", labelKey: "target_consumer" }, { id: "creator", labelKey: "target_creator" }, { id: "student", labelKey: "target_student" },
+  { id: "hr", labelKey: "target_hr" }, { id: "founder", labelKey: "target_founder" }, { id: "dev", labelKey: "target_dev" }, { id: "health_pro", labelKey: "target_health_pro" },
 ];
-
 const BUSINESS_MODELS = [
-  { id: "saas_sub", labelKey: "biz_saas_sub", emoji: "🔄" },
-  { id: "transaction", labelKey: "biz_transaction", emoji: "💸" },
-  { id: "freemium", labelKey: "biz_freemium", emoji: "🆓" },
-  { id: "marketplace_fee", labelKey: "biz_marketplace_fee", emoji: "🏪" },
-  { id: "license", labelKey: "biz_license", emoji: "📄" },
-  { id: "ads", labelKey: "biz_ads", emoji: "📢" },
-  { id: "data", labelKey: "biz_data", emoji: "📊" },
-  { id: "service", labelKey: "biz_service", emoji: "🤝" },
-  { id: "hardware", labelKey: "biz_hardware", emoji: "🔧" },
-  { id: "other", labelKey: "biz_other", emoji: "💡" },
+  { id: "saas_sub", labelKey: "biz_saas_sub", emoji: "🔄" }, { id: "transaction", labelKey: "biz_transaction", emoji: "💸" }, { id: "freemium", labelKey: "biz_freemium", emoji: "🆓" },
+  { id: "marketplace_fee", labelKey: "biz_marketplace_fee", emoji: "🏪" }, { id: "license", labelKey: "biz_license", emoji: "📄" }, { id: "ads", labelKey: "biz_ads", emoji: "📢" },
+  { id: "data", labelKey: "biz_data", emoji: "📊" }, { id: "service", labelKey: "biz_service", emoji: "🤝" }, { id: "hardware", labelKey: "biz_hardware", emoji: "🔧" }, { id: "other", labelKey: "biz_other", emoji: "💡" },
 ];
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+type T = (k: string, v?: Record<string, unknown>) => string;
 
-function Chips<T extends { id: string; labelKey: string; emoji?: string }>({
-  items, selected, onToggle, multi = false, t,
-}: {
-  items: T[];
-  selected: string | string[];
-  onToggle: (id: string) => void;
-  multi?: boolean;
-  t: (key: string) => string;
+function Chips({ items, selected, onToggle, t }: {
+  items: { id: string; labelKey: string; emoji?: string }[]; selected: string | string[]; onToggle: (id: string) => void; t: T;
 }) {
-  const isActive = (id: string) =>
-    Array.isArray(selected) ? selected.includes(id) : selected === id;
+  const active = (id: string) => Array.isArray(selected) ? selected.includes(id) : selected === id;
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item) => (
-        <button
-          key={item.id}
-          type="button"
-          onClick={() => onToggle(item.id)}
-          className={`rounded-full px-3 py-1.5 text-sm font-medium border transition-colors flex items-center gap-1.5 ${
-            isActive(item.id)
-              ? "bg-indigo-600 text-white border-indigo-600"
-              : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"
-          }`}
-        >
-          {item.emoji && <span>{item.emoji}</span>}
-          {t(item.labelKey)}
+        <button key={item.id} type="button" onClick={() => onToggle(item.id)}
+          className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${active(item.id) ? "border-indigo-600 bg-indigo-600 text-white" : "border-zinc-200 bg-white text-zinc-700 hover:border-indigo-400"}`}>
+          {item.emoji && <span>{item.emoji}</span>}{t(item.labelKey)}
         </button>
       ))}
     </div>
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+interface External { headline: string; whatWeDo: string; forWhom: string; teaser: string; }
+interface Internal {
+  coreIdea: string; differentiation: string; problem: string; solution: string; businessModel: string;
+  competitors?: { name: string; note: string }[]; uniqueness: string; risks?: string; nextSteps: string[];
+}
 
 export default function PlanPage() {
-  const t = useTranslations("startup_pages.plan");
-  const [step, setStep] = useState<"form" | "result">("form");
+  const t = useTranslations("startup_pages.plan") as unknown as T;
+  const { locale } = useParams<{ locale: string }>();
+  const [tier, setTier] = useState<string | null>(null);
+  const [step, setStep] = useState<"form" | "questions" | "result">("form");
 
-  // Picker state
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [problems, setProblems] = useState<string[]>([]);
@@ -110,166 +72,200 @@ export default function PlanPage() {
   const [bizModel, setBizModel] = useState("");
   const [description, setDescription] = useState("");
 
-  function toggleMulti(set: React.Dispatch<React.SetStateAction<string[]>>, id: string) {
-    set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  }
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [external, setExternal] = useState<External | null>(null);
+  const [internal, setInternal] = useState<Internal | null>(null);
+
+  useEffect(() => onAuthStateChanged(auth, async (u) => {
+    if (!u) { setTier("free"); return; }
+    try { const s = await getDoc(doc(db, "profiles", u.uid)); setTier((s.data()?.plan_tier as string) ?? "free"); }
+    catch { setTier("free"); }
+  }), []);
+
+  const paid = isStartupPaid(tier);
+  const toggleMulti = (set: React.Dispatch<React.SetStateAction<string[]>>, id: string) =>
+    set((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+
+  const label = (arr: { id: string; labelKey: string }[], id: string) => { const it = arr.find((x) => x.id === id); return it ? t(it.labelKey) : id; };
+  const paramsForApi = () => ({
+    name, category: label(CATEGORIES, category),
+    problems: problems.map((p) => label(PROBLEM_AREAS, p)),
+    targets: targets.map((g) => label(TARGET_GROUPS, g)),
+    bizModel: label(BUSINESS_MODELS, bizModel), description,
+  });
 
   const canSubmit = name.trim() && category && problems.length > 0 && targets.length > 0 && bizModel;
 
-  function handleGenerate(e: React.FormEvent) {
+  async function fetchQuestions(e: React.FormEvent) {
     e.preventDefault();
-    if (!canSubmit) return;
-    setStep("result");
+    if (!canSubmit || busy) return;
+    setBusy(true); setError(null);
+    try {
+      const res = await fetch("/api/ai/plan/questions", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi() }),
+      });
+      const data = await res.json();
+      if (!res.ok || !Array.isArray(data.questions)) { setError(res.status === 403 ? t("paid_only") : t("ai_error")); return; }
+      setQuestions(data.questions); setAnswers(new Array(data.questions.length).fill("")); setStep("questions");
+    } catch { setError(t("ai_error")); } finally { setBusy(false); }
   }
 
-  const selectedCategory = CATEGORIES.find(c => c.id === category);
-  const selectedBizModel = BUSINESS_MODELS.find(b => b.id === bizModel);
+  async function generatePlan() {
+    setBusy(true); setError(null);
+    try {
+      const qa = questions.map((q, i) => ({ q, a: answers[i] ?? "" }));
+      const res = await fetch("/api/ai/plan/generate", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi(), qa }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.internal) { setError(t("ai_error")); return; }
+      setExternal(data.external); setInternal(data.internal); setStep("result");
+    } catch { setError(t("ai_error")); } finally { setBusy(false); }
+  }
 
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
-
       <main className="mx-auto max-w-3xl px-6 py-10">
 
+        {tier && !paid && (
+          <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
+            <span className="text-3xl">🔒</span>
+            <p className="mt-2 font-bold text-amber-900">{t("paid_only")}</p>
+            <Button asChild className="mt-3"><Link href={`/${locale}/startup/billing`}>{t("unlock_pro_cta")}</Link></Button>
+          </div>
+        )}
+
         {step === "form" && (
-          <form onSubmit={handleGenerate} className="flex flex-col gap-6">
-
-            {/* Name */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
+          <form onSubmit={fetchQuestions} className="flex flex-col gap-6">
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="font-semibold text-zinc-900">{t("startup_name")}</h2>
-              <input
-                required value={name} onChange={e => setName(e.target.value)}
-                placeholder={t("startup_name_placeholder")}
-                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-              />
+              <input required value={name} onChange={(e) => setName(e.target.value)} placeholder={t("startup_name_placeholder")}
+                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400" />
             </section>
-
-            {/* Kategorie */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="font-semibold text-zinc-900">{t("category")}</h2>
-              <p className="text-xs text-zinc-400">{t("category_hint")}</p>
-              <Chips items={CATEGORIES} selected={category} onToggle={id => setCategory(id === category ? "" : id)} t={t} />
+              <Chips items={CATEGORIES} selected={category} onToggle={(id) => setCategory(id === category ? "" : id)} t={t} />
             </section>
-
-            {/* Problem */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="font-semibold text-zinc-900">{t("problem_heading")}</h2>
               <p className="text-xs text-zinc-400">{t("problem_hint")}</p>
-              <Chips multi items={PROBLEM_AREAS} selected={problems} onToggle={id => toggleMulti(setProblems, id)} t={t} />
+              <Chips items={PROBLEM_AREAS} selected={problems} onToggle={(id) => toggleMulti(setProblems, id)} t={t} />
             </section>
-
-            {/* Zielgruppe */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="font-semibold text-zinc-900">{t("target_heading")}</h2>
               <p className="text-xs text-zinc-400">{t("target_hint")}</p>
-              <Chips multi items={TARGET_GROUPS} selected={targets} onToggle={id => toggleMulti(setTargets, id)} t={t} />
+              <Chips items={TARGET_GROUPS} selected={targets} onToggle={(id) => toggleMulti(setTargets, id)} t={t} />
             </section>
-
-            {/* Geschäftsmodell */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="font-semibold text-zinc-900">{t("biz_heading")}</h2>
-              <p className="text-xs text-zinc-400">{t("biz_hint")}</p>
-              <Chips items={BUSINESS_MODELS} selected={bizModel} onToggle={id => setBizModel(id === bizModel ? "" : id)} t={t} />
+              <Chips items={BUSINESS_MODELS} selected={bizModel} onToggle={(id) => setBizModel(id === bizModel ? "" : id)} t={t} />
             </section>
-
-            {/* Beschreibung — einziges Freitext-Feld */}
-            <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
-              <h2 className="font-semibold text-zinc-900">{t("desc_heading")} <span className="text-zinc-400 font-normal text-sm">{t("optional")}</span></h2>
-              <p className="text-xs text-zinc-400">{t("desc_hint")}</p>
-              <textarea
-                value={description} onChange={e => setDescription(e.target.value)}
-                rows={3}
-                placeholder={t("desc_placeholder")}
-                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 resize-none"
-              />
+            <section className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="font-semibold text-zinc-900">{t("desc_heading")} <span className="text-sm font-normal text-zinc-400">{t("optional")}</span></h2>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder={t("desc_placeholder")}
+                className="resize-none rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400" />
             </section>
-
-            {/* Summary + CTA */}
-            {canSubmit && (
-              <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 flex items-start gap-3">
-                <span className="text-2xl">✅</span>
-                <div>
-                  <p className="font-semibold text-indigo-900">{name}</p>
-                  <p className="text-sm text-indigo-700 mt-0.5">
-                    {selectedCategory?.emoji} {selectedCategory ? t(selectedCategory.labelKey) : ""} ·{" "}
-                    {t("summary_problems", { count: problems.length })} ·{" "}
-                    {t("summary_targets", { count: targets.length })} ·{" "}
-                    {selectedBizModel?.emoji} {selectedBizModel ? t(selectedBizModel.labelKey) : ""}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <Button type="submit" size="lg" disabled={!canSubmit} className="disabled:opacity-40">
-              {t("generate_cta")}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <Button type="submit" size="lg" disabled={!canSubmit || busy || !paid} className="disabled:opacity-40">
+              {busy ? t("generating_questions") : t("next_questions")}
             </Button>
-            {!canSubmit && (
-              <p className="text-xs text-zinc-400 text-center">
-                {t("generate_hint")}
-              </p>
-            )}
+            {!canSubmit && <p className="text-center text-xs text-zinc-400">{t("generate_hint")}</p>}
           </form>
         )}
 
-        {step === "result" && (
-          <div className="flex flex-col gap-6">
-            {/* Preview / locked result */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-              <h2 className="text-xl font-bold text-zinc-900 mb-1">{t("exec_summary")}</h2>
-              <p className="text-sm text-zinc-500 mb-6">{t("ai_generated")}</p>
-              <div className="space-y-3 text-sm leading-relaxed text-zinc-700">
-                <p>
-                  {t.rich("summary_sentence1", {
-                    strong: (chunks) => <strong>{chunks}</strong>,
-                    name,
-                    category: selectedCategory ? t(selectedCategory.labelKey) : "",
-                    problems: problems.map(p => { const it = PROBLEM_AREAS.find(x => x.id === p); return it ? t(it.labelKey) : null; }).filter(Boolean).join(", ").toLowerCase(),
-                    targets: targets.map(tg => { const it = TARGET_GROUPS.find(x => x.id === tg); return it ? t(it.labelKey) : null; }).filter(Boolean).join(", "),
-                  })}
-                </p>
-                <p>
-                  {t("summary_sentence2", { model: selectedBizModel ? t(selectedBizModel.labelKey).toLowerCase() : "" })}
-                  {description ? ` ${description}` : ""}
-                </p>
-              </div>
+        {step === "questions" && (
+          <div className="flex flex-col gap-5">
+            <div>
+              <h2 className="text-xl font-bold text-zinc-900">{t("questions_title")}</h2>
+              <p className="text-sm text-zinc-500">{t("questions_hint")}</p>
             </div>
+            {questions.map((q, i) => (
+              <div key={i} className="rounded-2xl bg-white p-5 shadow-sm">
+                <p className="mb-2 text-sm font-semibold text-zinc-800">{i + 1}. {q}</p>
+                <textarea value={answers[i] ?? ""} onChange={(e) => setAnswers((a) => { const n = [...a]; n[i] = e.target.value; return n; })}
+                  rows={2} placeholder={t("answer_placeholder")}
+                  className="w-full resize-none rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400" />
+              </div>
+            ))}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setStep("form")} disabled={busy}>{t("back")}</Button>
+              <Button onClick={generatePlan} disabled={busy} className="flex-1">
+                {busy ? t("generating_plan") : t("generate_plan")}
+              </Button>
+            </div>
+          </div>
+        )}
 
-            {/* Locked sections */}
-            {[
-              { title: t("locked_market_title"), hint: t("locked_market_hint") },
-              { title: t("locked_competition_title"), hint: t("locked_competition_hint") },
-              { title: t("locked_finance_title"), hint: t("locked_finance_hint") },
-            ].map(s => (
-              <div key={s.title} className="relative rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm overflow-hidden">
-                <div className="blur-sm select-none pointer-events-none">
-                  <h2 className="text-lg font-bold text-zinc-900 mb-3">{s.title}</h2>
-                  <div className="grid grid-cols-3 gap-4">
-                    {["???", "???", "???"].map((v, i) => (
-                      <div key={i} className="rounded-xl bg-indigo-50 p-4 text-center">
-                        <p className="text-xs text-indigo-400 uppercase font-semibold">{t("value_label", { n: i + 1 })}</p>
-                        <p className="mt-1 text-2xl font-black text-indigo-200">€{v}</p>
+        {step === "result" && external && internal && (
+          <div className="flex flex-col gap-6">
+            <p className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">{t("saved_note")}</p>
+
+            {/* External */}
+            <section className="rounded-2xl border-2 border-emerald-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-bold text-zinc-900">{t("version_external_title")}</h2>
+              <p className="mb-4 text-sm text-emerald-700">{t("version_external_desc")}</p>
+              <h3 className="text-xl font-extrabold text-zinc-900">{external.headline}</h3>
+              <Field label={t("ext_whatWeDo")} value={external.whatWeDo} />
+              <Field label={t("ext_forWhom")} value={external.forWhom} />
+              <Field label={t("ext_teaser")} value={external.teaser} />
+            </section>
+
+            {/* Internal */}
+            <section className="rounded-2xl border-2 border-indigo-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-bold text-zinc-900">{t("version_internal_title")}</h2>
+              <p className="mb-4 text-sm text-indigo-700">{t("version_internal_desc")}</p>
+              <Field label={t("int_core")} value={internal.coreIdea} strong />
+              <Field label={t("int_diff")} value={internal.differentiation} strong />
+              <Field label={t("int_problem")} value={internal.problem} />
+              <Field label={t("int_solution")} value={internal.solution} />
+              <Field label={t("int_model")} value={internal.businessModel} />
+              {internal.competitors && internal.competitors.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">{t("int_competitors")}</p>
+                  <div className="mt-1 flex flex-col gap-1.5">
+                    {internal.competitors.map((c, i) => (
+                      <div key={i} className="rounded-lg border border-zinc-100 bg-zinc-50 p-2 text-sm">
+                        <span className="font-semibold text-zinc-800">{c.name}</span> <span className="text-zinc-500">— {c.note}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/80 backdrop-blur-sm">
-                  <span className="text-3xl">🔒</span>
-                  <p className="font-bold text-zinc-900">{s.title}</p>
-                  <p className="text-sm text-zinc-500">{s.hint}</p>
-                  <Button asChild size="sm" className="mt-2">
-                    <Link href="/startup/billing">{t("unlock_pro_cta")}</Link>
-                  </Button>
+              )}
+              <Field label={t("int_uniqueness")} value={internal.uniqueness} strong />
+              {internal.risks && <Field label={t("int_risks")} value={internal.risks} />}
+              {internal.nextSteps && internal.nextSteps.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">{t("int_next")}</p>
+                  <ul className="mt-1 space-y-1 text-sm text-zinc-700">
+                    {internal.nextSteps.map((s, i) => <li key={i} className="flex gap-2"><span className="text-indigo-500">→</span>{s}</li>)}
+                  </ul>
                 </div>
-              </div>
-            ))}
+              )}
+              <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">{t("market_unverified")}</p>
+            </section>
 
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setStep("form")}>{t("create_new")}</Button>
-              <Button asChild><Link href="/startup">{t("dashboard")}</Link></Button>
+              <Button variant="outline" onClick={() => { setStep("form"); setExternal(null); setInternal(null); }}>{t("create_new")}</Button>
+              <Button asChild><Link href={`/${locale}/startup/overview`}>{t("to_overview")}</Link></Button>
             </div>
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+function Field({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+  if (!value) return null;
+  return (
+    <div className="mt-3">
+      <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">{label}</p>
+      <p className={`mt-0.5 text-sm leading-relaxed ${strong ? "font-semibold text-zinc-900" : "text-zinc-600"}`}>{value}</p>
     </div>
   );
 }

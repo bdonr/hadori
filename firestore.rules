@@ -46,6 +46,12 @@ service cloud.firestore {
       }
     }
 
+    // Business plans (top-level, per user). Owner only for now; the external
+    // teaser version becomes shareable in a later phase.
+    match /businessplans/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
     // Projects: creator-owned. Anyone authenticated can browse; only owner mutates.
     match /projects/{projectId} {
       allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;

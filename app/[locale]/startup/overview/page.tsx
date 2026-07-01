@@ -28,19 +28,22 @@ export default function StartupOverviewPage() {
   const [startup, setStartup] = useState<StartupDoc | null>(null);
   const [tier, setTier] = useState("free");
   const [hasDeck, setHasDeck] = useState(false);
+  const [plan, setPlan] = useState<{ external?: { headline?: string; teaser?: string }; internal?: { coreIdea?: string } } | null>(null);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) { setLoading(false); return; }
       try {
-        const [s, p, d] = await Promise.all([
+        const [s, p, d, bp] = await Promise.all([
           getDoc(doc(db, "startups", user.uid)),
           getDoc(doc(db, "profiles", user.uid)),
           getDoc(doc(db, "pitchdecks", user.uid)),
+          getDoc(doc(db, "businessplans", user.uid)),
         ]);
         if (s.exists()) setStartup(s.data() as StartupDoc);
         setTier((p.data()?.plan_tier as string) ?? "free");
         setHasDeck(d.exists());
+        if (bp.exists()) setPlan(bp.data() as typeof plan);
       } catch { /* ignore */ }
       setLoading(false);
     });
@@ -168,9 +171,15 @@ export default function StartupOverviewPage() {
           />
           <DocTile
             emoji="📄" title={t("businessplan")} href={`/${locale}/startup/plan`}
-            status={t("not_saved_yet")} ok={false}
-            desc={external ? t("plan_external") : t("plan_internal")}
-            cta={t("open")}
+            status={plan ? t("complete") : t("not_saved_yet")} ok={!!plan}
+            desc={
+              plan
+                ? (external
+                    ? (plan.external?.teaser || plan.external?.headline || t("plan_external"))
+                    : (plan.internal?.coreIdea || t("plan_internal")))
+                : (external ? t("plan_external") : t("plan_internal"))
+            }
+            cta={plan ? t("open") : t("create_cta")}
           />
         </div>
 
