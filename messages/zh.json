@@ -753,7 +753,17 @@
       "subtitle": "与投资人共享文档。他们只能看到你允许的内容。",
       "empty_title": "尚无文档",
       "empty_description": "上传你的 Pitch Deck、财务数据或任何文档，与投资人共享。",
-      "upload_button": "上传文档（即将推出）"
+      "upload_button": "上传文档",
+      "uploading": "上传中…",
+      "loading": "正在加载文档…",
+      "download": "下载",
+      "delete": "删除",
+      "confirm_delete": "删除此文档？此操作无法撤销。",
+      "too_large": "文件过大（最大 50 MB）。",
+      "upload_error": "上传失败，请重试。",
+      "size_label": "大小",
+      "uploaded_by": "上传者",
+      "manage_hint": "只有所有者和管理员可以上传或删除。所有成员都可以查看和下载。"
     },
     "milestones": {
       "status_upcoming": "即将开始",

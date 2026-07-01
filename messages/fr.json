@@ -753,7 +753,17 @@
       "subtitle": "Partage des documents avec les investisseurs. Ils ne voient que ce que tu autorises.",
       "empty_title": "Aucun document pour l'instant",
       "empty_description": "Uploade ton pitch deck, tes finances ou n'importe quel document à partager avec les investisseurs.",
-      "upload_button": "Uploader un document (bientôt disponible)"
+      "upload_button": "Téléverser un document",
+      "uploading": "Téléversement…",
+      "loading": "Chargement des documents…",
+      "download": "Télécharger",
+      "delete": "Supprimer",
+      "confirm_delete": "Supprimer ce document ? Cette action est irréversible.",
+      "too_large": "Le fichier est trop volumineux (max 50 Mo).",
+      "upload_error": "Échec du téléversement. Veuillez réessayer.",
+      "size_label": "Taille",
+      "uploaded_by": "par",
+      "manage_hint": "Seuls les propriétaires et administrateurs peuvent téléverser ou supprimer. Tous les membres peuvent consulter et télécharger."
     },
     "milestones": {
       "status_upcoming": "À venir",

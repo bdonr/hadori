@@ -18,6 +18,17 @@ service firebase.storage {
         && request.resource.size < 50 * 1024 * 1024; // 50 MB max
     }
 
+    // Workspace data room — access via workspace membership; owner/admin manage.
+    match /datarooms/{workspaceId}/{fileId} {
+      allow read: if request.auth != null
+        && firestore.exists(/databases/(default)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid));
+      allow write: if request.auth != null
+        && request.resource.size < 50 * 1024 * 1024
+        && firestore.get(/databases/(default)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid)).data.role in ["owner", "admin"];
+      allow delete: if request.auth != null
+        && firestore.get(/databases/(default)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid)).data.role in ["owner", "admin"];
+    }
+
     // Pitch deck slide images — owner writes, publicly readable (shown on deck)
     match /pitchdecks/{uid}/{slideId} {
       allow read: if true;

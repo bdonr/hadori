@@ -4,6 +4,7 @@ import { adminDb } from "@/lib/firebase/admin";
 import { canAccessDataRoom } from "@/lib/firebase/workspace";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { DataRoom } from "@/components/workspace/DataRoom";
 
 export default async function DataRoomPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params;
@@ -11,8 +12,14 @@ export default async function DataRoomPage({ params }: { params: Promise<{ local
   const session = await getServerSession();
   if (!session) redirect(`/${locale}/login`);
 
-  const profileSnap = await adminDb!.collection("profiles").doc(session.uid).get();
+  const [profileSnap, memberSnap] = await Promise.all([
+    adminDb!.collection("profiles").doc(session.uid).get(),
+    adminDb!.collection("workspaces").doc(id).collection("members").doc(session.uid).get(),
+  ]);
   const tier = profileSnap.data()?.plan_tier ?? "free";
+  const memberRole = memberSnap.data()?.role ?? "member";
+  const canManage = ["owner", "admin"].includes(memberRole);
+  const uploaderName = profileSnap.data()?.full_name ?? "";
 
   if (!canAccessDataRoom(tier)) {
     return (
@@ -46,18 +53,7 @@ export default async function DataRoomPage({ params }: { params: Promise<{ local
       <h1 className="text-lg font-bold text-zinc-900 mb-2">🔒 {t("title")}</h1>
       <p className="text-sm text-zinc-500 mb-6">{t("subtitle")}</p>
 
-      {/* Coming soon — ready for Phase X */}
-      <div className="rounded-2xl border-2 border-dashed border-zinc-200 p-12 text-center">
-        <span className="text-4xl">📂</span>
-        <p className="mt-4 font-semibold text-zinc-700">{t("empty_title")}</p>
-        <p className="mt-2 text-sm text-zinc-400">{t("empty_description")}</p>
-        <button
-          disabled
-          className="mt-6 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white opacity-50 cursor-not-allowed"
-        >
-          {t("upload_button")}
-        </button>
-      </div>
+      <DataRoom workspaceId={id} locale={locale} canManage={canManage} uploaderName={uploaderName} />
     </div>
   );
 }

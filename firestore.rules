@@ -175,6 +175,12 @@ service cloud.firestore {
         allow write: if isAuth()
           && get(/databases/$(database)/documents/workspaces/$(workspaceId)).data.ownerId == request.auth.uid;
       }
+      // Data room file metadata — any member reads; only owner/admin manage.
+      match /dataroom/{fileId} {
+        allow read: if isMember();
+        allow write: if isAuth()
+          && get(/databases/$(database)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid)).data.role in ["owner", "admin"];
+      }
     }
   }
 }

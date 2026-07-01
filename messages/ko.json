@@ -753,7 +753,17 @@
       "subtitle": "투자자와 문서를 공유하세요. 허용한 것만 볼 수 있습니다.",
       "empty_title": "아직 문서가 없습니다",
       "empty_description": "피치덱, 재무 자료 또는 투자자와 공유할 문서를 업로드하세요.",
-      "upload_button": "문서 업로드 (곧 제공)"
+      "upload_button": "문서 업로드",
+      "uploading": "업로드 중…",
+      "loading": "문서 불러오는 중…",
+      "download": "다운로드",
+      "delete": "삭제",
+      "confirm_delete": "이 문서를 삭제할까요? 되돌릴 수 없습니다.",
+      "too_large": "파일이 너무 큽니다 (최대 50MB).",
+      "upload_error": "업로드에 실패했습니다. 다시 시도해 주세요.",
+      "size_label": "크기",
+      "uploaded_by": "업로더",
+      "manage_hint": "소유자와 관리자만 업로드/삭제할 수 있습니다. 모든 멤버가 보고 다운로드할 수 있습니다."
     },
     "milestones": {
       "status_upcoming": "예정",

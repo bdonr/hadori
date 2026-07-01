@@ -753,7 +753,17 @@
       "subtitle": "Share documents with investors. They can only see what you allow.",
       "empty_title": "No documents yet",
       "empty_description": "Upload your pitch deck, financials, or any document to share with investors.",
-      "upload_button": "Upload document (coming soon)"
+      "upload_button": "Upload document",
+      "uploading": "Uploading…",
+      "loading": "Loading documents…",
+      "download": "Download",
+      "delete": "Delete",
+      "confirm_delete": "Delete this document? This cannot be undone.",
+      "too_large": "File is too large (max 50 MB).",
+      "upload_error": "Upload failed. Please try again.",
+      "size_label": "Size",
+      "uploaded_by": "by",
+      "manage_hint": "Only owners and admins can upload or delete. All members can view and download."
     },
     "milestones": {
       "status_upcoming": "Upcoming",

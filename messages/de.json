@@ -753,7 +753,17 @@
       "subtitle": "Teile Dokumente mit Investoren. Sie sehen nur, was du freigibst.",
       "empty_title": "Noch keine Dokumente",
       "empty_description": "Lade dein Pitch Deck, deine Finanzen oder ein beliebiges Dokument hoch, um es mit Investoren zu teilen.",
-      "upload_button": "Dokument hochladen (kommt bald)"
+      "upload_button": "Dokument hochladen",
+      "uploading": "Wird hochgeladen…",
+      "loading": "Dokumente werden geladen…",
+      "download": "Herunterladen",
+      "delete": "Löschen",
+      "confirm_delete": "Dieses Dokument löschen? Dies kann nicht rückgängig gemacht werden.",
+      "too_large": "Datei ist zu groß (max. 50 MB).",
+      "upload_error": "Upload fehlgeschlagen. Bitte versuche es erneut.",
+      "size_label": "Größe",
+      "uploaded_by": "von",
+      "manage_hint": "Nur Eigentümer und Admins können hochladen oder löschen. Alle Mitglieder können ansehen und herunterladen."
     },
     "milestones": {
       "status_upcoming": "Anstehend",

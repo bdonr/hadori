@@ -98,12 +98,17 @@ export default async function WorkspaceLayout({
               <p className="text-[10px] text-zinc-400 capitalize">{member.role}</p>
             </div>
           </div>
-          <LangSwitcher />
         </div>
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto">
+        {/* Top bar with language switcher */}
+        <div className="sticky top-0 z-10 flex items-center justify-end border-b border-zinc-200 bg-white/80 px-6 py-2 backdrop-blur">
+          <LangSwitcher />
+        </div>
+        {children}
+      </main>
     </div>
   );
 }
