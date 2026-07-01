@@ -105,7 +105,7 @@ export default function PlanPage() {
     setBusy(true); setError(null);
     try {
       const res = await fetch("/api/ai/plan/questions", {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi() }),
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi(), locale }),
       });
       const data = await res.json();
       if (!res.ok || !Array.isArray(data.questions)) { setError(res.status === 403 ? t("paid_only") : t("ai_error")); return; }
@@ -118,7 +118,7 @@ export default function PlanPage() {
     try {
       const qa = questions.map((q, i) => ({ q, a: answers[i] ?? "" }));
       const res = await fetch("/api/ai/plan/generate", {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi(), qa }),
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ params: paramsForApi(), qa, locale }),
       });
       const data = await res.json();
       if (!res.ok || !data.internal) { setError(t("ai_error")); return; }

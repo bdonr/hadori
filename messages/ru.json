@@ -978,7 +978,11 @@
       "locked_note": "Отмена в любой месяц · Экспорт в PDF включён",
       "saved": "✓ Сохранено",
       "saving": "Сохранение …",
-      "save_pitchdeck": "Сохранить питч-дек"
+      "save_pitchdeck": "Сохранить питч-дек",
+      "add_image": "Добавить изображение",
+      "uploading": "Загрузка…",
+      "remove_image": "Удалить",
+      "image_error": "Не удалось загрузить — возможно, Firebase Storage ещё не включён."
     },
     "plan": {
       "cat_saas": "B2B SaaS",

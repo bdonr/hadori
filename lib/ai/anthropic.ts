@@ -13,6 +13,14 @@ export const TOKEN_BUDGET = {
 
 const ENDPOINT = "https://api.anthropic.com/v1/messages";
 
+// Map a UI locale to a language name so the model replies in the user's language.
+const LANGUAGES: Record<string, string> = {
+  de: "German", en: "English", fr: "French", ja: "Japanese", zh: "Simplified Chinese", ru: "Russian", ko: "Korean",
+};
+export function languageName(locale?: string): string {
+  return LANGUAGES[locale ?? ""] ?? "German";
+}
+
 function headers(apiKey: string) {
   return { "x-api-key": apiKey, "anthropic-version": "2023-06-01", "content-type": "application/json" };
 }

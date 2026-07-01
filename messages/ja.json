@@ -978,7 +978,11 @@
       "locked_note": "毎月解約可能 · PDFエクスポート込み",
       "saved": "✓ 保存しました",
       "saving": "保存中 …",
-      "save_pitchdeck": "ピッチデックを保存"
+      "save_pitchdeck": "ピッチデックを保存",
+      "add_image": "画像を追加",
+      "uploading": "アップロード中…",
+      "remove_image": "削除",
+      "image_error": "アップロードに失敗しました — Firebase Storage がまだ有効になっていない可能性があります。"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 import { getServerSession } from "@/lib/firebase/session";
 import { isStartupPaid } from "@/lib/entitlements";
-import { callTool, TOKEN_BUDGET } from "@/lib/ai/anthropic";
+import { callTool, TOKEN_BUDGET, languageName } from "@/lib/ai/anthropic";
 
 // Turns the params + the 5 answers into TWO versions of the plan:
 //  - external: a teaser that sketches WHAT is being done WITHOUT revealing the
@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "AI not configured" }, { status: 500 });
 
-  const { params, qa } = await req.json();
+  const { params, qa, locale } = await req.json();
+  const lang = languageName(locale);
   const qaText = Array.isArray(qa)
     ? qa.map((x: { q: string; a: string }, i: number) => `Q${i + 1}: ${x.q}\nA${i + 1}: ${x.a}`).join("\n\n")
     : "";
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
     system: `You write a startup's business plan in TWO versions. Be concise (this is token-budgeted).
 EXTERNAL = a public teaser: sketch WHAT the startup does and for whom at a high level to spark interest, but DO NOT reveal the core idea, the "how", or the secret sauce. No numbers you cannot back up.
 INTERNAL = the full honest plan for the founder: core idea, what differentiates them, problem, solution, business model, a short competitor list (names or archetypes) with a note each, why they are unique, key risks, and 3-5 concrete next steps.
-For competitors/market: do NOT invent specific market-size figures or fake statistics — describe the competitive landscape qualitatively and flag it as to-be-validated. Write in the same language as the answers; if unclear, German.`,
+For competitors/market: do NOT invent specific market-size figures or fake statistics — describe the competitive landscape qualitatively and flag it as to-be-validated. Write ALL text in ${lang}.`,
     user: ctx,
     toolName: "write_plan",
     description: "Write both plan versions.",

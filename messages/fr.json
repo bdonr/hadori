@@ -978,7 +978,11 @@
       "locked_note": "Résiliable chaque mois · Export PDF inclus",
       "saved": "✓ Enregistré",
       "saving": "Enregistrement …",
-      "save_pitchdeck": "Enregistrer le pitch deck"
+      "save_pitchdeck": "Enregistrer le pitch deck",
+      "add_image": "Ajouter une image",
+      "uploading": "Téléversement…",
+      "remove_image": "Supprimer",
+      "image_error": "Échec du téléversement — Firebase Storage n'est peut-être pas encore activé."
     },
     "plan": {
       "cat_saas": "B2B SaaS",

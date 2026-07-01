@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 import { getServerSession } from "@/lib/firebase/session";
 import { isStartupPaid } from "@/lib/entitlements";
-import { callTool, TOKEN_BUDGET } from "@/lib/ai/anthropic";
+import { callTool, TOKEN_BUDGET, languageName } from "@/lib/ai/anthropic";
 
 // Given the input-mask params, the AI asks exactly 5 sharp questions to flesh
 // out the business plan. One of them MUST probe the core idea + differentiation.
@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "AI not configured" }, { status: 500 });
 
-  const { params } = await req.json();
+  const { params, locale } = await req.json();
+  const lang = languageName(locale);
   const ctx = [
     params?.name ? `Name: ${params.name}` : "",
     params?.category ? `Category: ${params.category}` : "",
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
   const result = await callTool<{ questions: string[] }>({
     apiKey,
     maxTokens: TOKEN_BUDGET.questions,
-    system: `You interview a founder to build their business plan. Ask EXACTLY 5 short, specific questions (one sentence each). Exactly ONE question must ask for the core idea AND what makes them different from existing companies/competitors. The others should cover: the concrete problem & who pays, the solution/product, the business/revenue model, and traction or go-to-market. Be concise. Ask in the same language as the input; if unclear, German.`,
+    system: `You interview a founder to build their business plan. Ask EXACTLY 5 short, specific questions (one sentence each). Exactly ONE question must ask for the core idea AND what makes them different from existing companies/competitors. The others should cover: the concrete problem & who pays, the solution/product, the business/revenue model, and traction or go-to-market. Be concise. Write ALL questions in ${lang}.`,
     user: ctx || "A new startup with no details yet.",
     toolName: "ask_questions",
     description: "Return exactly 5 interview questions.",

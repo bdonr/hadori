@@ -978,7 +978,11 @@
       "locked_note": "Cancel monthly · PDF export included",
       "saved": "✓ Saved",
       "saving": "Saving …",
-      "save_pitchdeck": "Save pitch deck"
+      "save_pitchdeck": "Save pitch deck",
+      "add_image": "Add image",
+      "uploading": "Uploading…",
+      "remove_image": "Remove",
+      "image_error": "Upload failed — Firebase Storage may not be enabled yet."
     },
     "plan": {
       "cat_saas": "B2B SaaS",

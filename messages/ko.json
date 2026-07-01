@@ -978,7 +978,11 @@
       "locked_note": "매월 해지 가능 · PDF 내보내기 포함",
       "saved": "✓ 저장되었습니다",
       "saving": "저장 중 …",
-      "save_pitchdeck": "피치덱 저장"
+      "save_pitchdeck": "피치덱 저장",
+      "add_image": "이미지 추가",
+      "uploading": "업로드 중…",
+      "remove_image": "제거",
+      "image_error": "업로드 실패 — Firebase Storage가 아직 활성화되지 않았을 수 있습니다."
     },
     "plan": {
       "cat_saas": "B2B SaaS",

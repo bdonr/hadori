@@ -978,7 +978,11 @@
       "locked_note": "Monatlich kündbar · PDF-Export inklusive",
       "saved": "✓ Gespeichert",
       "saving": "Speichern …",
-      "save_pitchdeck": "Pitchdeck speichern"
+      "save_pitchdeck": "Pitchdeck speichern",
+      "add_image": "Bild hinzufügen",
+      "uploading": "Lädt hoch…",
+      "remove_image": "Entfernen",
+      "image_error": "Upload fehlgeschlagen — evtl. ist Firebase Storage noch nicht aktiviert."
     },
     "plan": {
       "cat_saas": "B2B SaaS",

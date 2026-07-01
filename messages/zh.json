@@ -978,7 +978,11 @@
       "locked_note": "按月可随时取消 · 含 PDF 导出",
       "saved": "✓ 已保存",
       "saving": "保存中 …",
-      "save_pitchdeck": "保存 Pitchdeck"
+      "save_pitchdeck": "保存 Pitchdeck",
+      "add_image": "添加图片",
+      "uploading": "上传中…",
+      "remove_image": "移除",
+      "image_error": "上传失败 — Firebase Storage 可能尚未启用。"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

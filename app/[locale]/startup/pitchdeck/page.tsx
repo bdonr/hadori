@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { isStartupPaid } from "@/lib/entitlements";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase/client";
+import { ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { auth, db, storage } from "@/lib/firebase/client";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
 
@@ -117,6 +118,9 @@ export default function PitchDeckPage() {
   const [isPro, setIsPro] = useState(false);
   const [uid, setUid] = useState<string | null>(null);
   const [values, setValues] = useState<Record<string, Record<string, string>>>({});
+  const [images, setImages] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [imgError, setImgError] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -134,8 +138,11 @@ export default function PitchDeckPage() {
         // Load existing pitchdeck
         const deckSnap = await getDoc(doc(db, "pitchdecks", user.uid));
         if (deckSnap.exists()) {
-          const slides = deckSnap.data().slides as Record<string, Record<string, string>> | undefined;
+          const d = deckSnap.data();
+          const slides = d.slides as Record<string, Record<string, string>> | undefined;
           if (slides) setValues(slides);
+          const imgs = d.images as Record<string, string> | undefined;
+          if (imgs) setImages(imgs);
         }
       } catch { /* ignore */ }
     });
@@ -159,13 +166,41 @@ export default function PitchDeckPage() {
     try {
       await setDoc(
         doc(db, "pitchdecks", uid),
-        { slides: values, updated_at: serverTimestamp() },
+        { slides: values, images, updated_at: serverTimestamp() },
         { merge: true }
       );
       setSaved(true);
     } catch { /* ignore */ } finally {
       setSaving(false);
     }
+  }
+
+  async function uploadImage(slideId: string, file: File) {
+    if (!uid || !file.type.startsWith("image/")) return;
+    if (file.size > 5 * 1024 * 1024) return; // 5 MB cap (matches storage rule)
+    setUploading(slideId); setImgError(false);
+    try {
+      const ref = storageRef(storage, `pitchdecks/${uid}/${slideId}`);
+      await uploadBytes(ref, file, { contentType: file.type });
+      const url = await getDownloadURL(ref);
+      const next = { ...images, [slideId]: url };
+      setImages(next);
+      // Persist immediately so the image survives without pressing Save.
+      await setDoc(doc(db, "pitchdecks", uid), { images: next, updated_at: serverTimestamp() }, { merge: true });
+    } catch { setImgError(true); } finally {
+      setUploading(null);
+    }
+  }
+
+  async function removeImage(slideId: string) {
+    if (!uid) return;
+    const next = { ...images };
+    delete next[slideId];
+    setImages(next);
+    try {
+      await deleteObject(storageRef(storage, `pitchdecks/${uid}/${slideId}`)).catch(() => {});
+      await setDoc(doc(db, "pitchdecks", uid), { images: next, updated_at: serverTimestamp() }, { merge: true });
+    } catch { /* ignore */ }
   }
 
   return (
@@ -190,6 +225,12 @@ export default function PitchDeckPage() {
           </div>
         )}
 
+        {imgError && (
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {t("image_error")}
+          </div>
+        )}
+
         {/* Active slides */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visibleSlides.map((slide) => (
@@ -199,6 +240,10 @@ export default function PitchDeckPage() {
               t={t}
               values={values[slide.id] ?? {}}
               onChange={(label, val) => set(slide.id, label, val)}
+              image={images[slide.id]}
+              uploading={uploading === slide.id}
+              onUpload={(file) => uploadImage(slide.id, file)}
+              onRemoveImage={() => removeImage(slide.id)}
             />
           ))}
         </div>
@@ -278,17 +323,46 @@ function SlideCard({
   t,
   values,
   onChange,
+  image,
+  uploading,
+  onUpload,
+  onRemoveImage,
 }: {
   slide: Slide;
   t: (key: string) => string;
   values: Record<string, string>;
   onChange: (label: string, value: string) => void;
+  image?: string;
+  uploading: boolean;
+  onUpload: (file: File) => void;
+  onRemoveImage: () => void;
 }) {
   return (
     <div className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">{slide.icon}</span>
         <h3 className="font-bold text-zinc-900">{t(slide.titleKey)}</h3>
+      </div>
+
+      {/* Slide image */}
+      <div className="mb-3">
+        {image ? (
+          <div className="group relative overflow-hidden rounded-xl border border-zinc-200">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={image} alt="" className="h-32 w-full object-cover" />
+            <button type="button" onClick={onRemoveImage}
+              className="absolute right-2 top-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100">
+              {t("remove_image")}
+            </button>
+          </div>
+        ) : (
+          <label className={`flex h-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-zinc-200 text-xs font-medium text-zinc-400 transition-colors hover:border-indigo-300 hover:text-indigo-500 ${uploading ? "opacity-50" : ""}`}>
+            <span className="text-lg">🖼️</span>
+            {uploading ? t("uploading") : t("add_image")}
+            <input type="file" accept="image/*" className="hidden" disabled={uploading}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) onUpload(f); e.target.value = ""; }} />
+          </label>
+        )}
       </div>
 
       <div className="flex flex-col gap-3 flex-1">
