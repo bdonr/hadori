@@ -118,12 +118,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             if (d.ownerId) {
               try {
                 const [profileSnap, talentSnap] = await Promise.all([
-                  getDoc(doc(db, "profiles", d.ownerId)),
-                  getDoc(doc(db, "talent", d.ownerId)),
+                  getDoc(doc(db, "publicProfiles", d.ownerId)).catch(() => null),
+                  getDoc(doc(db, "talent", d.ownerId)).catch(() => null),
                 ]);
-                if (profileSnap.exists()) {
+                if (profileSnap?.exists()) {
                   const pr = profileSnap.data();
-                  const ta = talentSnap.exists() ? talentSnap.data() : {};
+                  const ta = talentSnap?.exists() ? talentSnap.data() : {};
                   setCreator({
                     uid: d.ownerId,
                     full_name: pr.full_name ?? "Unbekannt",

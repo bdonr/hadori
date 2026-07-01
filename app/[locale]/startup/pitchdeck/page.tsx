@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { isStartupPaid } from "@/lib/entitlements";
 import { onAuthStateChanged } from "firebase/auth";
@@ -114,6 +114,7 @@ const SLIDES: Slide[] = [
 export default function PitchDeckPage() {
   const t = useTranslations("startup_pages.pitchdeck");
   const params = useParams();
+  const router = useRouter();
   const locale = (params.locale as string) ?? "en";
 
   const [isPro, setIsPro] = useState(false);
@@ -171,6 +172,8 @@ export default function PitchDeckPage() {
         { merge: true }
       );
       setSaved(true);
+      // Redirect to the overview so the founder can review the saved deck.
+      setTimeout(() => router.push(`/${locale}/startup/overview`), 700);
     } catch { /* ignore */ } finally {
       setSaving(false);
     }

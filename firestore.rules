@@ -13,6 +13,14 @@ service cloud.firestore {
       return isAuth() && request.auth.uid == uid;
     }
 
+    // Public identity — name/avatar/role only. Readable by any authenticated
+    // user so profile/detail pages can show names without exposing the private
+    // profile (email, stripe ids, plan_tier).
+    match /publicProfiles/{uid} {
+      allow read: if isAuth();
+      allow write: if isOwner(uid);
+    }
+
     // Profiles: users can only read/write their own profile
     match /profiles/{uid} {
       allow read: if isOwner(uid);

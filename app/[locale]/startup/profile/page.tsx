@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
@@ -24,6 +25,8 @@ const CATEGORIES = [
 
 export default function StartupProfilePage() {
   const t = useTranslations("startup_pages.profile");
+  const router = useRouter();
+  const locale = (useParams().locale as string) ?? "de";
   const [uid, setUid] = useState<string | null>(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -106,7 +109,8 @@ export default function StartupProfilePage() {
         updated_at: now,
       }, { merge: true });
       setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
+      // Redirect to the overview so the founder can review the saved profile.
+      setTimeout(() => router.push(`/${locale}/startup/overview`), 700);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("save_error"));
     } finally {

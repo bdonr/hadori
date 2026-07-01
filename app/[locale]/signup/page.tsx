@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { setDoc } from "firebase/firestore";
-import { auth } from "@/lib/firebase/client";
+import { setDoc, doc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
 import { profileDoc } from "@/lib/firebase/refs";
 import type { UserRole, Profile } from "@/lib/firebase/collections";
 import { Button } from "@/components/ui/button";
@@ -68,6 +68,11 @@ export default function SignupPage() {
         updated_at: now,
       };
       await setDoc(profileDoc(user.uid), profile);
+      // Public identity — always readable (name/avatar/role). The private
+      // profiles doc (email, stripe, plan_tier) stays owner-only.
+      await setDoc(doc(db, "publicProfiles", user.uid), {
+        uid: user.uid, full_name: name, role, avatar_url: "",
+      });
       const token = await user.getIdToken();
       await fetch("/api/auth/session", {
         method: "POST",

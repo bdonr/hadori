@@ -74,12 +74,14 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
       if (!targetUid) { setLoading(false); return; }
 
       try {
+        // Read the PUBLIC profile (name/role) — the private profiles doc is
+        // owner-only. Reads are independent so one failure never blanks the page.
         const [profileSnap, talentSnap] = await Promise.all([
-          getDoc(doc(db, "profiles", targetUid)),
-          getDoc(doc(db, "talent", targetUid)),
+          getDoc(doc(db, "publicProfiles", targetUid)).catch(() => null),
+          getDoc(doc(db, "talent", targetUid)).catch(() => null),
         ]);
-        const p = profileSnap.exists() ? profileSnap.data() as Profile : null;
-        const t = talentSnap.exists() ? talentSnap.data() as TalentData : null;
+        const p = profileSnap?.exists() ? profileSnap.data() as Profile : null;
+        const t = talentSnap?.exists() ? talentSnap.data() as TalentData : null;
         setProfile(p);
         setTalent(t);
 
