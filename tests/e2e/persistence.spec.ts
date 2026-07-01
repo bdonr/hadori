@@ -48,6 +48,20 @@ test.describe("Persistence — Startup", () => {
     await expect(page.getByText(projectName).first()).toBeVisible({ timeout: 20_000 });
   });
 
+  test("logged-in user on homepage is redirected to dashboard (no marketing/signup)", async ({ page }) => {
+    const email = uniqueEmail("home-redirect");
+    await signup(page, "creator", email, "Home Creator");
+    await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
+
+    // Visiting the homepage must bounce a logged-in user to their dashboard,
+    // NOT show the "Start for free" landing page.
+    await page.goto("/de");
+    await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
+    // The marketing signup CTA must not be present
+    await expect(page.getByRole("link", { name: /start for free|kostenlos starten|jetzt registrieren/i }))
+      .toHaveCount(0);
+  });
+
   test("workspace create: server API persists and redirects to workspace", async ({ page }) => {
     const email = uniqueEmail("persist-ws");
     await signup(page, "creator", email, "WS Creator");
