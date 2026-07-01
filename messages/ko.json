@@ -843,7 +843,10 @@
       "saved": "⭐ 저장됨",
       "save": "☆ 저장",
       "details": "상세 →",
-      "mrr_label": "💰 MRR: {mrr}"
+      "mrr_label": "💰 MRR: {mrr}",
+      "empty_title": "아직 딜 플로우에 스타트업이 없습니다",
+      "empty_desc": "스타트업이 투자자에게 자신을 공개하면 여기에 표시됩니다.",
+      "watchlist_limit_hit": "워치리스트 한도에 도달했습니다"
     },
     "portfolio": {
       "gate_title": "포트폴리오 트래커는 Pro부터 (월 49€)",
@@ -864,7 +867,10 @@
       "add_note": "+ 메모 추가",
       "added": "추가됨: {date}",
       "rejected": "거절됨 ({n})",
-      "reactivate": "다시 활성화"
+      "reactivate": "다시 활성화",
+      "empty_title": "아직 포트폴리오에 딜이 없습니다",
+      "empty_desc": "워치리스트의 스타트업을 추적하여 여기에서 파이프라인을 구축하세요.",
+      "go_to_watchlist": "워치리스트로 이동"
     },
     "profile": {
       "about_you": "당신에 대하여",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "Deal Flow 발견하기 →",
       "details": "상세",
       "free_limit": "관심 목록은 스타트업 5개까지 무료",
-      "upgrade_angel": "20개 슬롯을 위해 Angel로 업그레이드 →"
+      "upgrade_angel": "20개 슬롯을 위해 Angel로 업그레이드 →",
+      "empty_desc": "딜 플로우에서 스타트업을 저장하여 여기에서 주시하세요.",
+      "track_in_portfolio": "포트폴리오에서 추적"
     },
     "detail": {
       "loading": "로딩 중…",

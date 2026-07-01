@@ -843,7 +843,10 @@
       "saved": "⭐ 保存済み",
       "save": "☆ 保存",
       "details": "詳細 →",
-      "mrr_label": "💰 MRR: {mrr}"
+      "mrr_label": "💰 MRR: {mrr}",
+      "empty_title": "ディールフローにまだスタートアップがありません",
+      "empty_desc": "スタートアップが投資家に自身を公開すると、ここに表示されます。",
+      "watchlist_limit_hit": "ウォッチリストの上限に達しました"
     },
     "portfolio": {
       "gate_title": "Pro（月49€）以上でポートフォリオトラッカー",
@@ -864,7 +867,10 @@
       "add_note": "+ メモを追加",
       "added": "追加日: {date}",
       "rejected": "見送り（{n}）",
-      "reactivate": "再開する"
+      "reactivate": "再開する",
+      "empty_title": "ポートフォリオにまだ案件がありません",
+      "empty_desc": "ウォッチリストのスタートアップを追跡して、ここにパイプラインを構築しましょう。",
+      "go_to_watchlist": "ウォッチリストへ移動"
     },
     "profile": {
       "about_you": "あなたについて",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "ディールフローを見つける →",
       "details": "詳細",
       "free_limit": "ウォッチリストはスタートアップ5社まで無料",
-      "upgrade_angel": "Angelにアップグレードで20枠に →"
+      "upgrade_angel": "Angelにアップグレードで20枠に →",
+      "empty_desc": "ディールフローからスタートアップを保存して、ここで注目しておきましょう。",
+      "track_in_portfolio": "ポートフォリオで追跡"
     },
     "detail": {
       "loading": "読み込み中…",

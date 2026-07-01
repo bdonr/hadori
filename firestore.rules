@@ -115,6 +115,11 @@ service cloud.firestore {
       match /watchlist/{itemId} {
         allow read, write: if isOwner(uid);
       }
+
+      // Portfolio tracker — owner only.
+      match /portfolio/{itemId} {
+        allow read, write: if isOwner(uid);
+      }
     }
 
     // Investor interests: investor creates, startup owner reads via Admin SDK

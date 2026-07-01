@@ -843,7 +843,10 @@
       "saved": "⭐ 已保存",
       "save": "☆ 保存",
       "details": "详情 →",
-      "mrr_label": "💰 MRR：{mrr}"
+      "mrr_label": "💰 MRR：{mrr}",
+      "empty_title": "Deal Flow 中暂无初创公司",
+      "empty_desc": "当初创公司向投资者展示自己后，它们将显示在这里。",
+      "watchlist_limit_hit": "已达到 Watchlist 上限"
     },
     "portfolio": {
       "gate_title": "投资组合追踪器从 Pro 起（每月 49 €）",
@@ -864,7 +867,10 @@
       "add_note": "+ 添加笔记",
       "added": "添加于：{date}",
       "rejected": "已放弃（{n}）",
-      "reactivate": "重新激活"
+      "reactivate": "重新激活",
+      "empty_title": "您的 Portfolio 中暂无交易",
+      "empty_desc": "跟踪 Watchlist 中的初创公司，在这里构建您的 Pipeline。",
+      "go_to_watchlist": "前往 Watchlist"
     },
     "profile": {
       "about_you": "关于你",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "发现 Deal Flow →",
       "details": "详情",
       "free_limit": "免费关注列表最多 5 家初创企业",
-      "upgrade_angel": "升级到 Angel 可获得 20 个名额 →"
+      "upgrade_angel": "升级到 Angel 可获得 20 个名额 →",
+      "empty_desc": "从 Deal Flow 中保存初创公司，即可在这里持续关注它们。",
+      "track_in_portfolio": "添加到 Portfolio 跟踪"
     },
     "detail": {
       "loading": "正在加载…",

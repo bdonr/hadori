@@ -843,7 +843,10 @@
       "saved": "⭐ Gespeichert",
       "save": "☆ Speichern",
       "details": "Details →",
-      "mrr_label": "💰 MRR: {mrr}"
+      "mrr_label": "💰 MRR: {mrr}",
+      "empty_title": "Noch keine Startups im Deal Flow",
+      "empty_desc": "Sobald Startups sich für Investoren sichtbar schalten, erscheinen sie hier.",
+      "watchlist_limit_hit": "Watchlist-Limit erreicht"
     },
     "portfolio": {
       "gate_title": "Portfolio-Tracker ab Pro (49 €/Mo)",
@@ -864,7 +867,10 @@
       "add_note": "+ Notiz hinzufügen",
       "added": "Hinzugefügt: {date}",
       "rejected": "Abgelehnt ({n})",
-      "reactivate": "Reaktivieren"
+      "reactivate": "Reaktivieren",
+      "empty_title": "Noch keine Deals im Portfolio",
+      "empty_desc": "Verfolge Startups aus deiner Watchlist, um deine Pipeline hier aufzubauen.",
+      "go_to_watchlist": "Zur Watchlist"
     },
     "profile": {
       "about_you": "Über dich",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "Deal Flow entdecken →",
       "details": "Details",
       "free_limit": "Watchlist bis 5 Startups kostenlos",
-      "upgrade_angel": "Auf Angel upgraden für 20 Slots →"
+      "upgrade_angel": "Auf Angel upgraden für 20 Slots →",
+      "empty_desc": "Speichere Startups aus dem Deal Flow, um sie hier im Blick zu behalten.",
+      "track_in_portfolio": "Ins Portfolio"
     },
     "detail": {
       "loading": "Wird geladen…",

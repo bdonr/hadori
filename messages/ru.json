@@ -843,7 +843,10 @@
       "saved": "⭐ Сохранено",
       "save": "☆ Сохранить",
       "details": "Детали →",
-      "mrr_label": "💰 MRR: {mrr}"
+      "mrr_label": "💰 MRR: {mrr}",
+      "empty_title": "В Deal Flow пока нет стартапов",
+      "empty_desc": "Как только стартапы станут видимыми для инвесторов, они появятся здесь.",
+      "watchlist_limit_hit": "Достигнут лимит Watchlist"
     },
     "portfolio": {
       "gate_title": "Трекер портфеля от Pro (49 €/мес)",
@@ -864,7 +867,10 @@
       "add_note": "+ Добавить заметку",
       "added": "Добавлено: {date}",
       "rejected": "Отклонено ({n})",
-      "reactivate": "Реактивировать"
+      "reactivate": "Реактивировать",
+      "empty_title": "В вашем Portfolio пока нет сделок",
+      "empty_desc": "Отслеживайте стартапы из вашего Watchlist, чтобы построить здесь свой Pipeline.",
+      "go_to_watchlist": "Перейти к Watchlist"
     },
     "profile": {
       "about_you": "О тебе",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "Открыть Deal Flow →",
       "details": "Детали",
       "free_limit": "Watchlist до 5 стартапов бесплатно",
-      "upgrade_angel": "Перейти на Angel для 20 слотов →"
+      "upgrade_angel": "Перейти на Angel для 20 слотов →",
+      "empty_desc": "Сохраняйте стартапы из Deal Flow, чтобы следить за ними здесь.",
+      "track_in_portfolio": "Отслеживать в Portfolio"
     },
     "detail": {
       "loading": "Загружается…",

@@ -843,7 +843,10 @@
       "saved": "⭐ Saved",
       "save": "☆ Save",
       "details": "Details →",
-      "mrr_label": "💰 MRR: {mrr}"
+      "mrr_label": "💰 MRR: {mrr}",
+      "empty_title": "No startups in the deal flow yet",
+      "empty_desc": "Once startups make themselves visible to investors, they will show up here.",
+      "watchlist_limit_hit": "Watchlist limit reached"
     },
     "portfolio": {
       "gate_title": "Portfolio tracker from Pro (€49/mo)",
@@ -864,7 +867,10 @@
       "add_note": "+ Add note",
       "added": "Added: {date}",
       "rejected": "Passed ({n})",
-      "reactivate": "Reactivate"
+      "reactivate": "Reactivate",
+      "empty_title": "No deals in your portfolio yet",
+      "empty_desc": "Track startups from your watchlist to build your pipeline here.",
+      "go_to_watchlist": "Go to watchlist"
     },
     "profile": {
       "about_you": "About you",
@@ -905,7 +911,9 @@
       "discover_deal_flow": "Discover Deal Flow →",
       "details": "Details",
       "free_limit": "Watchlist up to 5 startups for free",
-      "upgrade_angel": "Upgrade to Angel for 20 slots →"
+      "upgrade_angel": "Upgrade to Angel for 20 slots →",
+      "empty_desc": "Save startups from the deal flow to keep an eye on them here.",
+      "track_in_portfolio": "Track in portfolio"
     },
     "detail": {
       "loading": "Loading…",
