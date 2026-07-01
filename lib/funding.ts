@@ -43,6 +43,31 @@ export const CHECK_SIZES: CheckSize[] = [
   { id: "series_b", label: "€10M+ (Series B+)" },
 ];
 
+// Funding amount sought — a range, never free text (rule #6: amounts are pickers).
+export const FUNDING_RANGES: MrrRange[] = [
+  { id: "none",      label: "Suche keine Finanzierung" },
+  { id: "lt_50k",    label: "< €50k" },
+  { id: "50k_250k",  label: "€50k – €250k" },
+  { id: "250k_1m",   label: "€250k – €1M" },
+  { id: "1m_3m",     label: "€1M – €3M" },
+  { id: "3m_10m",    label: "€3M – €10M" },
+  { id: "gt_10m",    label: "> €10M" },
+];
+
+// Deals per year (investor) — a range, never a free-text number.
+export const DEALS_PER_YEAR: MrrRange[] = [
+  { id: "0",       label: "0 (noch keine)" },
+  { id: "1_2",     label: "1–2" },
+  { id: "3_5",     label: "3–5" },
+  { id: "6_10",    label: "6–10" },
+  { id: "11_25",   label: "11–25" },
+  { id: "25_plus", label: "25+" },
+];
+
+export function getFundingRangeLabel(id: string): string {
+  return FUNDING_RANGES.find(r => r.id === id)?.label ?? id;
+}
+
 export function getFundingStage(id: string): FundingStage | undefined {
   return FUNDING_STAGES.find(s => s.id === id);
 }

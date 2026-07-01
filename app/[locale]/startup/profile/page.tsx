@@ -9,7 +9,7 @@ import { auth, db } from "@/lib/firebase/client";
 import { Button } from "@/components/ui/button";
 import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS } from "@/lib/regions";
-import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
+import { FUNDING_STAGES, MRR_RANGES, FUNDING_RANGES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
 import { isStartupPaid } from "@/lib/entitlements";
 import { HelpTip } from "@/components/HelpTip";
@@ -255,9 +255,11 @@ export default function StartupProfilePage() {
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="sp-funding" className="text-sm font-medium text-zinc-700">{t("funding_goal")}</label>
-                <input id="sp-funding" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)}
-                  placeholder={t("funding_goal_placeholder")}
-                  className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
+                <select id="sp-funding" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)}
+                  className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="">{t("funding_goal_placeholder")}</option>
+                  {FUNDING_RANGES.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
+                </select>
               </div>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={seekingInvestors} onChange={(e) => setSeekingInvestors(e.target.checked)}

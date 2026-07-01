@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { REGIONS } from "@/lib/regions";
-import { INVESTOR_FOCUS, CHECK_SIZES } from "@/lib/funding";
+import { INVESTOR_FOCUS, CHECK_SIZES, DEALS_PER_YEAR } from "@/lib/funding";
 import { Button } from "@/components/ui/button";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -185,8 +185,11 @@ export default function InvestorProfilePage() {
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-zinc-700">{t("deals_per_year")}</label>
-              <input value={dealsPerYear} onChange={e => setDealsPerYear(e.target.value)} placeholder={t("deals_per_year_placeholder")}
-                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 w-40" />
+              <select value={dealsPerYear} onChange={e => setDealsPerYear(e.target.value)}
+                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 w-56">
+                <option value="">{t("deals_per_year_placeholder")}</option>
+                {DEALS_PER_YEAR.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
+              </select>
             </div>
           </section>
 

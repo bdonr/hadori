@@ -10,6 +10,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
 import { isStartupPaid } from "@/lib/entitlements";
 import { REGIONS } from "@/lib/regions";
+import { getFundingRangeLabel } from "@/lib/funding";
 
 type View = "internal" | "external";
 
@@ -159,7 +160,7 @@ export default function StartupOverviewPage() {
                   <div className="space-y-1 text-sm text-zinc-600">
                     <p>{t("stage")}: <strong>{startup.stage || "—"}</strong></p>
                     <p>MRR: <strong>{startup.mrrRange || "—"}</strong></p>
-                    <p>{t("funding_goal")}: <strong>{startup.fundingGoal || "—"}</strong></p>
+                    <p>{t("funding_goal")}: <strong>{startup.fundingGoal ? getFundingRangeLabel(startup.fundingGoal) : "—"}</strong></p>
                     <p>{t("seeking_investors")}: <strong>{startup.seekingInvestors ? t("yes") : t("no")}</strong></p>
                     {!paid && <p className="text-xs text-amber-600">{t("funding_pro_only")}</p>}
                   </div>
