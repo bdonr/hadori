@@ -43,6 +43,6 @@ env:
   - variable: STRIPE_SECRET_KEY
     secret: STRIPE_SECRET_KEY
   - variable: STRIPE_WEBHOOK_SECRET
-    secret: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET@2
   - variable: ANTHROPIC_API_KEY
     secret: ANTHROPIC_API_KEY
