@@ -22,11 +22,25 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
   const tier = profile.plan_tier ?? "free";
   const name = profile.full_name ?? "";
 
+  // Pending incoming contact requests: single where() on toUid, filter here.
+  let pendingRequests = 0;
+  if (adminDb) {
+    try {
+      const appsSnap = await adminDb.collection("applications").where("toUid", "==", session.uid).get();
+      pendingRequests = appsSnap.docs.filter(d => {
+        const a = d.data();
+        return a.status === "pending" && a.type === "contact_request";
+      }).length;
+    } catch {
+      // index/permission issue — badge simply hides
+    }
+  }
+
   const cards = [
     { href: `/${locale}/talent/skills`,       icon: "⚡", title: t("card_skills"),       desc: t("card_skills_desc"),       badge: null },
     { href: `/${locale}/talent/portfolio`,    icon: "🎨", title: t("card_portfolio"),    desc: isPro ? t("card_portfolio_desc_pro") : t("card_portfolio_desc_free"), badge: !isPro ? "1 / 1" : null },
     { href: `/${locale}/talent/jobs`,         icon: "🔍", title: t("card_jobs"),         desc: t("card_jobs_desc"),         badge: null },
-    { href: `/${locale}/talent/applications`, icon: "📋", title: t("applications_link"), desc: t("applications_link_desc"), badge: null },
+    { href: `/${locale}/talent/applications`, icon: "📋", title: t("applications_link"), desc: t("applications_link_desc"), badge: null, count: pendingRequests },
     { href: `/${locale}/talent/billing`,      icon: "💳", title: t("card_billing"),      desc: isPro ? `${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "", badge: null },
   ];
 
@@ -62,6 +76,11 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
             >
               {c.badge && (
                 <span className="absolute right-4 top-4 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">{c.badge}</span>
+              )}
+              {"count" in c && (c as { count: number }).count > 0 && (
+                <span className="absolute right-4 top-4 flex h-6 min-w-6 items-center justify-center rounded-full bg-indigo-600 px-1.5 text-xs font-bold text-white">
+                  {(c as { count: number }).count}
+                </span>
               )}
               <span className="text-3xl">{c.icon}</span>
               <h2 className="mt-3 font-semibold text-zinc-900 group-hover:text-indigo-700 transition-colors">{c.title}</h2>

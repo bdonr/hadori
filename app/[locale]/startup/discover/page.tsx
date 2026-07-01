@@ -84,6 +84,7 @@ export default function DiscoverInvestorsPage() {
 
   async function requestIntro(m: Match) {
     if (!myUid || requestedIds.includes(m.uid) || atIntroLimit) return;
+    const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setRequestedIds((prev) => [...prev, m.uid]);
     setIntrosThisMonth((prev) => prev + 1);
     try {
@@ -94,6 +95,7 @@ export default function DiscoverInvestorsPage() {
         fromName: myName,
         toName: m.name,
         subjectTitle: m.firm || "",
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),

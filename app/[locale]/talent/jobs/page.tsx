@@ -195,7 +195,7 @@ export default function TalentJobsPage() {
   const applicationsLeft = applicationsCap - appsThisMonth;
   const atApplicationLimit = applicationsLeft <= 0;
 
-  async function apply(role: Role) {
+  async function apply(role: Role, message: string) {
     if (!myUid) return;
     if (appliedIds.includes(role.id) || atApplicationLimit) return;
     // Optimistic update.
@@ -210,6 +210,7 @@ export default function TalentJobsPage() {
         toName: role.posterName ?? "",
         roleId: role.id,
         roleTitle: role.title,
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),
@@ -342,7 +343,7 @@ export default function TalentJobsPage() {
                 locale={locale}
                 applied={appliedIds.includes(role.id)}
                 canApply={!atApplicationLimit}
-                onApply={() => apply(role)}
+                onApply={(message) => apply(role, message)}
               />
             ))}
           </div>
@@ -365,10 +366,12 @@ function RoleCard({
   locale: string;
   applied: boolean;
   canApply: boolean;
-  onApply: () => void;
+  onApply: (message: string) => void;
 }) {
   const t = useTranslations("talent_pages.jobs");
   const tax = useTaxonomy();
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   const matchColor =
     role.match >= 75 ? "bg-green-100 text-green-700" :
@@ -455,12 +458,20 @@ function RoleCard({
               {t("requested")}
             </span>
           ) : canApply ? (
-            <button
-              onClick={onApply}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
-            >
-              {t("express_interest")}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowMessage(v => !v)}
+                className="rounded-lg border border-zinc-200 px-3 py-2 text-sm font-semibold text-zinc-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors"
+              >
+                {t("add_note")}
+              </button>
+              <button
+                onClick={() => onApply(message)}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+              >
+                {t("express_interest")}
+              </button>
+            </div>
           ) : (
             <Link
               href={`/${locale}/talent/billing`}
@@ -471,6 +482,16 @@ function RoleCard({
           )}
         </div>
       </div>
+
+      {showMessage && !applied && canApply && (
+        <textarea
+          value={message}
+          onChange={e => setMessage(e.target.value)}
+          placeholder={t("message_placeholder")}
+          rows={2}
+          className="mt-3 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+        />
+      )}
     </div>
   );
 }

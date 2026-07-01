@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, getDoc, query, where, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 
 interface Application {
@@ -18,12 +18,32 @@ interface Application {
   toName?: string;
   roleTitle?: string;
   subjectTitle?: string;
+  message?: string;
   status: string;
   created_at?: { toDate?: () => Date };
 }
 
 function createdMillis(a: Application): number {
   return a.created_at?.toDate ? a.created_at.toDate().getTime() : Date.now();
+}
+
+// Batch-fetch publicProfiles for the given uids and return a map of
+// uid -> full_name (only for profiles that actually exist and have a name).
+async function fetchNames(uids: string[]): Promise<Record<string, string>> {
+  const unique = [...new Set(uids.filter(Boolean))];
+  const map: Record<string, string> = {};
+  await Promise.all(
+    unique.map(async (uid) => {
+      try {
+        const snap = await getDoc(doc(db, "publicProfiles", uid));
+        if (snap.exists()) {
+          const name = (snap.data().full_name as string) ?? "";
+          if (name) map[uid] = name;
+        }
+      } catch { /* ignore per-doc */ }
+    })
+  );
+  return map;
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -39,6 +59,33 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+// Render a counterpart name. Link to their profile only when the name was
+// resolved from a real publicProfiles doc (stored name or live-fetched name);
+// otherwise render plain text with the "someone" fallback.
+function CounterpartName({
+  uid, storedName, resolvedName, href,
+}: { uid: string; storedName?: string; resolvedName?: string; href: string }) {
+  const t = useTranslations("startup_pages.applicants");
+  const name = storedName || resolvedName || "";
+  if (!name) return <span className="font-semibold text-zinc-900">{t("someone")}</span>;
+  // We can link when we have a resolved profile. `storedName` alone doesn't prove
+  // the profile exists, but resolvedName (from a getDoc that existed) does.
+  return (
+    <Link href={href} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
+      {name}
+    </Link>
+  );
+}
+
+function MessageNote({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <p className="mt-1 border-l-2 border-zinc-200 pl-2 text-sm italic text-zinc-400">
+      &ldquo;{message}&rdquo;
+    </p>
+  );
+}
+
 export default function StartupApplicantsPage() {
   const t = useTranslations("startup_pages.applicants");
   const params = useParams();
@@ -48,6 +95,7 @@ export default function StartupApplicantsPage() {
   const [sent, setSent] = useState<Application[]>([]);
   const [investorInterest, setInvestorInterest] = useState<Application[]>([]);
   const [investorsRequested, setInvestorsRequested] = useState<Application[]>([]);
+  const [nameMap, setNameMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -78,6 +126,16 @@ export default function StartupApplicantsPage() {
         setSent(snt);
         setInvestorInterest(invInterest);
         setInvestorsRequested(invRequested);
+
+        // Resolve counterpart names LIVE for rows whose stored name is empty:
+        // received/interest use fromUid, sent/requested use toUid.
+        const needed = [
+          ...rec.filter(a => !a.fromName).map(a => a.fromUid),
+          ...invInterest.filter(a => !a.fromName).map(a => a.fromUid),
+          ...snt.filter(a => !a.toName).map(a => a.toUid),
+          ...invRequested.filter(a => !a.toName).map(a => a.toUid),
+        ];
+        if (needed.length > 0) setNameMap(await fetchNames(needed));
       } catch { /* ignore */ }
       setLoading(false);
     });
@@ -113,10 +171,9 @@ export default function StartupApplicantsPage() {
                   {received.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                       <div className="min-w-0 flex-1">
-                        <Link href={`/${locale}/user/${a.fromUid}`} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
-                          {a.fromName || t("someone")}
-                        </Link>
+                        <CounterpartName uid={a.fromUid} storedName={a.fromName} resolvedName={nameMap[a.fromUid]} href={`/${locale}/user/${a.fromUid}`} />
                         {a.roleTitle && <p className="mt-0.5 text-sm text-zinc-500">{a.roleTitle}</p>}
+                        <MessageNote message={a.message} />
                       </div>
                       <StatusBadge status={a.status} />
                       {a.status === "pending" && (
@@ -146,9 +203,10 @@ export default function StartupApplicantsPage() {
                 <div className="flex flex-col gap-3">
                   {sent.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                      <Link href={`/${locale}/user/${a.toUid}`} className="min-w-0 flex-1 font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
-                        {a.toName || t("someone")}
-                      </Link>
+                      <div className="min-w-0 flex-1">
+                        <CounterpartName uid={a.toUid} storedName={a.toName} resolvedName={nameMap[a.toUid]} href={`/${locale}/user/${a.toUid}`} />
+                        <MessageNote message={a.message} />
+                      </div>
                       <StatusBadge status={a.status} />
                     </div>
                   ))}
@@ -166,10 +224,9 @@ export default function StartupApplicantsPage() {
                   {investorInterest.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                       <div className="min-w-0 flex-1">
-                        <Link href={`/${locale}/investor/${a.fromUid}`} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
-                          {a.fromName || t("someone")}
-                        </Link>
+                        <CounterpartName uid={a.fromUid} storedName={a.fromName} resolvedName={nameMap[a.fromUid]} href={`/${locale}/investor/${a.fromUid}`} />
                         {a.subjectTitle && <p className="mt-0.5 text-sm text-zinc-500">{a.subjectTitle}</p>}
+                        <MessageNote message={a.message} />
                       </div>
                       <StatusBadge status={a.status} />
                       {a.status === "pending" && (
@@ -200,10 +257,9 @@ export default function StartupApplicantsPage() {
                   {investorsRequested.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                       <div className="min-w-0 flex-1">
-                        <Link href={`/${locale}/investor/${a.toUid}`} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
-                          {a.toName || t("someone")}
-                        </Link>
+                        <CounterpartName uid={a.toUid} storedName={a.toName} resolvedName={nameMap[a.toUid]} href={`/${locale}/investor/${a.toUid}`} />
                         {a.subjectTitle && <p className="mt-0.5 text-sm text-zinc-500">{a.subjectTitle}</p>}
+                        <MessageNote message={a.message} />
                       </div>
                       <StatusBadge status={a.status} />
                     </div>

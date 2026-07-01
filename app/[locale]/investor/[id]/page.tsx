@@ -102,6 +102,7 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
 
   async function requestIntro() {
     if (!authUid || !investor || !canRequestIntro || atIntroLimit || requested) return;
+    const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setRequested(true);
     setIntrosThisMonth(prev => prev + 1);
     try {
@@ -112,6 +113,7 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
         fromName: myName,
         toName: investor.name,
         subjectTitle: investor.firm || "",
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),

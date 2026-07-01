@@ -33,13 +33,27 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
     }
   }
 
+  // Pending incoming applicants: single where() on toUid, filter type/status here.
+  let pendingApplicants = 0;
+  if (adminDb) {
+    try {
+      const appsSnap = await adminDb.collection("applications").where("toUid", "==", session.uid).get();
+      pendingApplicants = appsSnap.docs.filter(d => {
+        const a = d.data();
+        return a.status === "pending" && (a.type === "application" || a.type === "startup_request");
+      }).length;
+    } catch {
+      // index/permission issue — badge simply hides
+    }
+  }
+
   const cards = [
     { href: `/${locale}/startup/overview`,   icon: "🗂️", title: t("card_overview"),   desc: t("card_overview_desc") },
     { href: `/${locale}/startup/plan`,       icon: "📄", title: t("card_plan"),       desc: t("card_plan_desc") },
     { href: `/${locale}/startup/pitchdeck`,  icon: "🎯", title: t("card_pitchdeck"),  desc: isPro ? t("card_pitchdeck_desc_pro") : t("card_pitchdeck_desc_free") },
     { href: `/${locale}/startup/visibility`, icon: isVisible ? "🟢" : "🔒", title: t("card_visibility"), desc: isVisible ? t("card_visibility_active") : isPro ? t("card_visibility_pro_off") : t("card_visibility_upgrade") },
     { href: `/${locale}/startup/roles`,      icon: "👥", title: t("card_roles"),      desc: t("card_roles_desc") },
-    { href: `/${locale}/startup/applicants`, icon: "📥", title: t("applicants_link"), desc: t("applicants_link_desc") },
+    { href: `/${locale}/startup/applicants`, icon: "📥", title: t("applicants_link"), desc: t("applicants_link_desc"), badge: pendingApplicants },
     { href: `/${locale}/startup/profile`,    icon: "🏢", title: t("card_profile"),    desc: t("card_profile_desc") },
     { href: `/${locale}/startup/billing`,    icon: "💳", title: t("card_billing"),    desc: isPro ? t("card_billing_desc_pro", { tier: profile.plan_tier }) : t("card_billing_desc_free") },
   ];
@@ -55,8 +69,13 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((c) => (
             <Link key={c.href} href={c.href}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md"
+              className="relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md"
             >
+              {"badge" in c && (c as { badge: number }).badge > 0 && (
+                <span className="absolute right-4 top-4 flex h-6 min-w-6 items-center justify-center rounded-full bg-indigo-600 px-1.5 text-xs font-bold text-white">
+                  {(c as { badge: number }).badge}
+                </span>
+              )}
               <span className="text-3xl">{c.icon}</span>
               <h2 className="mt-3 font-semibold text-zinc-900">{c.title}</h2>
               <p className="mt-1 text-sm text-zinc-500">{c.desc}</p>

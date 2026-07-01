@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, getDoc, query, where, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 
 interface Application {
@@ -17,12 +17,39 @@ interface Application {
   fromName?: string;
   toName?: string;
   roleTitle?: string;
+  message?: string;
   status: string;
   created_at?: { toDate?: () => Date };
 }
 
 function createdMillis(a: Application): number {
   return a.created_at?.toDate ? a.created_at.toDate().getTime() : Date.now();
+}
+
+async function fetchNames(uids: string[]): Promise<Record<string, string>> {
+  const unique = [...new Set(uids.filter(Boolean))];
+  const map: Record<string, string> = {};
+  await Promise.all(
+    unique.map(async (uid) => {
+      try {
+        const snap = await getDoc(doc(db, "publicProfiles", uid));
+        if (snap.exists()) {
+          const name = (snap.data().full_name as string) ?? "";
+          if (name) map[uid] = name;
+        }
+      } catch { /* ignore per-doc */ }
+    })
+  );
+  return map;
+}
+
+function MessageNote({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <p className="mt-1 border-l-2 border-zinc-200 pl-2 text-sm italic text-zinc-400">
+      &ldquo;{message}&rdquo;
+    </p>
+  );
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -45,6 +72,7 @@ export default function TalentApplicationsPage() {
 
   const [mine, setMine] = useState<Application[]>([]);
   const [requests, setRequests] = useState<Application[]>([]);
+  const [nameMap, setNameMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -65,6 +93,14 @@ export default function TalentApplicationsPage() {
           .sort((a, b) => createdMillis(b) - createdMillis(a));
         setMine(myApps);
         setRequests(reqs);
+
+        // Resolve counterpart names LIVE where the stored name is empty:
+        // my applications show the target (toUid); requests show the sender (fromUid).
+        const needed = [
+          ...myApps.filter(a => !a.toName).map(a => a.toUid),
+          ...reqs.filter(a => !a.fromName).map(a => a.fromUid),
+        ];
+        if (needed.length > 0) setNameMap(await fetchNames(needed));
       } catch { /* ignore */ }
       setLoading(false);
     });
@@ -100,7 +136,8 @@ export default function TalentApplicationsPage() {
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                       <div className="min-w-0 flex-1">
                         <p className="font-semibold text-zinc-900">{a.roleTitle || t("a_role")}</p>
-                        {a.toName && <p className="mt-0.5 text-sm text-zinc-500">{a.toName}</p>}
+                        {(a.toName || nameMap[a.toUid]) && <p className="mt-0.5 text-sm text-zinc-500">{a.toName || nameMap[a.toUid]}</p>}
+                        <MessageNote message={a.message} />
                       </div>
                       <StatusBadge status={a.status} />
                     </div>
@@ -118,9 +155,16 @@ export default function TalentApplicationsPage() {
                 <div className="flex flex-col gap-3">
                   {requests.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                      <Link href={`/${locale}/user/${a.fromUid}`} className="min-w-0 flex-1 font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
-                        {a.fromName || t("someone")}
-                      </Link>
+                      <div className="min-w-0 flex-1">
+                        {(a.fromName || nameMap[a.fromUid]) ? (
+                          <Link href={`/${locale}/user/${a.fromUid}`} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
+                            {a.fromName || nameMap[a.fromUid]}
+                          </Link>
+                        ) : (
+                          <span className="font-semibold text-zinc-900">{t("someone")}</span>
+                        )}
+                        <MessageNote message={a.message} />
+                      </div>
                       <StatusBadge status={a.status} />
                       {a.status === "pending" && (
                         <div className="flex gap-2">

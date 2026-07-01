@@ -318,7 +318,15 @@
     "looking_for_label": "Recherche :",
     "talent_cta_title": "Tu es un talent ?",
     "talent_cta_desc": "Crée ton profil DADORI et laisse les startups venir à toi.",
-    "talent_cta_button": "S'inscrire gratuitement →"
+    "talent_cta_button": "S'inscrire gratuitement →",
+    "type_projects": "Projets",
+    "type_startups": "Startups",
+    "type_talent": "Talents",
+    "search_by_skills": "Rechercher par compétences",
+    "talent_requires_login": "Connectez-vous pour parcourir les profils de talents",
+    "talent_neutral_name": "Profil de talent",
+    "empty_startups": "Aucune startup pour l'instant",
+    "empty_talent": "Aucun talent trouvé"
   },
   "workspace": {
     "board": "Board",
@@ -450,7 +458,9 @@
       "express_interest": "Manifester de l'intérêt",
       "apply_limit_title": "Limite de candidatures atteinte ({n} / mois)",
       "apply_limit_hint": "Passez à un forfait supérieur pour envoyer plus de candidatures ce mois-ci.",
-      "apply_limit_cta": "Améliorer"
+      "apply_limit_cta": "Améliorer",
+      "add_note": "Ajouter une note",
+      "message_placeholder": "Ajouter une courte note (facultatif)"
     },
     "portfolio": {
       "media_video": "Vidéo / Reel",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "Découvrir sur DADORI :",
       "all_projects_startups": "Tous les projets & startups →",
       "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
-      "intro_limit_reached": "Limite mensuelle d'intros atteinte"
+      "intro_limit_reached": "Limite mensuelle d'intros atteinte",
+      "message_prompt": "Ajouter un court message (facultatif)"
     },
     "matches": {
       "no_matches": "Aucun match pour l'instant",
@@ -650,7 +661,8 @@
       "exp_experienced": "Expérimenté (3–5 ans)",
       "exp_expert": "Expert (5+ ans)",
       "exp_junior": "Junior",
-      "contact_requires_paid": "Les demandes de contact nécessitent un forfait startup payant — mettre à niveau"
+      "contact_requires_paid": "Les demandes de contact nécessitent un forfait startup payant — mettre à niveau",
+      "message_placeholder": "Ajouter une courte note (facultatif)"
     },
     "invite": {
       "invalid_title": "Invitation invalide ou expirée",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "Limite de la watchlist atteinte",
       "featured_chip": "★ En vedette",
       "request_intro": "🤝 Demander une intro",
-      "intro_requested": "✓ Intro demandée"
+      "intro_requested": "✓ Intro demandée",
+      "message_prompt": "Ajouter un court message (facultatif)"
     },
     "portfolio": {
       "gate_title": "Tracker de portefeuille à partir de Pro (49 €/mois)",
@@ -967,7 +980,8 @@
       "notice_label": "Remarque :",
       "notice_text": "DADORI facilite les introductions. Aucune commission de succès, aucune participation aux transactions.",
       "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
-      "intro_limit_reached": "Limite mensuelle d'intros atteinte"
+      "intro_limit_reached": "Limite mensuelle d'intros atteinte",
+      "message_prompt": "Ajouter un court message (facultatif)"
     },
     "dashboard": {
       "greeting": "Bonjour, {name}",
@@ -1050,7 +1064,8 @@
       "gate_desc": "Découvrez et contactez des investisseurs pertinents avec un forfait Startup payant.",
       "upgrade_cta": "Passer à un forfait supérieur",
       "request_intro": "🤝 Demander une intro",
-      "intro_requested": "✓ Intro demandée"
+      "intro_requested": "✓ Intro demandée",
+      "message_prompt": "Ajouter un court message (facultatif)"
     },
     "pitchdeck": {
       "slide_problem_title": "Le problème",
@@ -1541,7 +1556,8 @@
     "request_intro": "🤝 Demander une intro",
     "intro_requested": "✓ Intro demandée",
     "intro_requires_paid": "Passez à un abonnement pour demander des intros →",
-    "intro_limit_reached": "Limite mensuelle d'intros atteinte"
+    "intro_limit_reached": "Limite mensuelle d'intros atteinte",
+    "message_prompt": "Ajouter un court message (facultatif)"
   },
   "taxonomy": {
     "skills": {

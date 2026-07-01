@@ -318,7 +318,15 @@
     "looking_for_label": "Sucht:",
     "talent_cta_title": "Du bist Talent?",
     "talent_cta_desc": "Erstell dein DADORI-Profil und lass Startups zu dir kommen.",
-    "talent_cta_button": "Kostenlos registrieren →"
+    "talent_cta_button": "Kostenlos registrieren →",
+    "type_projects": "Projekte",
+    "type_startups": "Startups",
+    "type_talent": "Talente",
+    "search_by_skills": "Nach Skills suchen",
+    "talent_requires_login": "Melde dich an, um Talent-Profile zu durchsuchen",
+    "talent_neutral_name": "Talent-Profil",
+    "empty_startups": "Noch keine Startups",
+    "empty_talent": "Keine Talente gefunden"
   },
   "workspace": {
     "board": "Board",
@@ -450,7 +458,9 @@
       "express_interest": "Interesse bekunden",
       "apply_limit_title": "Bewerbungslimit erreicht ({n} / Monat)",
       "apply_limit_hint": "Upgrade, um diesen Monat mehr Bewerbungen zu senden.",
-      "apply_limit_cta": "Upgraden"
+      "apply_limit_cta": "Upgraden",
+      "add_note": "Notiz hinzufügen",
+      "message_placeholder": "Kurze Notiz hinzufügen (optional)"
     },
     "portfolio": {
       "media_video": "Video / Reel",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "Auf DADORI entdecken:",
       "all_projects_startups": "Alle Projekte & Startups →",
       "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
-      "intro_limit_reached": "Monatliches Intro-Limit erreicht"
+      "intro_limit_reached": "Monatliches Intro-Limit erreicht",
+      "message_prompt": "Kurze Nachricht hinzufügen (optional)"
     },
     "matches": {
       "no_matches": "Noch keine Matches",
@@ -650,7 +661,8 @@
       "exp_intermediate": "Fortgeschritten (1–3 J.)",
       "exp_experienced": "Erfahren (3–5 J.)",
       "exp_expert": "Experte (5+ J.)",
-      "exp_junior": "Junior"
+      "exp_junior": "Junior",
+      "message_placeholder": "Kurze Notiz hinzufügen (optional)"
     },
     "invite": {
       "invalid_title": "Ungültige oder abgelaufene Einladung",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "Watchlist-Limit erreicht",
       "featured_chip": "★ Empfohlen",
       "request_intro": "🤝 Intro anfragen",
-      "intro_requested": "✓ Intro angefragt"
+      "intro_requested": "✓ Intro angefragt",
+      "message_prompt": "Kurze Nachricht hinzufügen (optional)"
     },
     "portfolio": {
       "gate_title": "Portfolio-Tracker ab Pro (49 €/Mo)",
@@ -967,7 +980,8 @@
       "notice_label": "Hinweis:",
       "notice_text": "DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.",
       "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
-      "intro_limit_reached": "Monatliches Intro-Limit erreicht"
+      "intro_limit_reached": "Monatliches Intro-Limit erreicht",
+      "message_prompt": "Kurze Nachricht hinzufügen (optional)"
     },
     "dashboard": {
       "greeting": "Hallo, {name}",
@@ -1073,7 +1087,8 @@
       "gate_desc": "Entdecke und kontaktiere passende Investoren mit einem bezahlten Startup-Plan.",
       "upgrade_cta": "Jetzt upgraden",
       "request_intro": "🤝 Intro anfragen",
-      "intro_requested": "✓ Intro angefragt"
+      "intro_requested": "✓ Intro angefragt",
+      "message_prompt": "Kurze Nachricht hinzufügen (optional)"
     },
     "pitchdeck": {
       "slide_problem_title": "Das Problem",
@@ -1545,7 +1560,8 @@
     "request_intro": "🤝 Intro anfragen",
     "intro_requested": "✓ Intro angefragt",
     "intro_requires_paid": "Upgrade nötig für Intro-Anfragen →",
-    "intro_limit_reached": "Monatliches Intro-Limit erreicht"
+    "intro_limit_reached": "Monatliches Intro-Limit erreicht",
+    "message_prompt": "Kurze Nachricht hinzufügen (optional)"
   },
   "taxonomy": {
     "skills": {

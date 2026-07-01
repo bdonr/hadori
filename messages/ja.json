@@ -318,7 +318,15 @@
     "looking_for_label": "募集中:",
     "talent_cta_title": "あなたはタレントですか？",
     "talent_cta_desc": "DADORIプロフィールを作成して、スタートアップから声をかけてもらいましょう。",
-    "talent_cta_button": "無料で登録 →"
+    "talent_cta_button": "無料で登録 →",
+    "type_projects": "プロジェクト",
+    "type_startups": "スタートアップ",
+    "type_talent": "タレント",
+    "search_by_skills": "スキルで検索",
+    "talent_requires_login": "タレントプロフィールを見るにはログインしてください",
+    "talent_neutral_name": "タレントプロフィール",
+    "empty_startups": "まだスタートアップがありません",
+    "empty_talent": "タレントが見つかりません"
   },
   "workspace": {
     "board": "ボード",
@@ -450,7 +458,9 @@
       "express_interest": "興味を示す",
       "apply_limit_title": "応募上限に達しました（月{n}件）",
       "apply_limit_hint": "今月さらに応募するにはアップグレードしてください。",
-      "apply_limit_cta": "アップグレード"
+      "apply_limit_cta": "アップグレード",
+      "add_note": "メモを追加",
+      "message_placeholder": "短いメモを追加（任意）"
     },
     "portfolio": {
       "media_video": "動画 / リール",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "DADORIで見つける:",
       "all_projects_startups": "すべてのプロジェクト＆スタートアップ →",
       "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
-      "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
+      "intro_limit_reached": "今月の紹介リクエスト上限に達しました",
+      "message_prompt": "短いメッセージを追加（任意）"
     },
     "matches": {
       "no_matches": "まだマッチがありません",
@@ -650,7 +661,8 @@
       "exp_experienced": "経験者（3〜5年）",
       "exp_expert": "エキスパート（5年以上）",
       "exp_junior": "ジュニア",
-      "contact_requires_paid": "連絡リクエストには有料のスタートアッププランが必要です — アップグレード"
+      "contact_requires_paid": "連絡リクエストには有料のスタートアッププランが必要です — アップグレード",
+      "message_placeholder": "短いメモを追加（任意）"
     },
     "invite": {
       "invalid_title": "無効または期限切れの招待",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "ウォッチリストの上限に達しました",
       "featured_chip": "★ おすすめ",
       "request_intro": "🤝 紹介をリクエスト",
-      "intro_requested": "✓ 紹介をリクエスト済み"
+      "intro_requested": "✓ 紹介をリクエスト済み",
+      "message_prompt": "短いメッセージを追加（任意）"
     },
     "portfolio": {
       "gate_title": "Pro（月49€）以上でポートフォリオトラッカー",
@@ -967,7 +980,8 @@
       "notice_label": "ご注意:",
       "notice_text": "DADORIは紹介を仲介します。成功報酬や取引への関与はありません。",
       "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
-      "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
+      "intro_limit_reached": "今月の紹介リクエスト上限に達しました",
+      "message_prompt": "短いメッセージを追加（任意）"
     },
     "dashboard": {
       "greeting": "こんにちは、{name}さん",
@@ -1050,7 +1064,8 @@
       "gate_desc": "有料のスタートアッププランで、適した投資家を見つけてコンタクトできます。",
       "upgrade_cta": "今すぐアップグレード",
       "request_intro": "🤝 紹介をリクエスト",
-      "intro_requested": "✓ 紹介をリクエスト済み"
+      "intro_requested": "✓ 紹介をリクエスト済み",
+      "message_prompt": "短いメッセージを追加（任意）"
     },
     "pitchdeck": {
       "slide_problem_title": "課題",
@@ -1541,7 +1556,8 @@
     "request_intro": "🤝 紹介をリクエスト",
     "intro_requested": "✓ 紹介をリクエスト済み",
     "intro_requires_paid": "紹介をリクエストするにはアップグレード →",
-    "intro_limit_reached": "今月の紹介リクエスト上限に達しました"
+    "intro_limit_reached": "今月の紹介リクエスト上限に達しました",
+    "message_prompt": "短いメッセージを追加（任意）"
   },
   "taxonomy": {
     "skills": {

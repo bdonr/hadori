@@ -21,9 +21,23 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
 
   const caps = planCaps(profile.plan_tier);
 
+  // Pending incoming investor requests: single where() on toUid, filter here.
+  let pendingRequests = 0;
+  if (adminDb) {
+    try {
+      const appsSnap = await adminDb.collection("applications").where("toUid", "==", session.uid).get();
+      pendingRequests = appsSnap.docs.filter(d => {
+        const a = d.data();
+        return a.status === "pending" && a.type === "investor_request";
+      }).length;
+    } catch {
+      // index/permission issue — badge simply hides
+    }
+  }
+
   const cards = [
     { href: `/${locale}/investor/dealflow`,  icon: "📬", title: td("card_dealflow"),   desc: td("card_dealflow_desc"),   tier: "Angel+", locked: !caps.startupDetails },
-    { href: `/${locale}/investor/requests`,  icon: "🤝", title: t("requests_link"),    desc: t("requests_link_desc"),    tier: null,     locked: false },
+    { href: `/${locale}/investor/requests`,  icon: "🤝", title: t("requests_link"),    desc: t("requests_link_desc"),    tier: null,     locked: false, count: pendingRequests },
     { href: `/${locale}/investor/discover`,  icon: "🔭", title: td("card_discover"),   desc: td("card_discover_desc"),   tier: null,     locked: false },
     { href: `/${locale}/investor/portfolio`, icon: "📊", title: td("card_portfolio"),  desc: td("card_portfolio_desc"),  tier: "Pro+",   locked: !caps.portfolioTracker },
     { href: `/${locale}/investor/watchlist`, icon: "⭐", title: td("card_watchlist"),  desc: td("card_watchlist_desc"),  tier: null,     locked: false },
@@ -47,6 +61,11 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
                 {c.tier && (
                   <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${c.locked ? "bg-zinc-100 text-zinc-500" : "bg-emerald-100 text-emerald-700"}`}>
                     {c.locked ? `🔒 ${c.tier}` : c.tier}
+                  </span>
+                )}
+                {"count" in c && (c as { count: number }).count > 0 && (
+                  <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-indigo-600 px-1.5 text-xs font-bold text-white">
+                    {(c as { count: number }).count}
                   </span>
                 )}
               </div>

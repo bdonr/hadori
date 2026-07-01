@@ -318,7 +318,15 @@
     "looking_for_label": "찾는 것:",
     "talent_cta_title": "당신도 인재인가요?",
     "talent_cta_desc": "DADORI 프로필을 만들고 스타트업이 먼저 다가오게 하세요.",
-    "talent_cta_button": "무료로 등록하기 →"
+    "talent_cta_button": "무료로 등록하기 →",
+    "type_projects": "프로젝트",
+    "type_startups": "스타트업",
+    "type_talent": "인재",
+    "search_by_skills": "스킬로 검색",
+    "talent_requires_login": "인재 프로필을 보려면 로그인하세요",
+    "talent_neutral_name": "인재 프로필",
+    "empty_startups": "아직 스타트업이 없습니다",
+    "empty_talent": "인재를 찾을 수 없습니다"
   },
   "workspace": {
     "board": "Board",
@@ -450,7 +458,9 @@
       "express_interest": "관심 표시하기",
       "apply_limit_title": "지원 한도에 도달했습니다 (월 {n}건)",
       "apply_limit_hint": "이번 달에 더 지원하려면 업그레이드하세요.",
-      "apply_limit_cta": "업그레이드"
+      "apply_limit_cta": "업그레이드",
+      "add_note": "메모 추가",
+      "message_placeholder": "짧은 메모 추가 (선택)"
     },
     "portfolio": {
       "media_video": "영상 / 릴",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "DADORI에서 발견하기:",
       "all_projects_startups": "모든 프로젝트 및 스타트업 →",
       "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
-      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
+      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다",
+      "message_prompt": "짧은 메시지 추가 (선택)"
     },
     "matches": {
       "no_matches": "아직 매칭이 없습니다",
@@ -650,7 +661,8 @@
       "exp_experienced": "숙련 (3–5년)",
       "exp_expert": "전문가 (5년 이상)",
       "exp_junior": "주니어",
-      "contact_requires_paid": "연락 요청은 유료 스타트업 플랜이 필요합니다 — 업그레이드"
+      "contact_requires_paid": "연락 요청은 유료 스타트업 플랜이 필요합니다 — 업그레이드",
+      "message_placeholder": "짧은 메모 추가 (선택)"
     },
     "invite": {
       "invalid_title": "유효하지 않거나 만료된 초대",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "워치리스트 한도에 도달했습니다",
       "featured_chip": "★ 추천",
       "request_intro": "🤝 소개 요청",
-      "intro_requested": "✓ 소개 요청됨"
+      "intro_requested": "✓ 소개 요청됨",
+      "message_prompt": "짧은 메시지 추가 (선택)"
     },
     "portfolio": {
       "gate_title": "포트폴리오 트래커는 Pro부터 (월 49€)",
@@ -967,7 +980,8 @@
       "notice_label": "안내:",
       "notice_text": "DADORI는 소개를 중개합니다. 성공 수수료도, 거래 참여도 없습니다.",
       "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
-      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
+      "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다",
+      "message_prompt": "짧은 메시지 추가 (선택)"
     },
     "dashboard": {
       "greeting": "안녕하세요, {name}님",
@@ -1050,7 +1064,8 @@
       "gate_desc": "유료 스타트업 플랜으로 적합한 투자자를 찾고 요청하세요.",
       "upgrade_cta": "지금 업그레이드",
       "request_intro": "🤝 소개 요청",
-      "intro_requested": "✓ 소개 요청됨"
+      "intro_requested": "✓ 소개 요청됨",
+      "message_prompt": "짧은 메시지 추가 (선택)"
     },
     "pitchdeck": {
       "slide_problem_title": "문제",
@@ -1541,7 +1556,8 @@
     "request_intro": "🤝 소개 요청",
     "intro_requested": "✓ 소개 요청됨",
     "intro_requires_paid": "소개를 요청하려면 업그레이드하세요 →",
-    "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다"
+    "intro_limit_reached": "이번 달 소개 요청 한도에 도달했습니다",
+    "message_prompt": "짧은 메시지 추가 (선택)"
   },
   "taxonomy": {
     "skills": {

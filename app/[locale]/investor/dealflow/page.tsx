@@ -129,6 +129,7 @@ export default function DealFlowPage() {
 
   async function requestIntro(deal: Deal) {
     if (!uid || requestedIds.includes(deal.id) || atIntroLimit) return;
+    const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setRequestedIds(prev => [...prev, deal.id]);
     setIntrosThisMonth(prev => prev + 1);
     try {
@@ -139,6 +140,7 @@ export default function DealFlowPage() {
         fromName: myName,
         toName: deal.name,
         subjectTitle: deal.name,
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),

@@ -318,7 +318,15 @@
     "looking_for_label": "寻找：",
     "talent_cta_title": "你是人才吗？",
     "talent_cta_desc": "创建你的 DADORI 档案，让初创企业主动找上你。",
-    "talent_cta_button": "免费注册 →"
+    "talent_cta_button": "免费注册 →",
+    "type_projects": "项目",
+    "type_startups": "初创公司",
+    "type_talent": "人才",
+    "search_by_skills": "按技能搜索",
+    "talent_requires_login": "登录以浏览人才资料",
+    "talent_neutral_name": "人才资料",
+    "empty_startups": "暂无初创公司",
+    "empty_talent": "未找到人才"
   },
   "workspace": {
     "board": "看板",
@@ -450,7 +458,9 @@
       "express_interest": "表达兴趣",
       "apply_limit_title": "已达申请上限（每月 {n} 个）",
       "apply_limit_hint": "升级以在本月发送更多申请。",
-      "apply_limit_cta": "升级"
+      "apply_limit_cta": "升级",
+      "add_note": "添加备注",
+      "message_placeholder": "添加简短备注（可选）"
     },
     "portfolio": {
       "media_video": "视频 / Reel",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "在 DADORI 上发现：",
       "all_projects_startups": "所有项目与初创企业 →",
       "intro_requires_paid": "升级以请求引荐 →",
-      "intro_limit_reached": "已达本月引荐上限"
+      "intro_limit_reached": "已达本月引荐上限",
+      "message_prompt": "添加简短留言（可选）"
     },
     "matches": {
       "no_matches": "尚无匹配",
@@ -650,7 +661,8 @@
       "exp_experienced": "资深（3–5 年）",
       "exp_expert": "专家（5 年以上）",
       "exp_junior": "初级",
-      "contact_requires_paid": "联系请求需要付费的初创企业套餐 — 升级"
+      "contact_requires_paid": "联系请求需要付费的初创企业套餐 — 升级",
+      "message_placeholder": "添加简短备注（可选）"
     },
     "invite": {
       "invalid_title": "邀请无效或已过期",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "已达到 Watchlist 上限",
       "featured_chip": "★ 精选",
       "request_intro": "🤝 请求引荐",
-      "intro_requested": "✓ 已请求引荐"
+      "intro_requested": "✓ 已请求引荐",
+      "message_prompt": "添加简短留言（可选）"
     },
     "portfolio": {
       "gate_title": "投资组合追踪器从 Pro 起（每月 49 €）",
@@ -967,7 +980,8 @@
       "notice_label": "提示：",
       "notice_text": "DADORI 负责撮合引荐。不收取成功佣金，不参与交易分成。",
       "intro_requires_paid": "升级以请求引荐 →",
-      "intro_limit_reached": "已达本月引荐上限"
+      "intro_limit_reached": "已达本月引荐上限",
+      "message_prompt": "添加简短留言（可选）"
     },
     "dashboard": {
       "greeting": "你好，{name}",
@@ -1050,7 +1064,8 @@
       "gate_desc": "使用付费 Startup 套餐，发现并联系匹配的投资者。",
       "upgrade_cta": "立即升级",
       "request_intro": "🤝 请求引荐",
-      "intro_requested": "✓ 已请求引荐"
+      "intro_requested": "✓ 已请求引荐",
+      "message_prompt": "添加简短留言（可选）"
     },
     "pitchdeck": {
       "slide_problem_title": "问题",
@@ -1541,7 +1556,8 @@
     "request_intro": "🤝 请求引荐",
     "intro_requested": "✓ 已请求引荐",
     "intro_requires_paid": "升级以请求引荐 →",
-    "intro_limit_reached": "已达本月引荐上限"
+    "intro_limit_reached": "已达本月引荐上限",
+    "message_prompt": "添加简短留言（可选）"
   },
   "taxonomy": {
     "skills": {

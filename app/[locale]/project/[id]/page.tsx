@@ -255,6 +255,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
   async function requestIntro() {
     if (!authUid || !project?.ownerId || !canRequestIntro || atIntroLimit || alreadyRequested) return;
+    const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setInterested(true);
     setIntrosThisMonth(prev => prev + 1);
     try {
@@ -265,6 +266,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         fromName: myName,
         toName: (project.founders[0]?.name ?? project.name ?? ""),
         subjectTitle: project.name || "",
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),

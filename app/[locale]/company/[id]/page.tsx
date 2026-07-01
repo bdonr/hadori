@@ -200,6 +200,7 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
 
   async function requestIntro() {
     if (!authUid || !canRequestIntro || atIntroLimit || requested || authUid === id) return;
+    const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setRequested(true);
     setIntrosThisMonth(prev => prev + 1);
     try {
@@ -210,6 +211,7 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
         fromName: myName,
         toName: (startup?.name || profile?.full_name || ""),
         subjectTitle: startup?.name || "",
+        message: message.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),

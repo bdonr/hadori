@@ -318,7 +318,15 @@
     "looking_for_label": "Ищет:",
     "talent_cta_title": "Ты талант?",
     "talent_cta_desc": "Создай свой профиль DADORI и позволь стартапам самим прийти к тебе.",
-    "talent_cta_button": "Зарегистрироваться бесплатно →"
+    "talent_cta_button": "Зарегистрироваться бесплатно →",
+    "type_projects": "Проекты",
+    "type_startups": "Стартапы",
+    "type_talent": "Таланты",
+    "search_by_skills": "Поиск по навыкам",
+    "talent_requires_login": "Войдите, чтобы просматривать профили талантов",
+    "talent_neutral_name": "Профиль таланта",
+    "empty_startups": "Пока нет стартапов",
+    "empty_talent": "Таланты не найдены"
   },
   "workspace": {
     "board": "Доска",
@@ -450,7 +458,9 @@
       "express_interest": "Проявить интерес",
       "apply_limit_title": "Достигнут лимит заявок ({n} / месяц)",
       "apply_limit_hint": "Оформите подписку, чтобы отправлять больше заявок в этом месяце.",
-      "apply_limit_cta": "Улучшить"
+      "apply_limit_cta": "Улучшить",
+      "add_note": "Добавить заметку",
+      "message_placeholder": "Добавьте короткую заметку (необязательно)"
     },
     "portfolio": {
       "media_video": "Видео / Reel",
@@ -593,7 +603,8 @@
       "discover_on_dadori": "Открой на DADORI:",
       "all_projects_startups": "Все проекты и стартапы →",
       "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
-      "intro_limit_reached": "Достигнут месячный лимит интро"
+      "intro_limit_reached": "Достигнут месячный лимит интро",
+      "message_prompt": "Добавьте короткое сообщение (необязательно)"
     },
     "matches": {
       "no_matches": "Пока нет совпадений",
@@ -650,7 +661,8 @@
       "exp_experienced": "Опытный (3–5 лет)",
       "exp_expert": "Эксперт (5+ лет)",
       "exp_junior": "Junior",
-      "contact_requires_paid": "Запросы на контакт требуют платного тарифа для стартапа — обновить"
+      "contact_requires_paid": "Запросы на контакт требуют платного тарифа для стартапа — обновить",
+      "message_placeholder": "Добавьте короткую заметку (необязательно)"
     },
     "invite": {
       "invalid_title": "Недействительное или просроченное приглашение",
@@ -886,7 +898,8 @@
       "watchlist_limit_hit": "Достигнут лимит Watchlist",
       "featured_chip": "★ Рекомендуемое",
       "request_intro": "🤝 Запросить интро",
-      "intro_requested": "✓ Интро запрошено"
+      "intro_requested": "✓ Интро запрошено",
+      "message_prompt": "Добавьте короткое сообщение (необязательно)"
     },
     "portfolio": {
       "gate_title": "Трекер портфеля от Pro (49 €/мес)",
@@ -967,7 +980,8 @@
       "notice_label": "Примечание:",
       "notice_text": "DADORI организует интро. Никаких комиссий за успех, никакого участия в сделках.",
       "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
-      "intro_limit_reached": "Достигнут месячный лимит интро"
+      "intro_limit_reached": "Достигнут месячный лимит интро",
+      "message_prompt": "Добавьте короткое сообщение (необязательно)"
     },
     "dashboard": {
       "greeting": "Здравствуйте, {name}",
@@ -1050,7 +1064,8 @@
       "gate_desc": "Находите и запрашивайте подходящих инвесторов с платным тарифом Startup.",
       "upgrade_cta": "Обновить сейчас",
       "request_intro": "🤝 Запросить интро",
-      "intro_requested": "✓ Интро запрошено"
+      "intro_requested": "✓ Интро запрошено",
+      "message_prompt": "Добавьте короткое сообщение (необязательно)"
     },
     "pitchdeck": {
       "slide_problem_title": "Проблема",
@@ -1541,7 +1556,8 @@
     "request_intro": "🤝 Запросить интро",
     "intro_requested": "✓ Интро запрошено",
     "intro_requires_paid": "Оформите подписку, чтобы запрашивать интро →",
-    "intro_limit_reached": "Достигнут месячный лимит интро"
+    "intro_limit_reached": "Достигнут месячный лимит интро",
+    "message_prompt": "Добавьте короткое сообщение (необязательно)"
   },
   "taxonomy": {
     "skills": {

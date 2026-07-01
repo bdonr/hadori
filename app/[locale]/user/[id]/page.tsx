@@ -81,6 +81,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   const [myTier, setMyTier] = useState<string | null>(null);
   const [myName, setMyName] = useState("");
   const [contactsThisMonth, setContactsThisMonth] = useState(0);
+  const [contactMessage, setContactMessage] = useState("");
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -204,6 +205,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
         type: "contact_request",
         fromName: myName,
         toName: displayName,
+        message: contactMessage.trim(),
         status: "pending",
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),
@@ -281,10 +283,19 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                   ✓ {t("request_sent")}
                 </span>
               ) : canRequestContact ? (
-                <button onClick={requestContact} disabled={atContactLimit}
-                  className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  {t("request_contact")}
-                </button>
+                <div className="flex w-full flex-col gap-2 sm:w-80">
+                  <textarea
+                    value={contactMessage}
+                    onChange={e => setContactMessage(e.target.value)}
+                    placeholder={t("message_placeholder")}
+                    rows={2}
+                    className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+                  />
+                  <button onClick={requestContact} disabled={atContactLimit}
+                    className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    {t("request_contact")}
+                  </button>
+                </div>
               ) : (
                 <div className="flex flex-col gap-1">
                   <button disabled
