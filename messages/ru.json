@@ -125,7 +125,9 @@
     "default_name": "Основатель",
     "greeting": "Здравствуйте, {name}",
     "workspace_open": "Открыть рабочее пространство",
-    "workspace_open_desc": "Kanban, команда, вехи и AI-сооснователь"
+    "workspace_open_desc": "Kanban, команда, вехи и AI-сооснователь",
+    "applicants_link": "Кандидаты",
+    "applicants_link_desc": "Просмотр заявок и запросов на контакт"
   },
   "talent": {
     "dashboard_title": "Привет, {name} 👋",
@@ -146,7 +148,9 @@
     "steps_title": "Первые шаги",
     "step1": "Указать навыки и доступность",
     "step2": "Добавить первую работу в портфолио",
-    "step3": "Просмотреть открытые роли и проекты"
+    "step3": "Просмотреть открытые роли и проекты",
+    "applications_link": "Мои заявки",
+    "applications_link_desc": "Статус ваших заявок и запросов на контакт"
   },
   "skills": {
     "title": "Мои навыки",
@@ -516,6 +520,22 @@
       "public_toggle": "Публично",
       "private_toggle": "Приватно",
       "visibility_hint": "Управляйте тем, виден ли этот раздел в вашем публичном профиле. Ваше имя всегда публично."
+    },
+    "applications": {
+      "title": "Мои заявки",
+      "subtitle": "Отслеживайте свои заявки на вакансии и запросы на контакт.",
+      "loading": "Загрузка…",
+      "mine_title": "Мои заявки",
+      "mine_empty": "Вы ещё не откликнулись ни на одну вакансию.",
+      "requests_title": "Запросы на контакт",
+      "requests_empty": "Пока нет запросов на контакт.",
+      "accept": "Принять",
+      "decline": "Отклонить",
+      "someone": "Кто-то",
+      "a_role": "Вакансия",
+      "status_pending": "В ожидании",
+      "status_accepted": "Принята",
+      "status_declined": "Отклонена"
     }
   },
   "misc_pages": {
@@ -627,7 +647,8 @@
       "exp_intermediate": "Средний (1–3 года)",
       "exp_experienced": "Опытный (3–5 лет)",
       "exp_expert": "Эксперт (5+ лет)",
-      "exp_junior": "Junior"
+      "exp_junior": "Junior",
+      "contact_requires_paid": "Запросы на контакт требуют платного тарифа для стартапа — обновить"
     },
     "invite": {
       "invalid_title": "Недействительное или просроченное приглашение",
@@ -1398,6 +1419,21 @@
       "view_public": "Публичный вид →",
       "release_in_editor": "Открыть в редакторе",
       "verified_badge": "Проверено инкубатором"
+    },
+    "applicants": {
+      "title": "Кандидаты",
+      "subtitle": "Заявки на ваши вакансии и отправленные вами запросы на контакт.",
+      "loading": "Загрузка…",
+      "received_title": "Полученные заявки",
+      "received_empty": "Пока нет заявок.",
+      "sent_title": "Отправленные запросы на контакт",
+      "sent_empty": "Вы ещё не отправили ни одного запроса на контакт.",
+      "accept": "Принять",
+      "decline": "Отклонить",
+      "someone": "Кто-то",
+      "status_pending": "В ожидании",
+      "status_accepted": "Принята",
+      "status_declined": "Отклонена"
     }
   },
   "glossary": {

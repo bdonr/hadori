@@ -9,9 +9,10 @@ import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, addDoc, query, where, serverTimestamp } from "firebase/firestore";
 import type { Profile } from "@/lib/firebase/collections";
 import { Navbar } from "@/components/layout/navbar";
+import { isStartupPaid, isStartupProPlus } from "@/lib/entitlements";
 
 const AVAIL_META = {
   immediately:   { labelKey: "avail_immediately",   color: "bg-green-50 border-green-200 text-green-700" },
@@ -77,6 +78,9 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [contacted, setContacted] = useState(false);
+  const [myTier, setMyTier] = useState<string | null>(null);
+  const [myName, setMyName] = useState("");
+  const [contactsThisMonth, setContactsThisMonth] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -104,6 +108,34 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
           } catch {
             // portfolio not found or no permission — silently skip
           }
+        }
+        // If I'm a logged-in startup viewing someone else, load my plan +
+        // existing contact requests so the button state persists.
+        if (user && targetUid && targetUid !== user.uid) {
+          try {
+            const myProfileSnap = await getDoc(doc(db, "profiles", user.uid));
+            if (myProfileSnap.exists())
+              setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+            const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+            if (myPubSnap.exists())
+              setMyName((myPubSnap.data().full_name as string) ?? "");
+
+            const reqSnap = await getDocs(
+              query(collection(db, "applications"), where("fromUid", "==", user.uid))
+            );
+            const myReqs = reqSnap.docs
+              .map(d => d.data() as Record<string, unknown>)
+              .filter(d => d.type === "contact_request");
+            if (myReqs.some(d => d.toUid === targetUid)) setContacted(true);
+            const now = new Date();
+            const monthCount = myReqs.filter(d => {
+              const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+              if (!ts?.toDate) return true;
+              const created = ts.toDate();
+              return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+            }).length;
+            setContactsThisMonth(monthCount);
+          } catch { /* ignore */ }
         }
       } catch {
         // Firebase offline / not configured
@@ -156,6 +188,28 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   }
 
   const displayName = profile.full_name || t("unknown");
+  const targetUid = id === "me" ? authUid : id;
+  const canRequestContact = isStartupPaid(myTier);
+  const contactCap = isStartupProPlus(myTier) ? Infinity : 20;
+  const atContactLimit = contactsThisMonth >= contactCap;
+
+  async function requestContact() {
+    if (!authUid || !targetUid || !canRequestContact || atContactLimit || contacted) return;
+    setContacted(true);
+    setContactsThisMonth(prev => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: authUid,
+        toUid: targetUid,
+        type: "contact_request",
+        fromName: myName,
+        toName: displayName,
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
+  }
   const bio = canShow("bio") ? (talent?.bio ?? "") : "";
   const skills = canShow("skills") ? (talent?.skills ?? []) : [];
   const showExperience = canShow("experience");
@@ -222,15 +276,25 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                 ✏️ {t("edit_profile")}
               </Link>
             ) : (
-              !contacted ? (
-                <button onClick={() => setContacted(true)}
-                  className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                  {t("request_contact")}
-                </button>
-              ) : (
+              contacted ? (
                 <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">
                   ✓ {t("request_sent")}
                 </span>
+              ) : canRequestContact ? (
+                <button onClick={requestContact} disabled={atContactLimit}
+                  className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {t("request_contact")}
+                </button>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  <button disabled
+                    className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white opacity-50 cursor-not-allowed">
+                    {t("request_contact")}
+                  </button>
+                  <Link href={`/${locale}/startup/billing`} className="text-xs text-indigo-600 hover:underline">
+                    {t("contact_requires_paid")}
+                  </Link>
+                </div>
               )
             )}
             <button onClick={() => navigator.clipboard?.writeText(window.location.href)}

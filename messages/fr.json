@@ -125,7 +125,9 @@
     "default_name": "Fondateur",
     "greeting": "Bonjour, {name}",
     "workspace_open": "Ouvrir l'espace de travail",
-    "workspace_open_desc": "Kanban, équipe, jalons & Co-Fondateur IA"
+    "workspace_open_desc": "Kanban, équipe, jalons & Co-Fondateur IA",
+    "applicants_link": "Candidats",
+    "applicants_link_desc": "Examiner les candidatures et demandes de contact"
   },
   "talent": {
     "dashboard_title": "Salut, {name} 👋",
@@ -146,7 +148,9 @@
     "steps_title": "Premiers pas",
     "step1": "Renseigner compétences & disponibilité",
     "step2": "Ajouter ta première réalisation au portfolio",
-    "step3": "Parcourir les rôles & projets ouverts"
+    "step3": "Parcourir les rôles & projets ouverts",
+    "applications_link": "Mes candidatures",
+    "applications_link_desc": "Statut de vos demandes et demandes de contact"
   },
   "skills": {
     "title": "Mes compétences",
@@ -516,6 +520,22 @@
       "public_toggle": "Public",
       "private_toggle": "Privé",
       "visibility_hint": "Choisissez si cette section est visible sur votre profil public. Votre nom reste toujours public."
+    },
+    "applications": {
+      "title": "Mes candidatures",
+      "subtitle": "Suivez vos candidatures et demandes de contact.",
+      "loading": "Chargement…",
+      "mine_title": "Mes candidatures",
+      "mine_empty": "Vous n'avez encore postulé à aucun poste.",
+      "requests_title": "Demandes de contact",
+      "requests_empty": "Aucune demande de contact pour l'instant.",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "someone": "Quelqu'un",
+      "a_role": "Un poste",
+      "status_pending": "En attente",
+      "status_accepted": "Acceptée",
+      "status_declined": "Refusée"
     }
   },
   "misc_pages": {
@@ -627,7 +647,8 @@
       "exp_intermediate": "Intermédiaire (1–3 ans)",
       "exp_experienced": "Expérimenté (3–5 ans)",
       "exp_expert": "Expert (5+ ans)",
-      "exp_junior": "Junior"
+      "exp_junior": "Junior",
+      "contact_requires_paid": "Les demandes de contact nécessitent un forfait startup payant — mettre à niveau"
     },
     "invite": {
       "invalid_title": "Invitation invalide ou expirée",
@@ -1398,6 +1419,21 @@
       "view_public": "Vue publique →",
       "release_in_editor": "Publier dans l’éditeur",
       "verified_badge": "Vérifié par l’incubateur"
+    },
+    "applicants": {
+      "title": "Candidats",
+      "subtitle": "Candidatures pour vos postes et demandes de contact envoyées.",
+      "loading": "Chargement…",
+      "received_title": "Candidatures reçues",
+      "received_empty": "Aucune candidature pour l'instant.",
+      "sent_title": "Demandes de contact envoyées",
+      "sent_empty": "Vous n'avez encore envoyé aucune demande de contact.",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "someone": "Quelqu'un",
+      "status_pending": "En attente",
+      "status_accepted": "Acceptée",
+      "status_declined": "Refusée"
     }
   },
   "glossary": {

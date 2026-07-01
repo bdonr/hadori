@@ -125,7 +125,9 @@
     "default_name": "創業者",
     "greeting": "こんにちは、{name}さん",
     "workspace_open": "ワークスペースを開く",
-    "workspace_open_desc": "Kanban、チーム、マイルストーン & AI共同創業者"
+    "workspace_open_desc": "Kanban、チーム、マイルストーン & AI共同創業者",
+    "applicants_link": "応募者",
+    "applicants_link_desc": "応募と連絡リクエストを確認"
   },
   "talent": {
     "dashboard_title": "こんにちは、{name}さん 👋",
@@ -146,7 +148,9 @@
     "steps_title": "はじめの一歩",
     "step1": "スキルと稼働状況を入力",
     "step2": "最初のポートフォリオを追加",
-    "step3": "募集中の役割やプロジェクトを見てまわる"
+    "step3": "募集中の役割やプロジェクトを見てまわる",
+    "applications_link": "応募状況",
+    "applications_link_desc": "応募と連絡リクエストのステータス"
   },
   "skills": {
     "title": "マイスキル",
@@ -516,6 +520,22 @@
       "public_toggle": "公開",
       "private_toggle": "非公開",
       "visibility_hint": "このセクションを公開プロフィールに表示するかどうかを設定します。名前は常に公開されます。"
+    },
+    "applications": {
+      "title": "応募状況",
+      "subtitle": "応募と連絡リクエストを確認できます。",
+      "loading": "読み込み中…",
+      "mine_title": "応募状況",
+      "mine_empty": "まだどの募集にも応募していません。",
+      "requests_title": "連絡リクエスト",
+      "requests_empty": "連絡リクエストはまだありません。",
+      "accept": "承認",
+      "decline": "辞退",
+      "someone": "匿名",
+      "a_role": "募集",
+      "status_pending": "保留中",
+      "status_accepted": "承認済み",
+      "status_declined": "辞退済み"
     }
   },
   "misc_pages": {
@@ -627,7 +647,8 @@
       "exp_intermediate": "中級（1〜3年）",
       "exp_experienced": "経験者（3〜5年）",
       "exp_expert": "エキスパート（5年以上）",
-      "exp_junior": "ジュニア"
+      "exp_junior": "ジュニア",
+      "contact_requires_paid": "連絡リクエストには有料のスタートアッププランが必要です — アップグレード"
     },
     "invite": {
       "invalid_title": "無効または期限切れの招待",
@@ -1398,6 +1419,21 @@
       "view_public": "公開ビュー →",
       "release_in_editor": "エディタで公開",
       "verified_badge": "インキュベーター認証済み"
+    },
+    "applicants": {
+      "title": "応募者",
+      "subtitle": "募集への応募と送信した連絡リクエスト。",
+      "loading": "読み込み中…",
+      "received_title": "受信した応募",
+      "received_empty": "応募はまだありません。",
+      "sent_title": "送信した連絡リクエスト",
+      "sent_empty": "まだ連絡リクエストを送信していません。",
+      "accept": "承認",
+      "decline": "辞退",
+      "someone": "匿名",
+      "status_pending": "保留中",
+      "status_accepted": "承認済み",
+      "status_declined": "辞退済み"
     }
   },
   "glossary": {

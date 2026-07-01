@@ -125,7 +125,9 @@
     "default_name": "Gründer",
     "greeting": "Hallo, {name}",
     "workspace_open": "Workspace öffnen",
-    "workspace_open_desc": "Kanban, Team, Milestones & KI Co-Founder"
+    "workspace_open_desc": "Kanban, Team, Milestones & KI Co-Founder",
+    "applicants_link": "Bewerbungen",
+    "applicants_link_desc": "Bewerbungen & Kontaktanfragen prüfen"
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -146,7 +148,9 @@
     "steps_title": "Erste Schritte",
     "step1": "Skills & Verfügbarkeit eintragen",
     "step2": "Ersten Portfolio-Eintrag hinzufügen",
-    "step3": "Offene Rollen & Projekte durchstöbern"
+    "step3": "Offene Rollen & Projekte durchstöbern",
+    "applications_link": "Meine Bewerbungen",
+    "applications_link_desc": "Status deiner Anfragen & Kontaktanfragen"
   },
   "skills": {
     "title": "Meine Skills",
@@ -516,6 +520,22 @@
       "public_toggle": "Öffentlich",
       "private_toggle": "Privat",
       "visibility_hint": "Steuere, ob dieser Bereich in deinem öffentlichen Profil sichtbar ist. Dein Name ist immer öffentlich."
+    },
+    "applications": {
+      "title": "Meine Bewerbungen",
+      "subtitle": "Verfolge deine Bewerbungen und Kontaktanfragen.",
+      "loading": "Lädt…",
+      "mine_title": "Meine Bewerbungen",
+      "mine_empty": "Du hast dich noch auf keine Rolle beworben.",
+      "requests_title": "Kontaktanfragen",
+      "requests_empty": "Noch keine Kontaktanfragen.",
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "someone": "Jemand",
+      "a_role": "Eine Rolle",
+      "status_pending": "Ausstehend",
+      "status_accepted": "Angenommen",
+      "status_declined": "Abgelehnt"
     }
   },
   "misc_pages": {
@@ -588,6 +608,7 @@
       "edit_profile": "Profil bearbeiten",
       "request_contact": "Kontakt anfragen",
       "request_sent": "Anfrage gesendet",
+      "contact_requires_paid": "Kontaktanfragen erfordern einen kostenpflichtigen Startup-Plan — upgraden",
       "share_profile": "Profil teilen",
       "about_name": "Über {name}",
       "no_bio_yet": "Noch keine Bio —",
@@ -952,6 +973,21 @@
     }
   },
   "startup_pages": {
+    "applicants": {
+      "title": "Bewerbungen",
+      "subtitle": "Bewerbungen auf deine Rollen und die von dir gesendeten Kontaktanfragen.",
+      "loading": "Lädt…",
+      "received_title": "Erhaltene Bewerbungen",
+      "received_empty": "Noch keine Bewerbungen.",
+      "sent_title": "Gesendete Kontaktanfragen",
+      "sent_empty": "Du hast noch keine Kontaktanfragen gesendet.",
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "someone": "Jemand",
+      "status_pending": "Ausstehend",
+      "status_accepted": "Angenommen",
+      "status_declined": "Abgelehnt"
+    },
     "billing": {
       "not_bookable": "Dieser Plan ist noch nicht buchbar. Bitte versuche es später erneut.",
       "payment_failed": "Zahlung konnte nicht gestartet werden.",

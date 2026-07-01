@@ -26,7 +26,7 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
     { href: `/${locale}/talent/skills`,       icon: "⚡", title: t("card_skills"),       desc: t("card_skills_desc"),       badge: null },
     { href: `/${locale}/talent/portfolio`,    icon: "🎨", title: t("card_portfolio"),    desc: isPro ? t("card_portfolio_desc_pro") : t("card_portfolio_desc_free"), badge: !isPro ? "1 / 1" : null },
     { href: `/${locale}/talent/jobs`,         icon: "🔍", title: t("card_jobs"),         desc: t("card_jobs_desc"),         badge: null },
-    { href: `/${locale}/talent/applications`, icon: "📋", title: t("card_applications"), desc: t("card_applications_desc"), badge: null },
+    { href: `/${locale}/talent/applications`, icon: "📋", title: t("applications_link"), desc: t("applications_link_desc"), badge: null },
     { href: `/${locale}/talent/billing`,      icon: "💳", title: t("card_billing"),      desc: isPro ? `${tier.charAt(0).toUpperCase() + tier.slice(1)}` : "", badge: null },
   ];
 

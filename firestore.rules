@@ -21,6 +21,23 @@ service cloud.firestore {
       allow write: if isOwner(uid);
     }
 
+    // Applications / intros — persisted requests between any two parties
+    // (talent↔startup, startup↔investor, investor↔project). Sender creates,
+    // recipient updates status; both parties can read their own.
+    match /applications/{id} {
+      allow read: if isAuth()
+        && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
+      allow create: if isAuth()
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.status == "pending";
+      allow update: if isAuth()
+        && resource.data.toUid == request.auth.uid
+        && request.resource.data.fromUid == resource.data.fromUid
+        && request.resource.data.toUid == resource.data.toUid;
+      allow delete: if isAuth()
+        && resource.data.fromUid == request.auth.uid;
+    }
+
     // Profiles: users can only read/write their own profile
     match /profiles/{uid} {
       allow read: if isOwner(uid);

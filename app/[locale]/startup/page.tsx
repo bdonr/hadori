@@ -39,6 +39,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
     { href: `/${locale}/startup/pitchdeck`,  icon: "🎯", title: t("card_pitchdeck"),  desc: isPro ? t("card_pitchdeck_desc_pro") : t("card_pitchdeck_desc_free") },
     { href: `/${locale}/startup/visibility`, icon: isVisible ? "🟢" : "🔒", title: t("card_visibility"), desc: isVisible ? t("card_visibility_active") : isPro ? t("card_visibility_pro_off") : t("card_visibility_upgrade") },
     { href: `/${locale}/startup/roles`,      icon: "👥", title: t("card_roles"),      desc: t("card_roles_desc") },
+    { href: `/${locale}/startup/applicants`, icon: "📥", title: t("applicants_link"), desc: t("applicants_link_desc") },
     { href: `/${locale}/startup/profile`,    icon: "🏢", title: t("card_profile"),    desc: t("card_profile_desc") },
     { href: `/${locale}/startup/billing`,    icon: "💳", title: t("card_billing"),    desc: isPro ? t("card_billing_desc_pro", { tier: profile.plan_tier }) : t("card_billing_desc_free") },
   ];

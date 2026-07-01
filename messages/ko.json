@@ -125,7 +125,9 @@
     "default_name": "창업자",
     "greeting": "안녕하세요, {name}님",
     "workspace_open": "워크스페이스 열기",
-    "workspace_open_desc": "Kanban, 팀, 마일스톤 & AI 공동창업자"
+    "workspace_open_desc": "Kanban, 팀, 마일스톤 & AI 공동창업자",
+    "applicants_link": "지원자",
+    "applicants_link_desc": "지원 및 연락 요청 확인"
   },
   "talent": {
     "dashboard_title": "안녕하세요, {name} 👋",
@@ -146,7 +148,9 @@
     "steps_title": "시작하기",
     "step1": "스킬 및 가용성 입력",
     "step2": "첫 포트폴리오 항목 추가",
-    "step3": "열린 역할 및 프로젝트 둘러보기"
+    "step3": "열린 역할 및 프로젝트 둘러보기",
+    "applications_link": "내 지원",
+    "applications_link_desc": "지원 및 연락 요청 상태"
   },
   "skills": {
     "title": "내 스킬",
@@ -516,6 +520,22 @@
       "public_toggle": "공개",
       "private_toggle": "비공개",
       "visibility_hint": "이 섹션을 공개 프로필에 표시할지 설정합니다. 이름은 항상 공개됩니다."
+    },
+    "applications": {
+      "title": "내 지원",
+      "subtitle": "직무 지원과 연락 요청을 추적하세요.",
+      "loading": "불러오는 중…",
+      "mine_title": "내 지원",
+      "mine_empty": "아직 지원한 직무가 없습니다.",
+      "requests_title": "연락 요청",
+      "requests_empty": "아직 연락 요청이 없습니다.",
+      "accept": "수락",
+      "decline": "거절",
+      "someone": "익명",
+      "a_role": "직무",
+      "status_pending": "대기 중",
+      "status_accepted": "수락됨",
+      "status_declined": "거절됨"
     }
   },
   "misc_pages": {
@@ -627,7 +647,8 @@
       "exp_intermediate": "중급 (1–3년)",
       "exp_experienced": "숙련 (3–5년)",
       "exp_expert": "전문가 (5년 이상)",
-      "exp_junior": "주니어"
+      "exp_junior": "주니어",
+      "contact_requires_paid": "연락 요청은 유료 스타트업 플랜이 필요합니다 — 업그레이드"
     },
     "invite": {
       "invalid_title": "유효하지 않거나 만료된 초대",
@@ -1398,6 +1419,21 @@
       "view_public": "공개 보기 →",
       "release_in_editor": "편집기에서 공개",
       "verified_badge": "인큐베이터 인증됨"
+    },
+    "applicants": {
+      "title": "지원자",
+      "subtitle": "직무에 대한 지원과 보낸 연락 요청입니다.",
+      "loading": "불러오는 중…",
+      "received_title": "받은 지원",
+      "received_empty": "아직 지원이 없습니다.",
+      "sent_title": "보낸 연락 요청",
+      "sent_empty": "아직 보낸 연락 요청이 없습니다.",
+      "accept": "수락",
+      "decline": "거절",
+      "someone": "익명",
+      "status_pending": "대기 중",
+      "status_accepted": "수락됨",
+      "status_declined": "거절됨"
     }
   },
   "glossary": {

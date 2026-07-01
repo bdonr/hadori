@@ -125,7 +125,9 @@
     "default_name": "Founder",
     "greeting": "Hello, {name}",
     "workspace_open": "Open Workspace",
-    "workspace_open_desc": "Kanban, Team, Milestones & AI Co-Founder"
+    "workspace_open_desc": "Kanban, Team, Milestones & AI Co-Founder",
+    "applicants_link": "Applicants",
+    "applicants_link_desc": "Review applications & contact requests"
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -146,7 +148,9 @@
     "steps_title": "First steps",
     "step1": "Add your skills & availability",
     "step2": "Add your first portfolio entry",
-    "step3": "Browse open roles & projects"
+    "step3": "Browse open roles & projects",
+    "applications_link": "My applications",
+    "applications_link_desc": "Status of your requests & contact requests"
   },
   "skills": {
     "title": "My skills",
@@ -516,6 +520,22 @@
       "public_toggle": "Public",
       "private_toggle": "Private",
       "visibility_hint": "Control whether this section is visible on your public profile. Your name is always public."
+    },
+    "applications": {
+      "title": "My applications",
+      "subtitle": "Track your role applications and contact requests.",
+      "loading": "Loading…",
+      "mine_title": "My applications",
+      "mine_empty": "You haven't applied to any roles yet.",
+      "requests_title": "Contact requests",
+      "requests_empty": "No contact requests yet.",
+      "accept": "Accept",
+      "decline": "Decline",
+      "someone": "Someone",
+      "a_role": "A role",
+      "status_pending": "Pending",
+      "status_accepted": "Accepted",
+      "status_declined": "Declined"
     }
   },
   "misc_pages": {
@@ -588,6 +608,7 @@
       "edit_profile": "Edit profile",
       "request_contact": "Request contact",
       "request_sent": "Request sent",
+      "contact_requires_paid": "Contact requests require a paid startup plan — upgrade",
       "share_profile": "Share profile",
       "about_name": "About {name}",
       "no_bio_yet": "No bio yet —",
@@ -952,6 +973,21 @@
     }
   },
   "startup_pages": {
+    "applicants": {
+      "title": "Applicants",
+      "subtitle": "Applications for your roles and the contact requests you sent.",
+      "loading": "Loading…",
+      "received_title": "Received applications",
+      "received_empty": "No applications yet.",
+      "sent_title": "Sent contact requests",
+      "sent_empty": "You haven't sent any contact requests yet.",
+      "accept": "Accept",
+      "decline": "Decline",
+      "someone": "Someone",
+      "status_pending": "Pending",
+      "status_accepted": "Accepted",
+      "status_declined": "Declined"
+    },
     "billing": {
       "not_bookable": "This plan isn't bookable yet. Please try again later.",
       "payment_failed": "Payment couldn't be started.",

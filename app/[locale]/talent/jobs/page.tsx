@@ -8,7 +8,7 @@ import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS, getRegion, regionMatches } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, getDoc, addDoc, where, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 import { planCaps } from "@/lib/entitlements";
 
@@ -63,14 +63,18 @@ export default function TalentJobsPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [tier, setTier] = useState("free");
-  // Roles the user has expressed interest in this session — counts toward the
-  // monthly application cap (applications are not persisted server-side yet).
+  const [myUid, setMyUid] = useState<string | null>(null);
+  const [myName, setMyName] = useState("");
+  // Roles the user has applied to (persisted in the `applications` collection).
   const [appliedIds, setAppliedIds] = useState<string[]>([]);
+  // Count of applications created this calendar month — used for the monthly cap.
+  const [appsThisMonth, setAppsThisMonth] = useState(0);
 
   // Load user skills & roles from Firestore
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setMyUid(user.uid);
         try {
           const snap = await getDoc(doc(db, "talent", user.uid));
           if (snap.exists()) {
@@ -84,6 +88,29 @@ export default function TalentJobsPage() {
           const profileSnap = await getDoc(doc(db, "profiles", user.uid));
           if (profileSnap.exists())
             setTier((profileSnap.data().plan_tier as string) ?? "free");
+          // Display name comes from the public profile.
+          const pubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
+          if (pubSnap.exists())
+            setMyName((pubSnap.data().full_name as string) ?? "");
+
+          // Load existing applications so state survives reload.
+          const appsSnap = await getDocs(
+            query(collection(db, "applications"), where("fromUid", "==", user.uid))
+          );
+          const myApps = appsSnap.docs
+            .map(d => d.data() as Record<string, unknown>)
+            .filter(d => d.type === "application");
+          setAppliedIds(myApps.map(d => d.roleId as string).filter(Boolean));
+          // Count applications created this calendar month toward the cap.
+          const now = new Date();
+          const monthCount = myApps.filter(d => {
+            const ts = d.created_at as { toDate?: () => Date } | null | undefined;
+            // A doc whose serverTimestamp hasn't resolved yet counts as this month.
+            if (!ts?.toDate) return true;
+            const created = ts.toDate();
+            return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+          }).length;
+          setAppsThisMonth(monthCount);
         } catch { /* ignore */ }
       }
 
@@ -165,11 +192,29 @@ export default function TalentJobsPage() {
   const topMatch = results.length > 0 ? results[0].match : 0;
 
   const applicationsCap = planCaps(tier).applicationsPerMonth;
-  const applicationsLeft = applicationsCap - appliedIds.length;
+  const applicationsLeft = applicationsCap - appsThisMonth;
   const atApplicationLimit = applicationsLeft <= 0;
 
-  function apply(roleId: string) {
-    setAppliedIds(prev => (prev.includes(roleId) ? prev : [...prev, roleId]));
+  async function apply(role: Role) {
+    if (!myUid) return;
+    if (appliedIds.includes(role.id) || atApplicationLimit) return;
+    // Optimistic update.
+    setAppliedIds(prev => [...prev, role.id]);
+    setAppsThisMonth(prev => prev + 1);
+    try {
+      await addDoc(collection(db, "applications"), {
+        fromUid: myUid,
+        toUid: role.ownerId,
+        type: "application",
+        fromName: myName,
+        toName: role.posterName ?? "",
+        roleId: role.id,
+        roleTitle: role.title,
+        status: "pending",
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+    } catch { /* keep optimistic state */ }
   }
 
   return (
@@ -297,7 +342,7 @@ export default function TalentJobsPage() {
                 locale={locale}
                 applied={appliedIds.includes(role.id)}
                 canApply={!atApplicationLimit}
-                onApply={() => apply(role.id)}
+                onApply={() => apply(role)}
               />
             ))}
           </div>
