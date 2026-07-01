@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { isStartupPaid } from "@/lib/entitlements";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
@@ -128,7 +129,7 @@ export default function PitchDeckPage() {
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         if (profileSnap.exists()) {
           const tier = profileSnap.data().plan_tier as string | undefined;
-          setIsPro(tier === "pro" || tier === "scale");
+          setIsPro(isStartupPaid(tier));
         }
         // Load existing pitchdeck
         const deckSnap = await getDoc(doc(db, "pitchdecks", user.uid));

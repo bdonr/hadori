@@ -204,3 +204,30 @@ export function can(role: Role, tier: Tier, feature: keyof Entitlements): boolea
   if (typeof val === "number") return val > 0;
   return false;
 }
+
+// ---------------------------------------------------------------------------
+// Boolean gates keyed by the REAL plan_tier ids stored on profiles
+// (from lib/tiers.ts). Use these in pages/routes instead of inline
+// `plan_tier === "pro"` checks. Legacy "pro"/"scale" accepted for old data.
+// ---------------------------------------------------------------------------
+
+// Paid startup plan: unlocks funding details, full pitch deck, investor
+// visibility, workspace AI co-founder.
+export function isStartupPaid(planTier?: string | null): boolean {
+  return !!planTier && ["startup", "startup_pro", "pro", "scale"].includes(planTier);
+}
+
+// Top startup plan: verified badge, data room, featured placement.
+export function isStartupProPlus(planTier?: string | null): boolean {
+  return !!planTier && ["startup_pro", "scale"].includes(planTier);
+}
+
+// Paid talent plan (Plus or Pro).
+export function isTalentPaid(planTier?: string | null): boolean {
+  return !!planTier && ["plus", "pro", "scale"].includes(planTier);
+}
+
+// Paid investor plan (Angel and above).
+export function isInvestorPaid(planTier?: string | null): boolean {
+  return !!planTier && planTier.startsWith("investor_") && planTier !== "investor_free";
+}

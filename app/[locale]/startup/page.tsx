@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 import { WorkspaceCreateCard } from "@/components/workspace/WorkspaceCreateCard";
 import { Navbar } from "@/components/layout/navbar";
+import { isStartupPaid } from "@/lib/entitlements";
 import Link from "next/link";
 
 export default async function StartupDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -19,7 +20,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
   const t = await getTranslations("startup");
 
   const name = profile.full_name ?? "Gründer";
-  const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
+  const isPro = isStartupPaid(profile.plan_tier);
   const isVisible = profile.investor_visible ?? false;
 
   let workspaceId: string | null = null;

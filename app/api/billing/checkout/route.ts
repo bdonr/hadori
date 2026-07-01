@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/firebase/session";
 import { adminDb } from "@/lib/firebase/admin";
 import { getStripe } from "@/lib/stripe";
+import { tierForPriceId } from "@/lib/plan-map";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -68,12 +69,18 @@ async function handleCheckout(req: NextRequest) {
 
   const origin = req.headers.get("origin") ?? "https://dadori.com";
 
+  // The tier the user is buying — stamped as metadata so the webhook can set
+  // plan_tier deterministically without re-matching price IDs.
+  const tier = tierForPriceId(resolvedPriceId) ?? tierForPriceId(priceId) ?? "";
+
   const checkoutSession = await stripe.checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: resolvedPriceId, quantity: 1 }],
     success_url: `${origin}${successUrl}`,
     cancel_url: `${origin}${cancelUrl}`,
+    metadata: { uid: session.uid, plan_tier: tier },
+    subscription_data: { metadata: { uid: session.uid, plan_tier: tier } },
   });
 
   return NextResponse.json({ url: checkoutSession.url });

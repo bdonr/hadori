@@ -6,6 +6,7 @@ import type { Profile } from "@/lib/firebase/collections";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
+import { isStartupPaid } from "@/lib/entitlements";
 import { getTranslations } from "next-intl/server";
 
 export default async function VisibilityPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -18,7 +19,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
   const profile = snap.data() as Profile | undefined;
   if (!profile || (profile.role !== "startup" && profile.role !== "creator")) redirect(`/${locale}/login`);
 
-  const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
+  const isPro = isStartupPaid(profile.plan_tier);
   const isVisible = profile.investor_visible ?? false;
 
   const perks = [

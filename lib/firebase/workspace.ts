@@ -1,4 +1,5 @@
 // Workspace types — extensible for payment integration later
+import { isStartupPaid, isStartupProPlus } from "@/lib/entitlements";
 
 export type WorkspaceMemberRole =
   | "owner"
@@ -106,19 +107,22 @@ export const DEFAULT_COLUMNS: WorkspaceColumn[] = [
   { id: "done",        title: "Done",        color: "bg-green-100",  order: 3 },
 ];
 
-// Tier limits
+// Tier limits — accepts the real plan_tier ids (startup/startup_pro) plus
+// legacy pro/scale values.
 export function workspaceLimit(tier: string) {
   switch (tier) {
-    case "scale": return { members: Infinity, boards: Infinity, ai: Infinity };
-    case "pro":   return { members: 25,       boards: Infinity, ai: 10 };
-    default:      return { members: 3,        boards: 1,        ai: 0 };
+    case "scale":
+    case "startup_pro": return { members: Infinity, boards: Infinity, ai: Infinity };
+    case "pro":
+    case "startup":     return { members: 25,       boards: Infinity, ai: 10 };
+    default:            return { members: 3,        boards: 1,        ai: 0 };
   }
 }
 
 export function canUseAI(tier: string) {
-  return tier === "pro" || tier === "scale";
+  return isStartupPaid(tier);
 }
 
 export function canAccessDataRoom(tier: string) {
-  return tier === "pro" || tier === "scale";
+  return isStartupProPlus(tier);
 }

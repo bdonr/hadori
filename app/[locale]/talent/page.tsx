@@ -4,6 +4,7 @@ import { adminDb } from "@/lib/firebase/admin";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 import { Navbar } from "@/components/layout/navbar";
+import { isTalentPaid } from "@/lib/entitlements";
 import Link from "next/link";
 
 export default async function TalentDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -17,7 +18,7 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
 
   const t = await getTranslations("talent");
 
-  const isPro = profile.plan_tier === "pro" || profile.plan_tier === "scale";
+  const isPro = isTalentPaid(profile.plan_tier);
   const tier = profile.plan_tier ?? "free";
   const name = profile.full_name ?? "";
 

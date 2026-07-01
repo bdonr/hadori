@@ -10,6 +10,7 @@ import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS } from "@/lib/regions";
 import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
+import { isStartupPaid } from "@/lib/entitlements";
 import { useTranslations } from "next-intl";
 
 const TEAM_SIZES = ["1", "2–5", "6–15", "16–50", "50+"];
@@ -69,7 +70,7 @@ export default function StartupProfilePage() {
         // Check tier
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         const tier = profileSnap.data()?.plan_tier ?? "free";
-        setIsPro(tier === "startup" || tier === "startup_pro" || tier === "scale");
+        setIsPro(isStartupPaid(tier));
       } catch {
         // Read failed — still let the user fill in and save their profile
       } finally {

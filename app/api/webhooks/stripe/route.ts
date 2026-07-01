@@ -1,13 +1,44 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { adminDb } from "@/lib/firebase/admin";
+import { tierForPriceId } from "@/lib/plan-map";
 import Stripe from "stripe";
 
-type PlanTier = "free" | "pro" | "scale";
+// Find the user's profile by their Stripe customer id, falling back to a uid
+// stored in metadata (and back-filling the customer id for next time).
+async function findProfileRef(customerId: string, uid?: string) {
+  const snap = await adminDb!
+    .collection("profiles")
+    .where("stripe_customer_id", "==", customerId)
+    .limit(1)
+    .get();
+  if (!snap.empty) return snap.docs[0].ref;
+
+  if (uid) {
+    const doc = await adminDb!.collection("profiles").doc(uid).get();
+    if (doc.exists) {
+      await doc.ref.update({ stripe_customer_id: customerId });
+      return doc.ref;
+    }
+  }
+  return null;
+}
+
+async function setTier(customerId: string, tier: string, uid?: string, subscriptionId?: string) {
+  if (!tier) return;
+  const ref = await findProfileRef(customerId, uid);
+  if (!ref) return;
+  await ref.update({
+    plan_tier: tier,
+    ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
+    updated_at: new Date().toISOString(),
+  });
+}
 
 export async function POST(req: NextRequest) {
+  const stripe = getStripe();
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
   if (!sig) return NextResponse.json({ error: "Missing signature" }, { status: 400 });
@@ -15,38 +46,43 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch {
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Invalid signature";
+    console.error("[stripe webhook] signature verification failed:", message);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  async function updateTier(customerId: string, tier: PlanTier, subscriptionId?: string) {
-    const snap = await adminDb!.collection("profiles")
-      .where("stripe_customer_id", "==", customerId)
-      .limit(1)
-      .get();
-    if (snap.empty) return;
-    await snap.docs[0].ref.update({
-      plan_tier: tier,
-      ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
-      updated_at: new Date().toISOString(),
-    });
-  }
-
-  switch (event.type) {
-    case "customer.subscription.created":
-    case "customer.subscription.updated": {
-      const sub = event.data.object as Stripe.Subscription;
-      const priceId = sub.items.data[0]?.price.id;
-      const tier: PlanTier =
-        priceId === process.env.STRIPE_PRICE_STARTUP_SCALE ? "scale" : "pro";
-      await updateTier(sub.customer as string, tier, sub.id);
-      break;
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const s = event.data.object as Stripe.Checkout.Session;
+        const uid = s.metadata?.uid;
+        let tier = s.metadata?.plan_tier ?? "";
+        // Fallback: derive the tier from the subscription's price.
+        if (!tier && s.subscription) {
+          const sub = await stripe.subscriptions.retrieve(s.subscription as string);
+          tier = tierForPriceId(sub.items.data[0]?.price.id) ?? "";
+        }
+        await setTier(s.customer as string, tier, uid, s.subscription as string | undefined);
+        break;
+      }
+      case "customer.subscription.created":
+      case "customer.subscription.updated": {
+        const sub = event.data.object as Stripe.Subscription;
+        const tier = sub.metadata?.plan_tier || tierForPriceId(sub.items.data[0]?.price.id) || "";
+        await setTier(sub.customer as string, tier, sub.metadata?.uid, sub.id);
+        break;
+      }
+      case "customer.subscription.deleted": {
+        const sub = event.data.object as Stripe.Subscription;
+        await setTier(sub.customer as string, "free", sub.metadata?.uid);
+        break;
+      }
     }
-    case "customer.subscription.deleted": {
-      const sub = event.data.object as Stripe.Subscription;
-      await updateTier(sub.customer as string, "free");
-      break;
-    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "handler error";
+    console.error("[stripe webhook] handler error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });

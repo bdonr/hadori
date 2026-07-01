@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 import { getServerSession } from "@/lib/firebase/session";
 import { canUseAI } from "@/lib/firebase/workspace";
+import { isStartupProPlus } from "@/lib/entitlements";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession();
@@ -23,8 +24,8 @@ export async function POST(req: NextRequest) {
   if (!canUseAI(profile?.plan_tier ?? "free"))
     return NextResponse.json({ error: "AI assistant requires Pro or Scale plan" }, { status: 403 });
 
-  // Check monthly limit for Pro (10 messages)
-  if (profile?.plan_tier === "pro") {
+  // Check monthly limit for finite-AI plans (10 messages); top tier is unlimited
+  if (!isStartupProPlus(profile?.plan_tier)) {
     const monthStart = new Date();
     monthStart.setDate(1);
     monthStart.setHours(0, 0, 0, 0);
