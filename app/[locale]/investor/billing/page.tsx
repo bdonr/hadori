@@ -59,6 +59,27 @@ export default function InvestorBillingPage() {
     }
   }
 
+  // Lower paid tier → switch price; free tier (Scout) → cancel the subscription.
+  async function handleDowngrade(tierId: string) {
+    if (STRIPE_PRICE_IDS[tierId]) {
+      if (!confirm(t("downgrade_confirm"))) return;
+      await handleUpgrade(tierId);
+      return;
+    }
+    if (!confirm(t("cancel_confirm"))) return;
+    setLoading(tierId);
+    setError(null);
+    try {
+      const res = await fetch("/api/billing/cancel", { method: "POST" });
+      if (!res.ok) throw new Error("cancel failed");
+      window.location.href = "/investor/billing?downgraded=1";
+    } catch {
+      setError(t("error_payment_failed"));
+    } finally {
+      setLoading(null);
+    }
+  }
+
   const tierOrder = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
   const currentIdx = tierOrder.indexOf(CURRENT);
 
@@ -123,7 +144,9 @@ export default function InvestorBillingPage() {
                 {isCurrent ? (
                   <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">{t("current")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">{t("downgrade")}</div>
+                  <button onClick={() => handleDowngrade(tier.id)} disabled={!!loading}
+                    className="rounded-xl border border-zinc-200 py-2 text-center text-xs font-semibold text-zinc-600 hover:bg-zinc-50 disabled:opacity-50">
+                    {loading === tier.id ? "…" : t("downgrade")}</button>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>
@@ -165,7 +188,9 @@ export default function InvestorBillingPage() {
                 {isCurrent ? (
                   <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">{t("current")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">{t("downgrade")}</div>
+                  <button onClick={() => handleDowngrade(tier.id)} disabled={!!loading}
+                    className="rounded-xl border border-zinc-200 py-2 text-center text-xs font-semibold text-zinc-600 hover:bg-zinc-50 disabled:opacity-50">
+                    {loading === tier.id ? "…" : t("downgrade")}</button>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>

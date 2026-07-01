@@ -411,7 +411,9 @@
       "feat_featured_placement": "Featured placement",
       "feat_profile_analytics": "Profile analytics",
       "feat_match_score": "Match score",
-      "footer_note": "Cancel monthly · Payment via Stripe · Active instantly"
+      "footer_note": "Cancel monthly · Payment via Stripe · Active instantly",
+      "downgrade_confirm": "Downgrade to this plan? The change takes effect immediately with prorated billing.",
+      "cancel_confirm": "Really cancel your subscription? You will be moved to the free plan."
     },
     "jobs": {
       "comp_revenue_share": "Revenue Share",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "Co-investor network",
       "feat_deal_flow_manager": "Deal Flow Manager",
-      "footer": "Cancel monthly · Payment via Stripe · Request Elite access by email"
+      "footer": "Cancel monthly · Payment via Stripe · Request Elite access by email",
+      "downgrade_confirm": "Downgrade to this plan? The change takes effect immediately with prorated billing.",
+      "cancel_confirm": "Really cancel your subscription? You will be moved to the free plan."
     },
     "dealflow": {
       "gate_title": "Deal Flow from Angel (€19/mo)",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "Featured placement",
       "feat_data_room": "Data Room",
       "feat_unlimited_intros": "Unlimited intros",
-      "footer_note": "Cancel monthly · Payment via Stripe · Active instantly"
+      "footer_note": "Cancel monthly · Payment via Stripe · Active instantly",
+      "downgrade_confirm": "Downgrade to this plan? The change takes effect immediately with prorated billing.",
+      "cancel_confirm": "Really cancel your subscription? You will be moved to the free plan."
     },
     "discover": {
       "intro_title": "DADORI Intro — how it works",

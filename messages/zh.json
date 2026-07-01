@@ -411,7 +411,9 @@
       "feat_featured_placement": "精选推荐位",
       "feat_profile_analytics": "档案分析",
       "feat_match_score": "匹配分数",
-      "footer_note": "按月可随时取消 · 通过 Stripe 支付 · 即时生效"
+      "footer_note": "按月可随时取消 · 通过 Stripe 支付 · 即时生效",
+      "downgrade_confirm": "降级到此套餐？更改将按比例计费并立即生效。",
+      "cancel_confirm": "确定要取消订阅吗？您将被切换到免费套餐。"
     },
     "jobs": {
       "comp_revenue_share": "收入分成",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "联合投资人网络",
       "feat_deal_flow_manager": "Deal Flow 管理器",
-      "footer": "按月可随时取消 · 通过 Stripe 支付 · Elite 权限请通过邮件申请"
+      "footer": "按月可随时取消 · 通过 Stripe 支付 · Elite 权限请通过邮件申请",
+      "downgrade_confirm": "降级到此套餐？更改将按比例计费并立即生效。",
+      "cancel_confirm": "确定要取消订阅吗？您将被切换到免费套餐。"
     },
     "dealflow": {
       "gate_title": "Deal Flow 从 Angel 起（每月 19 €）",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "精选推荐位",
       "feat_data_room": "数据室",
       "feat_unlimited_intros": "无限引荐",
-      "footer_note": "按月可随时取消 · 通过 Stripe 支付 · 即时生效"
+      "footer_note": "按月可随时取消 · 通过 Stripe 支付 · 即时生效",
+      "downgrade_confirm": "降级到此套餐？更改将按比例计费并立即生效。",
+      "cancel_confirm": "确定要取消订阅吗？您将被切换到免费套餐。"
     },
     "discover": {
       "intro_title": "DADORI 引荐——运作方式",

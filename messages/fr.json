@@ -411,7 +411,9 @@
       "feat_featured_placement": "Placement en vedette",
       "feat_profile_analytics": "Analytics de profil",
       "feat_match_score": "Match Score",
-      "footer_note": "Résiliable chaque mois · Paiement via Stripe · Actif immédiatement"
+      "footer_note": "Résiliable chaque mois · Paiement via Stripe · Actif immédiatement",
+      "downgrade_confirm": "Passer à ce forfait inférieur ? Le changement prend effet immédiatement avec facturation au prorata.",
+      "cancel_confirm": "Voulez-vous vraiment annuler votre abonnement ? Vous serez basculé vers le forfait gratuit."
     },
     "jobs": {
       "comp_revenue_share": "Revenue Share",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "Réseau de co-investisseurs",
       "feat_deal_flow_manager": "Deal Flow Manager",
-      "footer": "Résiliable chaque mois · Paiement via Stripe · Accès Elite sur demande par e-mail"
+      "footer": "Résiliable chaque mois · Paiement via Stripe · Accès Elite sur demande par e-mail",
+      "downgrade_confirm": "Passer à ce forfait inférieur ? Le changement prend effet immédiatement avec facturation au prorata.",
+      "cancel_confirm": "Voulez-vous vraiment annuler votre abonnement ? Vous serez basculé vers le forfait gratuit."
     },
     "dealflow": {
       "gate_title": "Deal Flow à partir d'Angel (19 €/mois)",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "Placement en vedette",
       "feat_data_room": "Data Room",
       "feat_unlimited_intros": "Intros illimitées",
-      "footer_note": "Résiliable chaque mois · Paiement via Stripe · Actif immédiatement"
+      "footer_note": "Résiliable chaque mois · Paiement via Stripe · Actif immédiatement",
+      "downgrade_confirm": "Passer à ce forfait inférieur ? Le changement prend effet immédiatement avec facturation au prorata.",
+      "cancel_confirm": "Voulez-vous vraiment annuler votre abonnement ? Vous serez basculé vers le forfait gratuit."
     },
     "discover": {
       "intro_title": "DADORI Intro — comment ça marche",

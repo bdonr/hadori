@@ -411,7 +411,9 @@
       "feat_featured_placement": "Featured Placement",
       "feat_profile_analytics": "Profil-Analytics",
       "feat_match_score": "Match Score",
-      "footer_note": "Monatlich kündbar · Zahlung über Stripe · Sofort aktiv"
+      "footer_note": "Monatlich kündbar · Zahlung über Stripe · Sofort aktiv",
+      "downgrade_confirm": "Auf diesen Tarif herabstufen? Die Änderung wird sofort mit anteiliger Verrechnung wirksam.",
+      "cancel_confirm": "Abo wirklich kündigen? Du wirst auf den kostenlosen Tarif herabgestuft."
     },
     "jobs": {
       "comp_revenue_share": "Revenue Share",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "Co-Investor Netzwerk",
       "feat_deal_flow_manager": "Deal Flow Manager",
-      "footer": "Monatlich kündbar · Zahlung über Stripe · Elite-Zugang per E-Mail anfragen"
+      "footer": "Monatlich kündbar · Zahlung über Stripe · Elite-Zugang per E-Mail anfragen",
+      "downgrade_confirm": "Auf diesen Tarif herabstufen? Die Änderung wird sofort mit anteiliger Verrechnung wirksam.",
+      "cancel_confirm": "Abo wirklich kündigen? Du wirst auf den kostenlosen Tarif herabgestuft."
     },
     "dealflow": {
       "gate_title": "Deal Flow ab Angel (19 €/Mo)",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "Featured Placement",
       "feat_data_room": "Datenraum",
       "feat_unlimited_intros": "Unbegrenzte Intros",
-      "footer_note": "Monatlich kündbar · Zahlung über Stripe · Sofort aktiv"
+      "footer_note": "Monatlich kündbar · Zahlung über Stripe · Sofort aktiv",
+      "downgrade_confirm": "Auf diesen Tarif herabstufen? Die Änderung wird sofort mit anteiliger Verrechnung wirksam.",
+      "cancel_confirm": "Abo wirklich kündigen? Du wirst auf den kostenlosen Tarif herabgestuft."
     },
     "discover": {
       "intro_title": "DADORI Intro — wie es funktioniert",

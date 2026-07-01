@@ -411,7 +411,9 @@
       "feat_featured_placement": "Featured Placement",
       "feat_profile_analytics": "Аналитика профиля",
       "feat_match_score": "Match Score",
-      "footer_note": "Отмена в любой месяц · Оплата через Stripe · Активно сразу"
+      "footer_note": "Отмена в любой месяц · Оплата через Stripe · Активно сразу",
+      "downgrade_confirm": "Перейти на этот тариф ниже? Изменение вступит в силу немедленно с пропорциональным перерасчётом.",
+      "cancel_confirm": "Действительно отменить подписку? Вы будете переведены на бесплатный тариф."
     },
     "jobs": {
       "comp_revenue_share": "Revenue Share",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "Сеть Co-Investor",
       "feat_deal_flow_manager": "Deal Flow Manager",
-      "footer": "Отмена в любой месяц · Оплата через Stripe · Elite-доступ запросить по эл. почте"
+      "footer": "Отмена в любой месяц · Оплата через Stripe · Elite-доступ запросить по эл. почте",
+      "downgrade_confirm": "Перейти на этот тариф ниже? Изменение вступит в силу немедленно с пропорциональным перерасчётом.",
+      "cancel_confirm": "Действительно отменить подписку? Вы будете переведены на бесплатный тариф."
     },
     "dealflow": {
       "gate_title": "Deal Flow от Angel (19 €/мес)",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "Featured Placement",
       "feat_data_room": "Data Room",
       "feat_unlimited_intros": "Безлимитные интро",
-      "footer_note": "Отмена в любой месяц · Оплата через Stripe · Активно сразу"
+      "footer_note": "Отмена в любой месяц · Оплата через Stripe · Активно сразу",
+      "downgrade_confirm": "Перейти на этот тариф ниже? Изменение вступит в силу немедленно с пропорциональным перерасчётом.",
+      "cancel_confirm": "Действительно отменить подписку? Вы будете переведены на бесплатный тариф."
     },
     "discover": {
       "intro_title": "DADORI Intro — как это работает",

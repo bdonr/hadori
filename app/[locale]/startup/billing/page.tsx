@@ -52,6 +52,29 @@ export default function StartupBillingPage() {
     }
   }
 
+  // Downgrade to a lower PAID tier switches the Stripe price in place (handled by
+  // the checkout route via subscriptions.update). A tier without a price is the
+  // free tier — that means cancelling the subscription entirely.
+  async function handleDowngrade(tierId: string) {
+    if (STRIPE_PRICE_IDS[tierId]) {
+      if (!confirm(t("downgrade_confirm"))) return;
+      await handleUpgrade(tierId);
+      return;
+    }
+    if (!confirm(t("cancel_confirm"))) return;
+    setLoading(tierId);
+    setError(null);
+    try {
+      const res = await fetch("/api/billing/cancel", { method: "POST" });
+      if (!res.ok) throw new Error("cancel failed");
+      window.location.href = "/startup/billing?downgraded=1";
+    } catch {
+      setError(t("payment_failed"));
+    } finally {
+      setLoading(null);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50 pb-20">
       <Navbar />
@@ -106,7 +129,10 @@ export default function StartupBillingPage() {
                 {isCurrent ? (
                   <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">{t("current_plan")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">{t("downgrade")}</div>
+                  <button onClick={() => handleDowngrade(tier.id)} disabled={!!loading}
+                    className="rounded-xl border border-zinc-200 py-2.5 text-center text-sm font-semibold text-zinc-600 hover:bg-zinc-50 disabled:opacity-50">
+                    {loading === tier.id ? t("starting") : t("downgrade")}
+                  </button>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2.5 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>

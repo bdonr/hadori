@@ -411,7 +411,9 @@
       "feat_featured_placement": "추천 노출",
       "feat_profile_analytics": "프로필 분석",
       "feat_match_score": "Match Score",
-      "footer_note": "매월 해지 가능 · Stripe로 결제 · 즉시 활성화"
+      "footer_note": "매월 해지 가능 · Stripe로 결제 · 즉시 활성화",
+      "downgrade_confirm": "이 플랜으로 다운그레이드할까요? 변경 사항은 일할 정산과 함께 즉시 적용됩니다.",
+      "cancel_confirm": "정말 구독을 취소할까요? 무료 플랜으로 변경됩니다."
     },
     "jobs": {
       "comp_revenue_share": "Revenue Share",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "공동 투자자 네트워크",
       "feat_deal_flow_manager": "Deal Flow 매니저",
-      "footer": "매월 해지 가능 · Stripe로 결제 · Elite 접근은 이메일로 문의"
+      "footer": "매월 해지 가능 · Stripe로 결제 · Elite 접근은 이메일로 문의",
+      "downgrade_confirm": "이 플랜으로 다운그레이드할까요? 변경 사항은 일할 정산과 함께 즉시 적용됩니다.",
+      "cancel_confirm": "정말 구독을 취소할까요? 무료 플랜으로 변경됩니다."
     },
     "dealflow": {
       "gate_title": "Deal Flow는 Angel부터 (월 19€)",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "추천 노출",
       "feat_data_room": "데이터룸",
       "feat_unlimited_intros": "무제한 소개",
-      "footer_note": "매월 해지 가능 · Stripe로 결제 · 즉시 활성화"
+      "footer_note": "매월 해지 가능 · Stripe로 결제 · 즉시 활성화",
+      "downgrade_confirm": "이 플랜으로 다운그레이드할까요? 변경 사항은 일할 정산과 함께 즉시 적용됩니다.",
+      "cancel_confirm": "정말 구독을 취소할까요? 무료 플랜으로 변경됩니다."
     },
     "discover": {
       "intro_title": "DADORI 소개 — 작동 방식",

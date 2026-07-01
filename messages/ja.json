@@ -411,7 +411,9 @@
       "feat_featured_placement": "注目枠での掲載",
       "feat_profile_analytics": "プロフィール分析",
       "feat_match_score": "マッチスコア",
-      "footer_note": "毎月解約可能 · Stripe経由のお支払い · すぐに有効"
+      "footer_note": "毎月解約可能 · Stripe経由のお支払い · すぐに有効",
+      "downgrade_confirm": "このプランにダウングレードしますか？変更は日割り計算で即時に反映されます。",
+      "cancel_confirm": "本当にサブスクリプションを解約しますか？無料プランに変更されます。"
     },
     "jobs": {
       "comp_revenue_share": "レベニューシェア",
@@ -819,7 +821,9 @@
       "feat_api_webhook": "API / Webhook",
       "feat_coinvestor_network": "共同投資家ネットワーク",
       "feat_deal_flow_manager": "ディールフローマネージャー",
-      "footer": "毎月解約可能 · Stripe経由のお支払い · Eliteアクセスはメールでお問い合わせください"
+      "footer": "毎月解約可能 · Stripe経由のお支払い · Eliteアクセスはメールでお問い合わせください",
+      "downgrade_confirm": "このプランにダウングレードしますか？変更は日割り計算で即時に反映されます。",
+      "cancel_confirm": "本当にサブスクリプションを解約しますか？無料プランに変更されます。"
     },
     "dealflow": {
       "gate_title": "Angel（月19€）以上でディールフロー",
@@ -972,7 +976,9 @@
       "feat_featured_placement": "注目枠での掲載",
       "feat_data_room": "データルーム",
       "feat_unlimited_intros": "紹介無制限",
-      "footer_note": "毎月解約可能 · Stripe経由のお支払い · すぐに有効"
+      "footer_note": "毎月解約可能 · Stripe経由のお支払い · すぐに有効",
+      "downgrade_confirm": "このプランにダウングレードしますか？変更は日割り計算で即時に反映されます。",
+      "cancel_confirm": "本当にサブスクリプションを解約しますか？無料プランに変更されます。"
     },
     "discover": {
       "intro_title": "DADORI Intro — その仕組み",
