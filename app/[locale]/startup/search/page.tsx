@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getSkillLabel } from "@/lib/skills";
+import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query } from "firebase/firestore";
@@ -45,6 +46,7 @@ export default function TalentSearchPage() {
   const [search, setSearch] = useState("");
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [langFilter, setLangFilter] = useState<string[]>([]);
+  const [wantedTags, setWantedTags] = useState<string[]>([]); // predefined roles/skills you seek
 
   useEffect(() => {
     let cancelled = false;
@@ -79,7 +81,12 @@ export default function TalentSearchPage() {
   }
 
   const results = useMemo(() => {
-    let list = talents;
+    // Tag-based match: how many of the sought predefined tags the talent has.
+    let list = talents.map(t => ({
+      ...t,
+      match: wantedTags.filter(tag => t.skills.includes(tag)).length,
+    }));
+    if (wantedTags.length > 0) list = list.filter(t => t.match > 0);
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(t =>
@@ -90,8 +97,10 @@ export default function TalentSearchPage() {
     }
     if (remoteOnly) list = list.filter(t => t.remote);
     if (langFilter.length > 0) list = list.filter(t => langFilter.some(l => t.languages.includes(l)));
+    // Best matches first.
+    list.sort((a, b) => b.match - a.match);
     return list;
-  }, [talents, search, remoteOnly, langFilter]);
+  }, [talents, wantedTags, search, remoteOnly, langFilter]);
 
   // Only show languages that actually appear in the talent pool
   const availableLangs = useMemo(() => {
@@ -104,6 +113,11 @@ export default function TalentSearchPage() {
       <Navbar />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
+        {/* Tag-based search — pick predefined roles/skills you're looking for */}
+        <div className="mb-5 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+          <SkillPicker label={t("seeking_tags_label")} selected={wantedTags} onChange={setWantedTags} />
+        </div>
+
         {/* Filter-Bar */}
         <div className="mb-4 flex flex-wrap gap-3">
           <input
@@ -174,6 +188,11 @@ export default function TalentSearchPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-bold text-zinc-900">{talent.name}</p>
+                        {wantedTags.length > 0 && talent.match > 0 && (
+                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                            {t("match_badge", { n: talent.match, total: wantedTags.length })}
+                          </span>
+                        )}
                         {talent.availability && AVAILABILITY_LABEL[talent.availability] && (
                           <span className="flex items-center gap-1 text-xs text-zinc-500">
                             <span className={`h-1.5 w-1.5 rounded-full ${AVAIL_DOT[talent.availability] ?? "bg-zinc-300"}`} />
@@ -194,11 +213,14 @@ export default function TalentSearchPage() {
                       {/* Skills */}
                       {talent.skills.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-1.5">
-                          {talent.skills.slice(0, 6).map(s => (
-                            <span key={s} className="rounded-full bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-700">
-                              {getSkillLabel(s)}
-                            </span>
-                          ))}
+                          {[...talent.skills].sort((a, b) => Number(wantedTags.includes(b)) - Number(wantedTags.includes(a))).slice(0, 6).map(s => {
+                            const hit = wantedTags.includes(s);
+                            return (
+                              <span key={s} className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${hit ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-indigo-100 bg-indigo-50 text-indigo-700"}`}>
+                                {hit && "✓ "}{getSkillLabel(s)}
+                              </span>
+                            );
+                          })}
                           {talent.skills.length > 6 && (
                             <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs text-zinc-500">+{talent.skills.length - 6}</span>
                           )}

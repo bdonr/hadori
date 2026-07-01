@@ -1260,7 +1260,9 @@
       "empty_no_talents_desc": "Таланты появятся здесь, как только зарегистрируются на DADORI.",
       "empty_no_results_desc": "Попробуй другие фильтры или поисковый запрос.",
       "remote_badge": "🌍 Удалённо",
-      "profile_link": "Профиль →"
+      "profile_link": "Профиль →",
+      "seeking_tags_label": "Что вы ищете? (роли и навыки)",
+      "match_badge": "{n}/{total} совпад."
     },
     "visibility": {
       "perk_findable_title": "Виден 200+ инвесторам",

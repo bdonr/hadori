@@ -1260,7 +1260,9 @@
       "empty_no_talents_desc": "タレントがDADORIに登録すると、ここに表示されます。",
       "empty_no_results_desc": "別のフィルターや検索語をお試しください。",
       "remote_badge": "🌍 リモート",
-      "profile_link": "プロフィール →"
+      "profile_link": "プロフィール →",
+      "seeking_tags_label": "何をお探しですか？（役割・スキル）",
+      "match_badge": "{n}/{total} 一致"
     },
     "visibility": {
       "perk_findable_title": "200人以上の投資家に見つけてもらえる",

@@ -1260,7 +1260,9 @@
       "empty_no_talents_desc": "인재가 DADORI에 등록하면 여기에 표시됩니다.",
       "empty_no_results_desc": "다른 필터나 검색어를 시도해 보세요.",
       "remote_badge": "🌍 Remote",
-      "profile_link": "프로필 →"
+      "profile_link": "프로필 →",
+      "seeking_tags_label": "무엇을 찾고 있나요? (역할·스킬)",
+      "match_badge": "{n}/{total} 일치"
     },
     "visibility": {
       "perk_findable_title": "200명 이상의 투자자에게 검색 가능",

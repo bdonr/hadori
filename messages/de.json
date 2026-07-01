@@ -1260,7 +1260,9 @@
       "empty_no_talents_desc": "Talente erscheinen hier sobald sie sich auf DADORI registrieren.",
       "empty_no_results_desc": "Andere Filter oder Suchbegriff probieren.",
       "remote_badge": "🌍 Remote",
-      "profile_link": "Profil →"
+      "profile_link": "Profil →",
+      "seeking_tags_label": "Wonach suchst du? (Rollen & Skills)",
+      "match_badge": "{n}/{total} passend"
     },
     "visibility": {
       "perk_findable_title": "Auffindbar für 200+ Investoren",

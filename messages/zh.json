@@ -1260,7 +1260,9 @@
       "empty_no_talents_desc": "人才在 DADORI 注册后将显示在此处。",
       "empty_no_results_desc": "试试其他筛选条件或搜索词。",
       "remote_badge": "🌍 远程",
-      "profile_link": "档案 →"
+      "profile_link": "档案 →",
+      "seeking_tags_label": "你在找什么？（角色与技能）",
+      "match_badge": "{n}/{total} 匹配"
     },
     "visibility": {
       "perk_findable_title": "可被 200+ 位投资人发现",
