@@ -309,7 +309,7 @@ export default function RolesPage() {
                           : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300"
                       }`}
                     >
-                      {l.label}
+                      {tax.language(l.id)}
                     </button>
                   ))}
                 </div>

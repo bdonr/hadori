@@ -146,7 +146,7 @@ export default function CreateProjectPage() {
                   className={`rounded-full px-3 py-1.5 text-sm font-medium border transition-colors flex items-center gap-1.5 ${
                     category === cat.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"
                   }`}>
-                  <span>{cat.emoji}</span>{cat.label}
+                  <span>{cat.emoji}</span>{tax.category(cat.id)}
                 </button>
               ))}
             </div>
@@ -163,12 +163,12 @@ export default function CreateProjectPage() {
                     className={`rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${
                       problems.includes(p.id) ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"
                     }`}>
-                    {p.label}
+                    {tax.problem(p.id)}
                   </button>
                 ))}
               </div>
               <div className="mt-2 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-xs text-indigo-700">
-                🥷 {t("stealth_preview_intro")} <strong>{t("stealth_preview_text", { category: CATEGORIES.find(c=>c.id===category)?.label ?? "…", problems: problems.map(id=>PROBLEM_AREAS.find(p=>p.id===id)?.label).filter(Boolean).join(", ") || "…" })}</strong>
+                🥷 {t("stealth_preview_intro")} <strong>{t("stealth_preview_text", { category: category ? tax.category(category) : "…", problems: problems.map(id=>tax.problem(id)).filter(Boolean).join(", ") || "…" })}</strong>
               </div>
             </section>
           )}

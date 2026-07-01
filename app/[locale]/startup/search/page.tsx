@@ -146,7 +146,7 @@ export default function TalentSearchPage() {
                     : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300"
                 }`}
               >
-                {l.label}
+                {tax.language(l.id)}
               </button>
             ))}
           </div>
@@ -233,7 +233,7 @@ export default function TalentSearchPage() {
                       {(talentLangs.length > 0 || talentRegions.length > 0) && (
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {talentLangs.map(l => (
-                            <span key={l.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{l.label}</span>
+                            <span key={l.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{tax.language(l.id)}</span>
                           ))}
                           {talentRegions.map(r => (
                             <span key={r.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{r.flag} {tax.region(r.id)}</span>

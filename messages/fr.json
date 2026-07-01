@@ -1673,6 +1673,39 @@
       "6_10": "6–10",
       "11_25": "11–25",
       "25_plus": "25+"
+    },
+    "category": {
+      "creator": "Creator / YouTube",
+      "music": "Musique / Podcast",
+      "gaming": "Gaming",
+      "community": "Community / Newsletter",
+      "app": "Idée d'app",
+      "ecommerce": "Boutique / E-Commerce",
+      "art": "Design / Art",
+      "education": "Éducation / Cours",
+      "events": "Events",
+      "other": "Autre"
+    },
+    "problem": {
+      "efficiency": "Processus trop lents",
+      "cost": "Coûts trop élevés",
+      "access": "Manque d'accès",
+      "quality": "Mauvaise qualité / choix",
+      "engagement": "Manque de communauté",
+      "monetization": "Monétisation",
+      "distribution": "Portée / Distribution",
+      "other": "Autre"
+    },
+    "language": {
+      "de": "Allemand",
+      "en": "Anglais",
+      "fr": "Français",
+      "es": "Espagnol",
+      "tr": "Turc",
+      "pl": "Polonais",
+      "nl": "Néerlandais",
+      "it": "Italien",
+      "any": "Peu importe / Tous"
     }
   }
 }

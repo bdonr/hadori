@@ -1673,6 +1673,39 @@
       "6_10": "6–10",
       "11_25": "11–25",
       "25_plus": "25+"
+    },
+    "category": {
+      "creator": "Creator / YouTube",
+      "music": "音楽 / Podcast",
+      "gaming": "Gaming",
+      "community": "Community / Newsletter",
+      "app": "アプリのアイデア",
+      "ecommerce": "ショップ / E-Commerce",
+      "art": "Design / アート",
+      "education": "教育 / 講座",
+      "events": "Events",
+      "other": "その他"
+    },
+    "problem": {
+      "efficiency": "プロセスが遅すぎる",
+      "cost": "コストが高すぎる",
+      "access": "アクセスの欠如",
+      "quality": "品質・選択肢が乏しい",
+      "engagement": "コミュニティの欠如",
+      "monetization": "マネタイズ",
+      "distribution": "リーチ / 流通",
+      "other": "その他"
+    },
+    "language": {
+      "de": "ドイツ語",
+      "en": "英語",
+      "fr": "フランス語",
+      "es": "スペイン語",
+      "tr": "トルコ語",
+      "pl": "ポーランド語",
+      "nl": "オランダ語",
+      "it": "イタリア語",
+      "any": "指定なし / すべて"
     }
   }
 }

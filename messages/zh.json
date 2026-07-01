@@ -1673,6 +1673,39 @@
       "6_10": "6–10",
       "11_25": "11–25",
       "25_plus": "25+"
+    },
+    "category": {
+      "creator": "Creator / YouTube",
+      "music": "音乐 / Podcast",
+      "gaming": "Gaming",
+      "community": "Community / Newsletter",
+      "app": "App 创意",
+      "ecommerce": "店铺 / E-Commerce",
+      "art": "Design / 艺术",
+      "education": "教育 / 课程",
+      "events": "Events",
+      "other": "其他"
+    },
+    "problem": {
+      "efficiency": "流程太慢",
+      "cost": "成本过高",
+      "access": "缺乏渠道",
+      "quality": "质量 / 选择不佳",
+      "engagement": "缺乏社区",
+      "monetization": "变现",
+      "distribution": "触达 / 分发",
+      "other": "其他"
+    },
+    "language": {
+      "de": "德语",
+      "en": "英语",
+      "fr": "法语",
+      "es": "西班牙语",
+      "tr": "土耳其语",
+      "pl": "波兰语",
+      "nl": "荷兰语",
+      "it": "意大利语",
+      "any": "不限 / 全部"
     }
   }
 }

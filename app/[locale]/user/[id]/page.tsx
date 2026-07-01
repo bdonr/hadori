@@ -290,7 +290,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                     <div className="flex flex-wrap gap-2">
                       {languages.map(l => (
                         <span key={l.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm font-medium text-zinc-700">
-                          {l.label}
+                          {tax.language(l.id)}
                         </span>
                       ))}
                     </div>

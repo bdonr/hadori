@@ -1673,6 +1673,39 @@
       "6_10": "6–10",
       "11_25": "11–25",
       "25_plus": "25+"
+    },
+    "category": {
+      "creator": "Creator / YouTube",
+      "music": "음악 / Podcast",
+      "gaming": "Gaming",
+      "community": "Community / Newsletter",
+      "app": "앱 아이디어",
+      "ecommerce": "쇼핑 / E-Commerce",
+      "art": "Design / 예술",
+      "education": "교육 / 강의",
+      "events": "Events",
+      "other": "기타"
+    },
+    "problem": {
+      "efficiency": "프로세스가 너무 느림",
+      "cost": "비용이 너무 높음",
+      "access": "접근성 부족",
+      "quality": "품질 / 선택지 부족",
+      "engagement": "커뮤니티 부족",
+      "monetization": "수익화",
+      "distribution": "도달 / 유통",
+      "other": "기타"
+    },
+    "language": {
+      "de": "독일어",
+      "en": "영어",
+      "fr": "프랑스어",
+      "es": "스페인어",
+      "tr": "터키어",
+      "pl": "폴란드어",
+      "nl": "네덜란드어",
+      "it": "이탈리아어",
+      "any": "상관없음 / 전체"
     }
   }
 }

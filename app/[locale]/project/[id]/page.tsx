@@ -327,7 +327,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                         {(creator.languages ?? []).map(lId => {
                           const l = LANGUAGES.find(x => x.id === lId);
                           return l ? (
-                            <span key={lId} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">{l.label}</span>
+                            <span key={lId} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">{tax.language(l.id)}</span>
                           ) : null;
                         })}
                         {(creator.regions ?? []).map(rId => {

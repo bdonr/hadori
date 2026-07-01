@@ -21,7 +21,10 @@ export type TaxonomyGroup =
   | "investor_focus"
   | "check_size"
   | "funding_range"
-  | "deals_per_year";
+  | "deals_per_year"
+  | "category"
+  | "problem"
+  | "language";
 
 type Translator = { (key: string): string; has: (key: string) => boolean };
 
@@ -41,6 +44,9 @@ function build(t: Translator) {
     checkSize: (id?: string | null) => get("check_size", id),
     fundingRange: (id?: string | null) => get("funding_range", id),
     dealsPerYear: (id?: string | null) => get("deals_per_year", id),
+    category: (id?: string | null) => get("category", id),
+    problem: (id?: string | null) => get("problem", id),
+    language: (id?: string | null) => get("language", id),
   };
 }
 

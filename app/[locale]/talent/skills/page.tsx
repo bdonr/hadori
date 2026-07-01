@@ -294,7 +294,7 @@ export default function TalentSkillsPage() {
                       : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
                   }`}
                 >
-                  {l.label}
+                  {tax.language(l.id)}
                 </button>
               ))}
             </div>
