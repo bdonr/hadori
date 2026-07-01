@@ -87,3 +87,5 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ received: true });
 }
+
+// webhook secret rotated to v2 202607010241
