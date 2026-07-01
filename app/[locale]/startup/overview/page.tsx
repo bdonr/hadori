@@ -25,6 +25,7 @@ export default function StartupOverviewPage() {
   const { locale } = useParams<{ locale: string }>();
   const [view, setView] = useState<View>("internal");
   const [loading, setLoading] = useState(true);
+  const [uid, setUid] = useState<string | null>(null);
   const [startup, setStartup] = useState<StartupDoc | null>(null);
   const [tier, setTier] = useState("free");
   const [hasDeck, setHasDeck] = useState(false);
@@ -33,6 +34,7 @@ export default function StartupOverviewPage() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) { setLoading(false); return; }
+      setUid(user.uid);
       // Read each doc independently — one denied/failed read must never blank
       // out the others (a missing rule on one collection used to hide all).
       const safe = async <R,>(fn: () => Promise<R>): Promise<R | null> => {
@@ -92,6 +94,12 @@ export default function StartupOverviewPage() {
           </button>
         </div>
         <p className="mt-2 text-xs text-zinc-400">{external ? t("external_hint") : t("internal_hint")}</p>
+        {external && uid && (
+          <Link href={`/${locale}/company/${uid}`} target="_blank"
+            className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+            {t("view_public_page")}
+          </Link>
+        )}
 
         {/* Profile card */}
         <section className={`mt-5 rounded-2xl border bg-white p-6 shadow-sm ${external ? "border-emerald-200" : "border-zinc-200"}`}>

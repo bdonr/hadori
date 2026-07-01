@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · Remote",
       "saved": "✓ Enregistré !",
       "save_profile": "Enregistrer le profil",
-      "min_one_skill": "Sélectionne au moins une compétence"
+      "min_one_skill": "Sélectionne au moins une compétence",
+      "public_toggle": "Public",
+      "private_toggle": "Privé",
+      "visibility_hint": "Choisissez si cette section est visible sur votre profil public. Votre nom reste toujours public."
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ Enregistré — également visible dans votre aperçu.",
       "ai_error": "Erreur de l'IA. Veuillez réessayer.",
       "paid_only": "Le business plan par IA est disponible à partir du plan Startup.",
-      "to_overview": "Vers l'aperçu →"
+      "to_overview": "Vers l'aperçu →",
+      "show_external_public_title": "Teaser visible publiquement",
+      "show_external_private_title": "Teaser privé",
+      "show_external_public_desc": "Les investisseurs et les visiteurs peuvent voir l'aperçu de votre business plan sur votre page publique.",
+      "show_external_private_desc": "Vous seul pouvez voir cet aperçu. Activez-le pour l'afficher publiquement."
     },
     "profile": {
       "save_error": "Erreur lors de l'enregistrement",
@@ -1313,7 +1320,8 @@
       "plan_internal": "Le vrai plan avec tous les détails.",
       "ai_title": "IA : Business plan → Kanban",
       "ai_desc": "Bientôt : l'IA transforme ton business plan en tâches, les regroupe en sprints le long de la timeline et suggère des rôles et des équipes.",
-      "coming_soon": "Bientôt disponible"
+      "coming_soon": "Bientôt disponible",
+      "view_public_page": "Voir la page publique →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "Des parts de votre entreprise. Celui qui reçoit de l'equity en possède un morceau.",
     "equity_example": "Un cofondateur reçoit 10 % d'equity au lieu d'un salaire.",
     "equity_impact": "Céder de l'equity apporte de l'aide/de l'argent mais réduit votre propre part."
+  },
+  "company": {
+    "untitled": "Startup sans nom",
+    "founded_by": "Fondée par",
+    "about_heading": "À propos de la startup",
+    "plan_teaser_label": "Aperçu du business plan",
+    "plan_whatWeDo": "Ce que nous faisons",
+    "plan_forWhom": "Pour qui",
+    "plan_teaser": "Teaser",
+    "pitchdeck_heading": "Pitch Deck",
+    "empty_title": "Rien de public pour le moment",
+    "empty_desc": "Cette startup n'a encore rien partagé publiquement.",
+    "explore_cta": "Découvrir d'autres startups"
   }
 }

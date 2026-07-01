@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · Remote",
       "saved": "✓ Saved!",
       "save_profile": "Save profile",
-      "min_one_skill": "Pick at least one skill"
+      "min_one_skill": "Pick at least one skill",
+      "public_toggle": "Public",
+      "private_toggle": "Private",
+      "visibility_hint": "Control whether this section is visible on your public profile. Your name is always public."
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ Saved — also visible in your overview.",
       "ai_error": "AI error. Please try again.",
       "paid_only": "The AI business plan is available from the Startup plan up.",
-      "to_overview": "To overview →"
+      "to_overview": "To overview →",
+      "show_external_public_title": "Teaser publicly visible",
+      "show_external_private_title": "Teaser private",
+      "show_external_public_desc": "Investors and visitors can see your business plan preview on your public page.",
+      "show_external_private_desc": "Only you can see this preview. Enable it to show it publicly."
     },
     "profile": {
       "save_error": "Error saving",
@@ -1313,7 +1320,8 @@
       "plan_internal": "The real plan with all the details.",
       "ai_title": "AI: Business plan → Kanban",
       "ai_desc": "Soon: AI turns your business plan into tasks, groups them into sprints along the timeline, and suggests roles & teams.",
-      "coming_soon": "Coming soon"
+      "coming_soon": "Coming soon",
+      "view_public_page": "View public page →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "Shares in your company. Whoever gets equity owns a piece of it.",
     "equity_example": "A co-founder gets 10% equity instead of salary.",
     "equity_impact": "Giving equity brings help/money but reduces your own share."
+  },
+  "company": {
+    "untitled": "Untitled startup",
+    "founded_by": "Founded by",
+    "about_heading": "About the startup",
+    "plan_teaser_label": "Business plan preview",
+    "plan_whatWeDo": "What we do",
+    "plan_forWhom": "For whom",
+    "plan_teaser": "Teaser",
+    "pitchdeck_heading": "Pitch deck",
+    "empty_title": "Nothing shared publicly yet",
+    "empty_desc": "This startup hasnt shared anything public yet.",
+    "explore_cta": "Explore other startups"
   }
 }

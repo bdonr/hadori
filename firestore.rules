@@ -54,16 +54,18 @@ service cloud.firestore {
       }
     }
 
-    // Business plans (top-level, per user). Owner only for now; the external
-    // teaser version becomes shareable in a later phase.
+    // Business plans (top-level, per user). Owner always; other authenticated
+    // users may read ONLY when the founder released the external teaser.
     match /businessplans/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isOwner(uid) || (isAuth() && resource.data.showExternal == true);
+      allow write: if isOwner(uid);
     }
 
-    // Pitch decks (top-level, per user). Owner reads/writes; the deck becomes
-    // shareable to investors in a later phase.
+    // Pitch decks (top-level, per user). Owner always; other authenticated
+    // users may read ONLY when the founder marked the deck public.
     match /pitchdecks/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isOwner(uid) || (isAuth() && resource.data.isPublic == true);
+      allow write: if isOwner(uid);
     }
 
     // Projects: creator-owned. Anyone authenticated can browse; only owner mutates.

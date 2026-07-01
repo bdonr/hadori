@@ -20,6 +20,24 @@ const EXPERIENCE_LEVELS = [
   { id: "expert", labelKey: "exp_expert", descKey: "exp_expert_desc" },
 ];
 
+type PublicFields = {
+  skills: boolean;
+  bio: boolean;
+  experience: boolean;
+  availability: boolean;
+  regions: boolean;
+  languages: boolean;
+};
+
+const DEFAULT_PUBLIC_FIELDS: PublicFields = {
+  skills: true,
+  bio: true,
+  experience: false,
+  availability: false,
+  regions: false,
+  languages: false,
+};
+
 const AVAILABILITY = [
   { id: "immediately", labelKey: "avail_immediately" },
   { id: "part_time", labelKey: "avail_part_time" },
@@ -41,6 +59,7 @@ export default function TalentSkillsPage() {
   const [regions, setRegions] = useState<string[]>(["worldwide"]);
   const [languages, setLanguages] = useState<string[]>(["de"]);
   const [uid, setUid] = useState<string | null>(null);
+  const [publicFields, setPublicFields] = useState<PublicFields>(DEFAULT_PUBLIC_FIELDS);
 
   // Load existing profile from Firestore
   useEffect(() => {
@@ -58,6 +77,17 @@ export default function TalentSkillsPage() {
           if (Array.isArray(d.languages)) setLanguages(d.languages as string[]);
           if (typeof d.remote === "boolean") setRemote(d.remote);
           if (typeof d.experience === "string") setExperience(d.experience);
+          if (d.publicFields && typeof d.publicFields === "object") {
+            const pf = d.publicFields as Partial<PublicFields>;
+            setPublicFields({
+              skills: typeof pf.skills === "boolean" ? pf.skills : DEFAULT_PUBLIC_FIELDS.skills,
+              bio: typeof pf.bio === "boolean" ? pf.bio : DEFAULT_PUBLIC_FIELDS.bio,
+              experience: typeof pf.experience === "boolean" ? pf.experience : DEFAULT_PUBLIC_FIELDS.experience,
+              availability: typeof pf.availability === "boolean" ? pf.availability : DEFAULT_PUBLIC_FIELDS.availability,
+              regions: typeof pf.regions === "boolean" ? pf.regions : DEFAULT_PUBLIC_FIELDS.regions,
+              languages: typeof pf.languages === "boolean" ? pf.languages : DEFAULT_PUBLIC_FIELDS.languages,
+            });
+          }
         }
       } catch {
         // Firebase not configured — ignore, use local state
@@ -77,6 +107,30 @@ export default function TalentSkillsPage() {
     );
   }
 
+  function togglePublic(field: keyof PublicFields) {
+    setPublicFields(prev => ({ ...prev, [field]: !prev[field] }));
+  }
+
+  function VisibilityToggle({ field }: { field: keyof PublicFields }) {
+    const isPublic = publicFields[field];
+    return (
+      <button
+        type="button"
+        onClick={() => togglePublic(field)}
+        aria-pressed={isPublic}
+        title={isPublic ? t("visibility_hint") : t("visibility_hint")}
+        className={`flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
+          isPublic
+            ? "border-green-200 bg-green-50 text-green-700"
+            : "border-zinc-200 bg-zinc-50 text-zinc-500"
+        }`}
+      >
+        <span>{isPublic ? "🌍" : "🔒"}</span>
+        <span>{isPublic ? t("public_toggle") : t("private_toggle")}</span>
+      </button>
+    );
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (uid) {
@@ -89,6 +143,7 @@ export default function TalentSkillsPage() {
           remote,
           regions,
           languages,
+          publicFields,
           updated_at: serverTimestamp(),
         }, { merge: true });
       } catch {
@@ -110,7 +165,10 @@ export default function TalentSkillsPage() {
 
           {/* Intro */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-1 text-base font-bold text-zinc-900">{t("who_title")}</h2>
+            <div className="mb-1 flex items-start justify-between gap-3">
+              <h2 className="text-base font-bold text-zinc-900">{t("who_title")}</h2>
+              <VisibilityToggle field="bio" />
+            </div>
             <p className="mb-4 text-sm text-zinc-500">{t("who_hint")}</p>
             <textarea
               rows={3}
@@ -123,6 +181,9 @@ export default function TalentSkillsPage() {
 
           {/* Skills */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
+            <div className="mb-2 flex justify-end">
+              <VisibilityToggle field="skills" />
+            </div>
             <SkillPicker
               label={t("skills_label")}
               selected={skills}
@@ -134,7 +195,10 @@ export default function TalentSkillsPage() {
           {/* Experience + Availability */}
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <p className="mb-3 text-sm font-semibold text-zinc-800">{t("experience_title")}</p>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-sm font-semibold text-zinc-800">{t("experience_title")}</p>
+                <VisibilityToggle field="experience" />
+              </div>
               <div className="flex flex-col gap-2">
                 {EXPERIENCE_LEVELS.map(l => (
                   <button
@@ -154,7 +218,10 @@ export default function TalentSkillsPage() {
             </div>
 
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <p className="mb-3 text-sm font-semibold text-zinc-800">{t("availability_title")}</p>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-sm font-semibold text-zinc-800">{t("availability_title")}</p>
+                <VisibilityToggle field="availability" />
+              </div>
               <div className="flex flex-col gap-2">
                 {AVAILABILITY.map(a => (
                   <button
@@ -185,7 +252,10 @@ export default function TalentSkillsPage() {
 
           {/* Region & Language */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-1 text-base font-bold text-zinc-900">{t("where_title")}</h2>
+            <div className="mb-1 flex items-start justify-between gap-3">
+              <h2 className="text-base font-bold text-zinc-900">{t("where_title")}</h2>
+              <VisibilityToggle field="regions" />
+            </div>
             <p className="mb-4 text-sm text-zinc-500">{t("where_hint")}</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {REGIONS.map(r => (
@@ -206,7 +276,10 @@ export default function TalentSkillsPage() {
               ))}
             </div>
 
-            <h2 className="mb-1 text-sm font-bold text-zinc-900">{t("languages_title")}</h2>
+            <div className="mb-1 flex items-center justify-between gap-3">
+              <h2 className="text-sm font-bold text-zinc-900">{t("languages_title")}</h2>
+              <VisibilityToggle field="languages" />
+            </div>
             <p className="mb-3 text-sm text-zinc-500">{t("languages_hint")}</p>
             <div className="flex flex-wrap gap-2">
               {LANGUAGES.map(l => (

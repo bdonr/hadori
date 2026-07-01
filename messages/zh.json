@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · 远程",
       "saved": "✓ 已保存！",
       "save_profile": "保存档案",
-      "min_one_skill": "请至少选择一项技能"
+      "min_one_skill": "请至少选择一项技能",
+      "public_toggle": "公开",
+      "private_toggle": "私密",
+      "visibility_hint": "控制此板块是否显示在你的公开资料上。你的姓名始终公开。"
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ 已保存 — 也会显示在你的概览中。",
       "ai_error": "AI 出错。请重试。",
       "paid_only": "AI 商业计划从 Startup 套餐起提供。",
-      "to_overview": "前往概览 →"
+      "to_overview": "前往概览 →",
+      "show_external_public_title": "预告公开可见",
+      "show_external_private_title": "预告私密",
+      "show_external_public_desc": "投资者和访客可以在你的公开页面上看到你的商业计划预览。",
+      "show_external_private_desc": "只有你能看到此预览。启用后即可公开显示。"
     },
     "profile": {
       "save_error": "保存时出错",
@@ -1313,7 +1320,8 @@
       "plan_internal": "包含所有细节的真正计划。",
       "ai_title": "AI：商业计划 → Kanban",
       "ai_desc": "即将推出：AI 将你的商业计划转化为任务，沿时间线归入各个 Sprint，并推荐角色与团队。",
-      "coming_soon": "即将推出"
+      "coming_soon": "即将推出",
+      "view_public_page": "查看公开页面 →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "你公司的股份。谁拿到股份，谁就拥有其中一部分。",
     "equity_example": "一位联合创始人拿10%股份代替薪水。",
     "equity_impact": "让出股份能换来帮助/资金，但会减少你自己的份额。"
+  },
+  "company": {
+    "untitled": "未命名的初创公司",
+    "founded_by": "创始人",
+    "about_heading": "关于该初创公司",
+    "plan_teaser_label": "商业计划预览",
+    "plan_whatWeDo": "我们做什么",
+    "plan_forWhom": "面向谁",
+    "plan_teaser": "预告",
+    "pitchdeck_heading": "路演材料",
+    "empty_title": "尚未公开分享任何内容",
+    "empty_desc": "这家初创公司还没有分享任何公开内容。",
+    "explore_cta": "探索其他初创公司"
   }
 }

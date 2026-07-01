@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · リモート",
       "saved": "✓ 保存しました！",
       "save_profile": "プロフィールを保存",
-      "min_one_skill": "少なくとも1つのスキルを選択してください"
+      "min_one_skill": "少なくとも1つのスキルを選択してください",
+      "public_toggle": "公開",
+      "private_toggle": "非公開",
+      "visibility_hint": "このセクションを公開プロフィールに表示するかどうかを設定します。名前は常に公開されます。"
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ 保存しました — 概要にも表示されます。",
       "ai_error": "AIエラーです。もう一度お試しください。",
       "paid_only": "AIビジネスプランはStartupプラン以上でご利用いただけます。",
-      "to_overview": "概要へ →"
+      "to_overview": "概要へ →",
+      "show_external_public_title": "ティーザーを一般公開",
+      "show_external_private_title": "ティーザーを非公開",
+      "show_external_public_desc": "投資家や訪問者があなたの公開ページで事業計画のプレビューを見られます。",
+      "show_external_private_desc": "このプレビューはあなただけが見られます。公開するには有効にしてください。"
     },
     "profile": {
       "save_error": "保存中にエラーが発生しました",
@@ -1313,7 +1320,8 @@
       "plan_internal": "すべての詳細を含む本物のプラン。",
       "ai_title": "AI: 事業計画 → カンバン",
       "ai_desc": "近日公開: AIがあなたの事業計画をタスクに変換し、タイムラインに沿ってスプリントにまとめ、役割やチームを提案します。",
-      "coming_soon": "近日公開"
+      "coming_soon": "近日公開",
+      "view_public_page": "公開ページを見る →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "あなたの会社の持ち分。エクイティを受け取る人は、その一部を所有します。",
     "equity_example": "共同創業者が給料の代わりに10％のエクイティを受け取る。",
     "equity_impact": "エクイティを渡すと助けやお金が得られますが、自分の取り分は減ります。"
+  },
+  "company": {
+    "untitled": "名称未設定のスタートアップ",
+    "founded_by": "創業者",
+    "about_heading": "スタートアップについて",
+    "plan_teaser_label": "事業計画のプレビュー",
+    "plan_whatWeDo": "私たちの事業内容",
+    "plan_forWhom": "対象となる人",
+    "plan_teaser": "ティーザー",
+    "pitchdeck_heading": "ピッチデック",
+    "empty_title": "まだ公開されているものはありません",
+    "empty_desc": "このスタートアップはまだ公開コンテンツを共有していません。",
+    "explore_cta": "他のスタートアップを見る"
   }
 }

@@ -41,7 +41,17 @@ interface TalentData {
   regions?: string[];
   languages?: string[];
   portfolio_url?: string;
+  publicFields?: Partial<PublicFields>;
 }
+
+type PublicFields = {
+  skills: boolean;
+  bio: boolean;
+  experience: boolean;
+  availability: boolean;
+  regions: boolean;
+  languages: boolean;
+};
 
 interface PortfolioItem {
   id: string;
@@ -104,6 +114,16 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
 
   const isOwnProfile = id === "me" || (authUid !== null && id === authUid);
 
+  // Per-field visibility. Owner sees everything. A totally-absent publicFields
+  // object means a legacy profile → show skills+bio only. Otherwise a field is
+  // shown only when explicitly marked public.
+  const hasPublicFields = !!talent && talent.publicFields != null;
+  function canShow(field: keyof PublicFields): boolean {
+    if (isOwnProfile) return true;
+    if (!hasPublicFields) return field === "skills" || field === "bio";
+    return talent?.publicFields?.[field] === true;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
@@ -135,15 +155,16 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   }
 
   const displayName = profile.full_name || t("unknown");
-  const bio = talent?.bio ?? "";
-  const skills = talent?.skills ?? [];
-  const avail = talent?.availability
+  const bio = canShow("bio") ? (talent?.bio ?? "") : "";
+  const skills = canShow("skills") ? (talent?.skills ?? []) : [];
+  const showExperience = canShow("experience");
+  const avail = canShow("availability") && talent?.availability
     ? AVAIL_META[talent.availability as keyof typeof AVAIL_META]
     : null;
-  const regions = (talent?.regions ?? [])
+  const regions = (canShow("regions") ? (talent?.regions ?? []) : [])
     .map(id => REGIONS.find(r => r.id === id))
     .filter(Boolean) as typeof REGIONS;
-  const languages = (talent?.languages ?? [])
+  const languages = (canShow("languages") ? (talent?.languages ?? []) : [])
     .map(id => LANGUAGES.find(l => l.id === id))
     .filter(Boolean) as typeof LANGUAGES;
 
@@ -184,7 +205,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                     🌍 {t("remote")}
                   </span>
                 )}
-                {talent?.experience && EXPERIENCE_LABEL[talent.experience] && (
+                {showExperience && talent?.experience && EXPERIENCE_LABEL[talent.experience] && (
                   <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-600">
                     {EXPERIENCE_LABEL[talent.experience]}
                   </span>
@@ -333,7 +354,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                       <dd className="font-medium text-zinc-800">{avail.label}</dd>
                     </div>
                   )}
-                  {talent.experience && EXPERIENCE_LABEL[talent.experience] && (
+                  {showExperience && talent.experience && EXPERIENCE_LABEL[talent.experience] && (
                     <div className="flex items-center justify-between">
                       <dt className="text-zinc-500">{t("experience")}</dt>
                       <dd className="font-medium text-zinc-800">{EXPERIENCE_LABEL[talent.experience]}</dd>

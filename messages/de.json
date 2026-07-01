@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · Remote",
       "saved": "✓ Gespeichert!",
       "save_profile": "Profil speichern",
-      "min_one_skill": "Wähl mindestens einen Skill aus"
+      "min_one_skill": "Wähl mindestens einen Skill aus",
+      "public_toggle": "Öffentlich",
+      "private_toggle": "Privat",
+      "visibility_hint": "Steuere, ob dieser Bereich in deinem öffentlichen Profil sichtbar ist. Dein Name ist immer öffentlich."
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ Gespeichert — auch in deiner Übersicht sichtbar.",
       "ai_error": "KI-Fehler. Bitte erneut versuchen.",
       "paid_only": "Der KI-Businessplan ist ab dem Startup-Plan verfügbar.",
-      "to_overview": "Zur Übersicht →"
+      "to_overview": "Zur Übersicht →",
+      "show_external_public_title": "Teaser öffentlich sichtbar",
+      "show_external_private_title": "Teaser privat",
+      "show_external_public_desc": "Investoren und Besucher sehen deine Businessplan-Vorschau auf deiner öffentlichen Seite.",
+      "show_external_private_desc": "Nur du siehst diese Vorschau. Aktiviere sie, um sie öffentlich zu zeigen."
     },
     "profile": {
       "save_error": "Fehler beim Speichern",
@@ -1313,7 +1320,8 @@
       "plan_internal": "Der echte Plan mit allen Details.",
       "ai_title": "KI: Businessplan → Kanban",
       "ai_desc": "Bald: Die KI macht aus deinem Businessplan Tasks, ordnet sie an der Timeline in Sprints und schlägt Rollen & Teams vor.",
-      "coming_soon": "Kommt bald"
+      "coming_soon": "Kommt bald",
+      "view_public_page": "Öffentliche Seite ansehen →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "Anteile an deinem Unternehmen. Wer Equity bekommt, gehört ein Stück mit.",
     "equity_example": "Ein Mitgründer bekommt 10 % Equity statt Gehalt.",
     "equity_impact": "Equity abgeben bringt Hilfe/Geld, verringert aber deinen eigenen Anteil."
+  },
+  "company": {
+    "untitled": "Unbenanntes Startup",
+    "founded_by": "Gegründet von",
+    "about_heading": "Über das Startup",
+    "plan_teaser_label": "Businessplan-Vorschau",
+    "plan_whatWeDo": "Was wir tun",
+    "plan_forWhom": "Für wen",
+    "plan_teaser": "Teaser",
+    "pitchdeck_heading": "Pitch Deck",
+    "empty_title": "Noch nichts öffentlich geteilt",
+    "empty_desc": "Dieses Startup hat noch keine öffentlichen Inhalte freigegeben.",
+    "explore_cta": "Andere Startups entdecken"
   }
 }

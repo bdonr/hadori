@@ -505,7 +505,10 @@
       "preview_remote_suffix": " · Remote",
       "saved": "✓ 저장되었습니다!",
       "save_profile": "프로필 저장",
-      "min_one_skill": "최소 하나의 스킬을 선택하세요"
+      "min_one_skill": "최소 하나의 스킬을 선택하세요",
+      "public_toggle": "공개",
+      "private_toggle": "비공개",
+      "visibility_hint": "이 섹션을 공개 프로필에 표시할지 설정합니다. 이름은 항상 공개됩니다."
     }
   },
   "misc_pages": {
@@ -1162,7 +1165,11 @@
       "saved_note": "✓ 저장됨 — 개요에서도 확인할 수 있습니다.",
       "ai_error": "AI 오류입니다. 다시 시도해 주세요.",
       "paid_only": "AI 비즈니스 플랜은 Startup 플랜부터 이용할 수 있습니다.",
-      "to_overview": "개요로 →"
+      "to_overview": "개요로 →",
+      "show_external_public_title": "티저 공개",
+      "show_external_private_title": "티저 비공개",
+      "show_external_public_desc": "투자자와 방문자가 공개 페이지에서 사업계획서 미리보기를 볼 수 있습니다.",
+      "show_external_private_desc": "이 미리보기는 나만 볼 수 있습니다. 공개하려면 켜세요."
     },
     "profile": {
       "save_error": "저장 중 오류가 발생했습니다",
@@ -1313,7 +1320,8 @@
       "plan_internal": "모든 세부 사항이 담긴 진짜 계획.",
       "ai_title": "AI: 사업 계획 → Kanban",
       "ai_desc": "곧 출시: AI가 당신의 사업 계획을 작업으로 바꾸고, 타임라인을 따라 스프린트로 묶으며, 역할과 팀을 제안합니다.",
-      "coming_soon": "곧 출시"
+      "coming_soon": "곧 출시",
+      "view_public_page": "공개 페이지 보기 →"
     }
   },
   "glossary": {
@@ -1367,5 +1375,18 @@
     "equity_simple": "당신 회사의 지분. 에쿼티를 받는 사람은 그 일부를 소유합니다.",
     "equity_example": "공동 창업자가 급여 대신 10% 에쿼티를 받습니다.",
     "equity_impact": "에쿼티를 주면 도움/돈을 얻지만 당신 자신의 몫은 줄어듭니다."
+  },
+  "company": {
+    "untitled": "이름 없는 스타트업",
+    "founded_by": "창업자",
+    "about_heading": "스타트업 소개",
+    "plan_teaser_label": "사업계획서 미리보기",
+    "plan_whatWeDo": "우리가 하는 일",
+    "plan_forWhom": "대상 고객",
+    "plan_teaser": "티저",
+    "pitchdeck_heading": "피치덱",
+    "empty_title": "아직 공개된 내용이 없습니다",
+    "empty_desc": "이 스타트업은 아직 공개 콘텐츠를 공유하지 않았습니다.",
+    "explore_cta": "다른 스타트업 둘러보기"
   }
 }

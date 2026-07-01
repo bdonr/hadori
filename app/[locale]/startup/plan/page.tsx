@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
@@ -78,9 +78,12 @@ export default function PlanPage() {
   const [error, setError] = useState<string | null>(null);
   const [external, setExternal] = useState<External | null>(null);
   const [internal, setInternal] = useState<Internal | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
+  const [showExternal, setShowExternal] = useState(false);
 
   useEffect(() => onAuthStateChanged(auth, async (u) => {
     if (!u) { setTier("free"); return; }
+    setUid(u.uid);
     try {
       const [s, bp] = await Promise.all([
         getDoc(doc(db, "profiles", u.uid)),
@@ -89,7 +92,8 @@ export default function PlanPage() {
       setTier((s.data()?.plan_tier as string) ?? "free");
       // Load a previously generated plan so it is never "lost" on reload.
       if (bp.exists()) {
-        const d = bp.data() as { external?: External; internal?: Internal };
+        const d = bp.data() as { external?: External; internal?: Internal; showExternal?: boolean };
+        if (typeof d.showExternal === "boolean") setShowExternal(d.showExternal);
         if (d.external && d.internal) {
           setExternal(d.external);
           setInternal(d.internal);
@@ -138,6 +142,15 @@ export default function PlanPage() {
       if (!res.ok || !data.internal) { setError(t("ai_error")); return; }
       setExternal(data.external); setInternal(data.internal); setStep("result");
     } catch { setError(t("ai_error")); } finally { setBusy(false); }
+  }
+
+  async function toggleShowExternal() {
+    const next = !showExternal;
+    setShowExternal(next);
+    if (!uid) return;
+    try {
+      await setDoc(doc(db, "businessplans", uid), { showExternal: next, updated_at: serverTimestamp() }, { merge: true });
+    } catch { setShowExternal(!next); }
   }
 
   return (
@@ -223,6 +236,23 @@ export default function PlanPage() {
             <section className="rounded-2xl border-2 border-emerald-200 bg-white p-6 shadow-sm">
               <h2 className="text-lg font-bold text-zinc-900">{t("version_external_title")}</h2>
               <p className="mb-4 text-sm text-emerald-700">{t("version_external_desc")}</p>
+
+              {/* Publish-teaser toggle — controls the public company page */}
+              <div className={`mb-4 flex items-start justify-between gap-4 rounded-xl border p-4 ${showExternal ? "border-emerald-200 bg-emerald-50" : "border-zinc-200 bg-zinc-50"}`}>
+                <div>
+                  <p className="text-sm font-semibold text-zinc-900">
+                    {showExternal ? `🌍 ${t("show_external_public_title")}` : `🔒 ${t("show_external_private_title")}`}
+                  </p>
+                  <p className="mt-0.5 text-xs text-zinc-500">
+                    {showExternal ? t("show_external_public_desc") : t("show_external_private_desc")}
+                  </p>
+                </div>
+                <button type="button" aria-label="toggle-plan-public" onClick={toggleShowExternal}
+                  className={`relative mt-0.5 h-7 w-12 shrink-0 rounded-full transition-colors ${showExternal ? "bg-emerald-500" : "bg-zinc-300"}`}>
+                  <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${showExternal ? "translate-x-6" : "translate-x-1"}`} />
+                </button>
+              </div>
+
               <h3 className="text-xl font-extrabold text-zinc-900">{external.headline}</h3>
               <Field label={t("ext_whatWeDo")} value={external.whatWeDo} />
               <Field label={t("ext_forWhom")} value={external.forWhom} />
