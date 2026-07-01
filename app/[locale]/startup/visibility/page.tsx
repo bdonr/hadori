@@ -66,6 +66,12 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
               </Button>
             )}
           </div>
+          {isPro && (
+            <Link href={`/${locale}/startup/discover`}
+              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+              {t("view_matches")}
+            </Link>
+          )}
         </div>
 
         {/* What you get */}

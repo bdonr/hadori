@@ -118,7 +118,9 @@
     "discover_title": "发现投资人",
     "roles_title": "组建团队",
     "roles_add": "发布职位",
-    "roles_empty": "暂无职位"
+    "roles_empty": "暂无职位",
+    "card_overview": "总览",
+    "card_overview_desc": "个人资料、Pitch deck 和计划集中一处 — 内部视图与公开视图。"
   },
   "talent": {
     "dashboard_title": "嗨，{name} 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "投资人注册后将显示在此处。发送请求 → DADORI 审核匹配 → 双方同意 → 引荐。",
       "focus": "重点",
       "empty_title": "尚无注册的投资人",
-      "empty_desc": "投资人创建 DADORI 档案后将显示在此处。"
+      "empty_desc": "投资人创建 DADORI 档案后将显示在此处。",
+      "matches_count": "{n} 位匹配的投资人",
+      "match_score": "{n}% 匹配",
+      "reason_stage": "阶段契合",
+      "reason_region": "地区契合",
+      "reason_focus": "重点契合",
+      "check_label": "投资额度",
+      "view_profile": "查看档案"
     },
     "pitchdeck": {
       "slide_problem_title": "问题",
@@ -1144,7 +1153,45 @@
       "upsell_title": "由你决定——而非我们",
       "upsell_desc": "在 Pro 方案下，你可以随时开启或关闭可见度。不会自动列出——只在你主动表达意愿时才会。",
       "price_per_month": "每月 49 €",
-      "legal_note": "DADORI 仅撮合初创企业与投资人之间的联系。我们不参与交易，也不收取分成费用。在接受资金之前，请寻求专业法律咨询。"
+      "legal_note": "DADORI 仅撮合初创企业与投资人之间的联系。我们不参与交易，也不收取分成费用。在接受资金之前，请寻求专业法律咨询。",
+      "view_matches": "查看匹配的投资人 →"
+    },
+    "overview": {
+      "back": "仪表盘",
+      "title": "总览",
+      "subtitle": "一目了然 — 以及你对外展示的内容。",
+      "view_internal": "内部视图",
+      "view_external": "公开视图",
+      "external_hint": "这就是投资人和人才看到的你。",
+      "internal_hint": "只属于你的完整视图。",
+      "profile": "个人资料",
+      "complete": "已完成",
+      "incomplete": "未完成",
+      "edit": "编辑",
+      "not_created": "尚未创建",
+      "create_cta": "立即创建",
+      "team": "团队",
+      "funding": "融资",
+      "funding_hidden": "仅内部可见",
+      "stage": "阶段",
+      "funding_goal": "融资目标",
+      "seeking_investors": "正在寻找投资人",
+      "yes": "是",
+      "no": "否",
+      "funding_pro_only": "融资详情自 Startup up 起可用。",
+      "visible_note": "🟢 对投资人可见。",
+      "hidden_note": "⚪ 当前未公开展示。",
+      "pitchdeck": "Pitch deck",
+      "open": "打开",
+      "pitchdeck_external": "用于留下第一印象的投资人幻灯片。",
+      "pitchdeck_internal": "包含全部幻灯片的完整 deck。",
+      "businessplan": "商业计划",
+      "not_saved_yet": "未保存",
+      "plan_external": "一个简短的预览版。",
+      "plan_internal": "包含所有细节的真正计划。",
+      "ai_title": "AI：商业计划 → Kanban",
+      "ai_desc": "即将推出：AI 将你的商业计划转化为任务，沿时间线归入各个 Sprint，并推荐角色与团队。",
+      "coming_soon": "即将推出"
     }
   }
 }

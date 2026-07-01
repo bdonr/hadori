@@ -118,7 +118,9 @@
     "discover_title": "Discover investors",
     "roles_title": "Build your team",
     "roles_add": "Post a role",
-    "roles_empty": "No roles yet"
+    "roles_empty": "No roles yet",
+    "card_overview": "Overview",
+    "card_overview_desc": "Profile, pitch deck & plan in one place — internal and public view."
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "Investors will appear here as soon as they sign up. Send a request → DADORI checks the match → both sides agree → intro.",
       "focus": "Focus",
       "empty_title": "No investors registered yet",
-      "empty_desc": "Investors will appear here as soon as they create a DADORI profile."
+      "empty_desc": "Investors will appear here as soon as they create a DADORI profile.",
+      "matches_count": "{n} matching investors",
+      "match_score": "{n}% match",
+      "reason_stage": "Stage fits",
+      "reason_region": "Region fits",
+      "reason_focus": "Focus fits",
+      "check_label": "Check size",
+      "view_profile": "View profile"
     },
     "pitchdeck": {
       "slide_problem_title": "The problem",
@@ -1144,7 +1153,45 @@
       "upsell_title": "You decide — not us",
       "upsell_desc": "On the Pro plan you can turn visibility on and off anytime. No automatic listing — only when you're actively interested.",
       "price_per_month": "€49/month",
-      "legal_note": "DADORI solely facilitates connections between startups and investors. We are not involved in transactions and charge no participation fees. Get legal advice before accepting capital."
+      "legal_note": "DADORI solely facilitates connections between startups and investors. We are not involved in transactions and charge no participation fees. Get legal advice before accepting capital.",
+      "view_matches": "View matching investors →"
+    },
+    "overview": {
+      "back": "Dashboard",
+      "title": "Overview",
+      "subtitle": "Everything at a glance — and what you show to the outside.",
+      "view_internal": "Insight view",
+      "view_external": "Public view",
+      "external_hint": "This is how investors & talent see you.",
+      "internal_hint": "Your full picture — just for you.",
+      "profile": "Profile",
+      "complete": "Complete",
+      "incomplete": "Incomplete",
+      "edit": "Edit",
+      "not_created": "Not created yet",
+      "create_cta": "Create now",
+      "team": "Team",
+      "funding": "Funding",
+      "funding_hidden": "Internal only",
+      "stage": "Stage",
+      "funding_goal": "Funding goal",
+      "seeking_investors": "Seeking investors",
+      "yes": "Yes",
+      "no": "No",
+      "funding_pro_only": "Funding details are available from Startup up.",
+      "visible_note": "🟢 Visible to investors.",
+      "hidden_note": "⚪ Not publicly discoverable right now.",
+      "pitchdeck": "Pitch deck",
+      "open": "Open",
+      "pitchdeck_external": "The investor slides for a first impression.",
+      "pitchdeck_internal": "Your full deck including all slides.",
+      "businessplan": "Business plan",
+      "not_saved_yet": "Not saved",
+      "plan_external": "A short teaser version.",
+      "plan_internal": "The real plan with all the details.",
+      "ai_title": "AI: Business plan → Kanban",
+      "ai_desc": "Soon: AI turns your business plan into tasks, groups them into sprints along the timeline, and suggests roles & teams.",
+      "coming_soon": "Coming soon"
     }
   }
 }

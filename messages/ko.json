@@ -118,7 +118,9 @@
     "discover_title": "투자자 발견하기",
     "roles_title": "팀 구성하기",
     "roles_add": "채용 공고 올리기",
-    "roles_empty": "아직 공고가 없습니다"
+    "roles_empty": "아직 공고가 없습니다",
+    "card_overview": "개요",
+    "card_overview_desc": "프로필, 피치덱, 플랜을 한곳에 — 내부 뷰와 공개 뷰."
   },
   "talent": {
     "dashboard_title": "안녕하세요, {name} 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "투자자가 등록하면 여기에 나타납니다. 요청 전송 → DADORI가 매칭 검토 → 양쪽이 동의 → 소개.",
       "focus": "포커스",
       "empty_title": "아직 등록된 투자자가 없습니다",
-      "empty_desc": "투자자가 DADORI 프로필을 만들면 여기에 표시됩니다."
+      "empty_desc": "투자자가 DADORI 프로필을 만들면 여기에 표시됩니다.",
+      "matches_count": "{n}명의 매칭 투자자",
+      "match_score": "{n}% 매칭",
+      "reason_stage": "단계 적합",
+      "reason_region": "지역 적합",
+      "reason_focus": "포커스 적합",
+      "check_label": "투자 규모",
+      "view_profile": "프로필 보기"
     },
     "pitchdeck": {
       "slide_problem_title": "문제",
@@ -1144,7 +1153,45 @@
       "upsell_title": "당신이 결정합니다 — 우리가 아니라",
       "upsell_desc": "Pro 플랜에서는 언제든 노출을 켜고 끌 수 있습니다. 자동 등록 없음 — 당신이 적극적으로 관심이 있을 때만.",
       "price_per_month": "월 49€",
-      "legal_note": "DADORI는 오직 스타트업과 투자자 간의 연결만 중개합니다. 우리는 거래에 관여하지 않으며 참여 수수료를 받지 않습니다. 자본을 받기 전에 법률 자문을 구하세요."
+      "legal_note": "DADORI는 오직 스타트업과 투자자 간의 연결만 중개합니다. 우리는 거래에 관여하지 않으며 참여 수수료를 받지 않습니다. 자본을 받기 전에 법률 자문을 구하세요.",
+      "view_matches": "매칭 투자자 보기 →"
+    },
+    "overview": {
+      "back": "대시보드",
+      "title": "개요",
+      "subtitle": "한눈에 모두 — 그리고 외부에 보여주는 것까지.",
+      "view_internal": "내부 뷰",
+      "view_external": "공개 뷰",
+      "external_hint": "투자자와 인재에게는 이렇게 보여요.",
+      "internal_hint": "오직 당신만을 위한 전체 뷰.",
+      "profile": "프로필",
+      "complete": "완료",
+      "incomplete": "미완료",
+      "edit": "편집",
+      "not_created": "아직 만들지 않음",
+      "create_cta": "지금 만들기",
+      "team": "팀",
+      "funding": "펀딩",
+      "funding_hidden": "내부 전용",
+      "stage": "단계",
+      "funding_goal": "펀딩 목표",
+      "seeking_investors": "투자자를 찾는 중",
+      "yes": "예",
+      "no": "아니오",
+      "funding_pro_only": "펀딩 세부 정보는 Startup up부터 이용할 수 있어요.",
+      "visible_note": "🟢 투자자에게 표시됩니다.",
+      "hidden_note": "⚪ 현재 공개적으로 노출되지 않습니다.",
+      "pitchdeck": "피치덱",
+      "open": "열기",
+      "pitchdeck_external": "첫인상을 위한 투자자용 슬라이드.",
+      "pitchdeck_internal": "모든 슬라이드를 포함한 전체 덱.",
+      "businessplan": "사업 계획",
+      "not_saved_yet": "저장 안 됨",
+      "plan_external": "짧은 티저 버전.",
+      "plan_internal": "모든 세부 사항이 담긴 진짜 계획.",
+      "ai_title": "AI: 사업 계획 → Kanban",
+      "ai_desc": "곧 출시: AI가 당신의 사업 계획을 작업으로 바꾸고, 타임라인을 따라 스프린트로 묶으며, 역할과 팀을 제안합니다.",
+      "coming_soon": "곧 출시"
     }
   }
 }

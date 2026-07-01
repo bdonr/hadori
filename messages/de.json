@@ -118,7 +118,9 @@
     "discover_title": "Investoren entdecken",
     "roles_title": "Team aufbauen",
     "roles_add": "Stelle ausschreiben",
-    "roles_empty": "Noch keine Stellen"
+    "roles_empty": "Noch keine Stellen",
+    "card_overview": "Übersicht",
+    "card_overview_desc": "Profil, Pitchdeck & Plan an einem Ort — Innen- und Außenansicht."
   },
   "talent": {
     "dashboard_title": "Hey, {name} 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "Investoren werden hier erscheinen sobald sie sich registrieren. Anfrage senden → DADORI prüft den Match → beide Seiten stimmen zu → Intro.",
       "focus": "Fokus",
       "empty_title": "Noch keine Investoren registriert",
-      "empty_desc": "Investoren erscheinen hier sobald sie ein DADORI-Profil erstellen."
+      "empty_desc": "Investoren erscheinen hier sobald sie ein DADORI-Profil erstellen.",
+      "matches_count": "{n} passende Investoren",
+      "match_score": "{n}% Match",
+      "reason_stage": "Phase passt",
+      "reason_region": "Region passt",
+      "reason_focus": "Fokus passt",
+      "check_label": "Check-Size",
+      "view_profile": "Profil ansehen"
     },
     "pitchdeck": {
       "slide_problem_title": "Das Problem",
@@ -1144,7 +1153,45 @@
       "upsell_title": "Du entscheidest — nicht wir",
       "upsell_desc": "Im Pro-Plan kannst du die Sichtbarkeit jederzeit ein- und ausschalten. Kein automatisches Auflisten — nur wenn du aktiv Interesse hast.",
       "price_per_month": "49 €/Monat",
-      "legal_note": "DADORI vermittelt ausschließlich Kontakte zwischen Startups und Investoren. Wir sind nicht an Transaktionen beteiligt und erheben keine Beteiligungsgebühren. Hol dir rechtliche Beratung, bevor du Kapital annimmst."
+      "legal_note": "DADORI vermittelt ausschließlich Kontakte zwischen Startups und Investoren. Wir sind nicht an Transaktionen beteiligt und erheben keine Beteiligungsgebühren. Hol dir rechtliche Beratung, bevor du Kapital annimmst.",
+      "view_matches": "Passende Investoren ansehen →"
+    },
+    "overview": {
+      "back": "Dashboard",
+      "title": "Übersicht",
+      "subtitle": "Alles auf einen Blick — und was du nach außen zeigst.",
+      "view_internal": "Innenansicht",
+      "view_external": "Außenansicht",
+      "external_hint": "So sehen dich Investoren & Talente.",
+      "internal_hint": "Dein volles Bild — nur für dich.",
+      "profile": "Profil",
+      "complete": "Vollständig",
+      "incomplete": "Unvollständig",
+      "edit": "Bearbeiten",
+      "not_created": "Noch nicht erstellt",
+      "create_cta": "Jetzt erstellen",
+      "team": "Team",
+      "funding": "Funding",
+      "funding_hidden": "Nur intern sichtbar",
+      "stage": "Phase",
+      "funding_goal": "Funding-Ziel",
+      "seeking_investors": "Sucht Investoren",
+      "yes": "Ja",
+      "no": "Nein",
+      "funding_pro_only": "Funding-Details sind ab Startup verfügbar.",
+      "visible_note": "🟢 Für Investoren sichtbar.",
+      "hidden_note": "⚪ Aktuell nicht öffentlich auffindbar.",
+      "pitchdeck": "Pitchdeck",
+      "open": "Öffnen",
+      "pitchdeck_external": "Die Investor-Slides für den ersten Eindruck.",
+      "pitchdeck_internal": "Dein vollständiges Deck inkl. aller Slides.",
+      "businessplan": "Businessplan",
+      "not_saved_yet": "Nicht gespeichert",
+      "plan_external": "Kurzfassung als Vorgeschmack.",
+      "plan_internal": "Der echte Plan mit allen Details.",
+      "ai_title": "KI: Businessplan → Kanban",
+      "ai_desc": "Bald: Die KI macht aus deinem Businessplan Tasks, ordnet sie an der Timeline in Sprints und schlägt Rollen & Teams vor.",
+      "coming_soon": "Kommt bald"
     }
   }
 }

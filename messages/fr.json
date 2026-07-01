@@ -118,7 +118,9 @@
     "discover_title": "Découvrir des investisseurs",
     "roles_title": "Construire ton équipe",
     "roles_add": "Publier un poste",
-    "roles_empty": "Aucun poste pour l'instant"
+    "roles_empty": "Aucun poste pour l'instant",
+    "card_overview": "Vue d'ensemble",
+    "card_overview_desc": "Profil, pitch deck et plan au même endroit — vue interne et publique."
   },
   "talent": {
     "dashboard_title": "Salut, {name} 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "Les investisseurs apparaîtront ici dès qu'ils s'inscriront. Envoie une demande → DADORI vérifie le match → les deux parties acceptent → intro.",
       "focus": "Focus",
       "empty_title": "Aucun investisseur inscrit pour l'instant",
-      "empty_desc": "Les investisseurs apparaîtront ici dès qu'ils créeront un profil DADORI."
+      "empty_desc": "Les investisseurs apparaîtront ici dès qu'ils créeront un profil DADORI.",
+      "matches_count": "{n} investisseurs correspondants",
+      "match_score": "{n}% de correspondance",
+      "reason_stage": "Stade adapté",
+      "reason_region": "Région adaptée",
+      "reason_focus": "Focus adapté",
+      "check_label": "Ticket d'investissement",
+      "view_profile": "Voir le profil"
     },
     "pitchdeck": {
       "slide_problem_title": "Le problème",
@@ -1144,7 +1153,45 @@
       "upsell_title": "C'est toi qui décides — pas nous",
       "upsell_desc": "En plan Pro, tu peux activer et désactiver la visibilité à tout moment. Aucun référencement automatique — uniquement quand tu manifestes activement de l'intérêt.",
       "price_per_month": "49 €/mois",
-      "legal_note": "DADORI met exclusivement en relation des startups et des investisseurs. Nous ne participons pas aux transactions et ne prélevons aucune commission de participation. Fais-toi conseiller juridiquement avant d'accepter des capitaux."
+      "legal_note": "DADORI met exclusivement en relation des startups et des investisseurs. Nous ne participons pas aux transactions et ne prélevons aucune commission de participation. Fais-toi conseiller juridiquement avant d'accepter des capitaux.",
+      "view_matches": "Voir les investisseurs correspondants →"
+    },
+    "overview": {
+      "back": "Tableau de bord",
+      "title": "Vue d'ensemble",
+      "subtitle": "Tout d'un coup d'œil — et ce que tu montres à l'extérieur.",
+      "view_internal": "Vue interne",
+      "view_external": "Vue publique",
+      "external_hint": "Voilà comment les investisseurs et les talents te voient.",
+      "internal_hint": "Ta vue complète — rien que pour toi.",
+      "profile": "Profil",
+      "complete": "Complet",
+      "incomplete": "Incomplet",
+      "edit": "Modifier",
+      "not_created": "Pas encore créé",
+      "create_cta": "Créer maintenant",
+      "team": "Équipe",
+      "funding": "Financement",
+      "funding_hidden": "Interne uniquement",
+      "stage": "Stade",
+      "funding_goal": "Objectif de financement",
+      "seeking_investors": "En recherche d'investisseurs",
+      "yes": "Oui",
+      "no": "Non",
+      "funding_pro_only": "Les détails de financement sont disponibles à partir de Startup up.",
+      "visible_note": "🟢 Visible par les investisseurs.",
+      "hidden_note": "⚪ Actuellement non visible publiquement.",
+      "pitchdeck": "Pitch deck",
+      "open": "Ouvrir",
+      "pitchdeck_external": "Les slides investisseurs pour une première impression.",
+      "pitchdeck_internal": "Ton deck complet avec toutes les slides.",
+      "businessplan": "Business plan",
+      "not_saved_yet": "Non enregistré",
+      "plan_external": "Une courte version teaser.",
+      "plan_internal": "Le vrai plan avec tous les détails.",
+      "ai_title": "IA : Business plan → Kanban",
+      "ai_desc": "Bientôt : l'IA transforme ton business plan en tâches, les regroupe en sprints le long de la timeline et suggère des rôles et des équipes.",
+      "coming_soon": "Bientôt disponible"
     }
   }
 }

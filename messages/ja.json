@@ -118,7 +118,9 @@
     "discover_title": "投資家を見つける",
     "roles_title": "チームをつくる",
     "roles_add": "求人を掲載",
-    "roles_empty": "まだ求人がありません"
+    "roles_empty": "まだ求人がありません",
+    "card_overview": "概要",
+    "card_overview_desc": "プロフィール、ピッチデック、プランをひとつに — 社内ビューと公開ビュー。"
   },
   "talent": {
     "dashboard_title": "こんにちは、{name}さん 👋",
@@ -902,7 +904,14 @@
       "intro_desc": "投資家は登録するとここに表示されます。リクエストを送信 → DADORIがマッチを確認 → 双方が同意 → 紹介。",
       "focus": "フォーカス",
       "empty_title": "まだ登録された投資家はいません",
-      "empty_desc": "投資家がDADORIプロフィールを作成すると、ここに表示されます。"
+      "empty_desc": "投資家がDADORIプロフィールを作成すると、ここに表示されます。",
+      "matches_count": "{n}人のマッチする投資家",
+      "match_score": "{n}% マッチ",
+      "reason_stage": "ステージが合致",
+      "reason_region": "地域が合致",
+      "reason_focus": "フォーカスが合致",
+      "check_label": "チェックサイズ",
+      "view_profile": "プロフィールを見る"
     },
     "pitchdeck": {
       "slide_problem_title": "課題",
@@ -1144,7 +1153,45 @@
       "upsell_title": "決めるのはあなた — 私たちではありません",
       "upsell_desc": "Proプランでは可視性をいつでもオン・オフできます。自動的にリストされることはありません — あなたが積極的に興味を持ったときだけです。",
       "price_per_month": "月49€",
-      "legal_note": "DADORIはスタートアップと投資家の間の連絡を仲介するのみです。私たちは取引には関与せず、成功報酬も一切いただきません。資本を受け入れる前に、法的な助言を得てください。"
+      "legal_note": "DADORIはスタートアップと投資家の間の連絡を仲介するのみです。私たちは取引には関与せず、成功報酬も一切いただきません。資本を受け入れる前に、法的な助言を得てください。",
+      "view_matches": "マッチする投資家を見る →"
+    },
+    "overview": {
+      "back": "ダッシュボード",
+      "title": "概要",
+      "subtitle": "すべてをひと目で — そして外部に見せる内容も。",
+      "view_internal": "インサイトビュー",
+      "view_external": "公開ビュー",
+      "external_hint": "投資家や人材にはこう見えています。",
+      "internal_hint": "あなただけのフルビュー。",
+      "profile": "プロフィール",
+      "complete": "完了",
+      "incomplete": "未完了",
+      "edit": "編集",
+      "not_created": "まだ作成されていません",
+      "create_cta": "今すぐ作成",
+      "team": "チーム",
+      "funding": "資金調達",
+      "funding_hidden": "社内のみ",
+      "stage": "ステージ",
+      "funding_goal": "資金調達目標",
+      "seeking_investors": "投資家を募集中",
+      "yes": "はい",
+      "no": "いいえ",
+      "funding_pro_only": "資金調達の詳細は Startup up 以上でご利用いただけます。",
+      "visible_note": "🟢 投資家に表示されています。",
+      "hidden_note": "⚪ 現在は一般公開されていません。",
+      "pitchdeck": "ピッチデック",
+      "open": "開く",
+      "pitchdeck_external": "第一印象のための投資家向けスライド。",
+      "pitchdeck_internal": "すべてのスライドを含むフルデック。",
+      "businessplan": "事業計画",
+      "not_saved_yet": "未保存",
+      "plan_external": "短いティーザー版。",
+      "plan_internal": "すべての詳細を含む本物のプラン。",
+      "ai_title": "AI: 事業計画 → カンバン",
+      "ai_desc": "近日公開: AIがあなたの事業計画をタスクに変換し、タイムラインに沿ってスプリントにまとめ、役割やチームを提案します。",
+      "coming_soon": "近日公開"
     }
   }
 }

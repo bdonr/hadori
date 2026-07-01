@@ -34,6 +34,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
   }
 
   const cards = [
+    { href: `/${locale}/startup/overview`,   icon: "🗂️", title: t("card_overview"),   desc: t("card_overview_desc") },
     { href: `/${locale}/startup/plan`,       icon: "📄", title: t("card_plan"),       desc: t("card_plan_desc") },
     { href: `/${locale}/startup/pitchdeck`,  icon: "🎯", title: t("card_pitchdeck"),  desc: isPro ? t("card_pitchdeck_desc_pro") : t("card_pitchdeck_desc_free") },
     { href: `/${locale}/startup/visibility`, icon: isVisible ? "🟢" : "🔒", title: t("card_visibility"), desc: isVisible ? t("card_visibility_active") : isPro ? t("card_visibility_pro_off") : t("card_visibility_upgrade") },
