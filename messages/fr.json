@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR : {mrr}",
       "empty_title": "Aucune startup dans le deal flow pour le moment",
       "empty_desc": "Dès que des startups se rendront visibles auprès des investisseurs, elles apparaîtront ici.",
-      "watchlist_limit_hit": "Limite de la watchlist atteinte"
+      "watchlist_limit_hit": "Limite de la watchlist atteinte",
+      "featured_chip": "★ En vedette"
     },
     "portfolio": {
       "gate_title": "Tracker de portefeuille à partir de Pro (49 €/mois)",
@@ -992,7 +993,10 @@
       "reason_region": "Région adaptée",
       "reason_focus": "Focus adapté",
       "check_label": "Ticket d'investissement",
-      "view_profile": "Voir le profil"
+      "view_profile": "Voir le profil",
+      "gate_title": "Découvrir des investisseurs",
+      "gate_desc": "Découvrez et contactez des investisseurs pertinents avec un forfait Startup payant.",
+      "upgrade_cta": "Passer à un forfait supérieur"
     },
     "pitchdeck": {
       "slide_problem_title": "Le problème",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 Public",
       "private_status": "🔒 Privé",
       "view_public": "Vue publique →",
-      "release_in_editor": "Publier dans l’éditeur"
+      "release_in_editor": "Publier dans l’éditeur",
+      "verified_badge": "Vérifié par l’incubateur"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "Pitch Deck",
     "empty_title": "Rien de public pour le moment",
     "empty_desc": "Cette startup n'a encore rien partagé publiquement.",
-    "explore_cta": "Découvrir d'autres startups"
+    "explore_cta": "Découvrir d'autres startups",
+    "verified_badge": "Vérifié par l’incubateur"
   },
   "taxonomy": {
     "skills": {

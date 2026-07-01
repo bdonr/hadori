@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR: {mrr}",
       "empty_title": "ディールフローにまだスタートアップがありません",
       "empty_desc": "スタートアップが投資家に自身を公開すると、ここに表示されます。",
-      "watchlist_limit_hit": "ウォッチリストの上限に達しました"
+      "watchlist_limit_hit": "ウォッチリストの上限に達しました",
+      "featured_chip": "★ おすすめ"
     },
     "portfolio": {
       "gate_title": "Pro（月49€）以上でポートフォリオトラッカー",
@@ -992,7 +993,10 @@
       "reason_region": "地域が合致",
       "reason_focus": "フォーカスが合致",
       "check_label": "チェックサイズ",
-      "view_profile": "プロフィールを見る"
+      "view_profile": "プロフィールを見る",
+      "gate_title": "投資家を探す",
+      "gate_desc": "有料のスタートアッププランで、適した投資家を見つけてコンタクトできます。",
+      "upgrade_cta": "今すぐアップグレード"
     },
     "pitchdeck": {
       "slide_problem_title": "課題",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 公開",
       "private_status": "🔒 非公開",
       "view_public": "公開ビュー →",
-      "release_in_editor": "エディタで公開"
+      "release_in_editor": "エディタで公開",
+      "verified_badge": "インキュベーター認証済み"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "ピッチデック",
     "empty_title": "まだ公開されているものはありません",
     "empty_desc": "このスタートアップはまだ公開コンテンツを共有していません。",
-    "explore_cta": "他のスタートアップを見る"
+    "explore_cta": "他のスタートアップを見る",
+    "verified_badge": "インキュベーター認証済み"
   },
   "taxonomy": {
     "skills": {

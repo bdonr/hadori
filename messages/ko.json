@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR: {mrr}",
       "empty_title": "아직 딜 플로우에 스타트업이 없습니다",
       "empty_desc": "스타트업이 투자자에게 자신을 공개하면 여기에 표시됩니다.",
-      "watchlist_limit_hit": "워치리스트 한도에 도달했습니다"
+      "watchlist_limit_hit": "워치리스트 한도에 도달했습니다",
+      "featured_chip": "★ 추천"
     },
     "portfolio": {
       "gate_title": "포트폴리오 트래커는 Pro부터 (월 49€)",
@@ -992,7 +993,10 @@
       "reason_region": "지역 적합",
       "reason_focus": "포커스 적합",
       "check_label": "투자 규모",
-      "view_profile": "프로필 보기"
+      "view_profile": "프로필 보기",
+      "gate_title": "투자자 탐색",
+      "gate_desc": "유료 스타트업 플랜으로 적합한 투자자를 찾고 요청하세요.",
+      "upgrade_cta": "지금 업그레이드"
     },
     "pitchdeck": {
       "slide_problem_title": "문제",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 공개",
       "private_status": "🔒 비공개",
       "view_public": "공개 보기 →",
-      "release_in_editor": "편집기에서 공개"
+      "release_in_editor": "편집기에서 공개",
+      "verified_badge": "인큐베이터 인증됨"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "피치덱",
     "empty_title": "아직 공개된 내용이 없습니다",
     "empty_desc": "이 스타트업은 아직 공개 콘텐츠를 공유하지 않았습니다.",
-    "explore_cta": "다른 스타트업 둘러보기"
+    "explore_cta": "다른 스타트업 둘러보기",
+    "verified_badge": "인큐베이터 인증됨"
   },
   "taxonomy": {
     "skills": {

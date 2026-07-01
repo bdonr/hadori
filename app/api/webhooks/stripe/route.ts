@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { adminDb } from "@/lib/firebase/admin";
 import { tierForPriceId } from "@/lib/plan-map";
+import { isStartupProPlus } from "@/lib/entitlements";
 import Stripe from "stripe";
 
 // Find the user's profile by their Stripe customer id, falling back to a uid
@@ -35,6 +36,14 @@ async function setTier(customerId: string, tier: string, uid?: string, subscript
     ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
     updated_at: new Date().toISOString(),
   });
+  // Stamp PUBLIC flags derived from the tier so other users can see
+  // verified badge / featured placement (plan_tier itself is owner-only).
+  // The profile ref's id IS the uid.
+  const proPlus = isStartupProPlus(tier);
+  try {
+    await adminDb!.collection("publicProfiles").doc(ref.id).set({ verified: proPlus }, { merge: true });
+    await adminDb!.collection("startups").doc(ref.id).set({ featured: proPlus }, { merge: true });
+  } catch {}
 }
 
 export async function POST(req: NextRequest) {

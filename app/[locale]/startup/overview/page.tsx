@@ -8,7 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
-import { isStartupPaid } from "@/lib/entitlements";
+import { isStartupPaid, isStartupProPlus } from "@/lib/entitlements";
 import { REGIONS } from "@/lib/regions";
 import { useTaxonomy } from "@/lib/taxonomy";
 
@@ -130,7 +130,14 @@ export default function StartupOverviewPage() {
           ) : (
             <div className="mt-4 space-y-3">
               <div>
-                <p className="text-xl font-extrabold text-zinc-900">{startup.name}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-xl font-extrabold text-zinc-900">{startup.name}</p>
+                  {external && isStartupProPlus(tier) && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                      ✔ {t("verified_badge")}
+                    </span>
+                  )}
+                </div>
                 {startup.tagline && <p className="text-zinc-600">{startup.tagline}</p>}
               </div>
               <div className="flex flex-wrap gap-2 text-xs">

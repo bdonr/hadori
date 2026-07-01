@@ -16,7 +16,7 @@ import { useTaxonomy } from "@/lib/taxonomy";
 type Deal = {
   id: string; name: string; icon: string; tagline: string; industry: string;
   teamSize: string; region: string; stage: string; mrrRange: string;
-  updatedAt: string; isNew: boolean; seekingInvestors: boolean;
+  updatedAt: string; isNew: boolean; seekingInvestors: boolean; featured: boolean;
 };
 
 export default function DealFlowPage() {
@@ -60,6 +60,7 @@ export default function DealFlowPage() {
             updatedAt,
             isNew,
             seekingInvestors: !!data.seekingInvestors,
+            featured: data.featured === true,
           };
         });
         const withIcons = await Promise.all(base.map(async (b) => {
@@ -72,7 +73,10 @@ export default function DealFlowPage() {
           }
           return { ...b, icon };
         }));
-        withIcons.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        withIcons.sort((a, b) => {
+          if (a.featured !== b.featured) return a.featured ? -1 : 1;
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        });
         setDeals(withIcons);
       } catch {
         // Firebase not configured / query failed
@@ -194,6 +198,7 @@ export default function DealFlowPage() {
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-zinc-900">{canSeeDetails ? deal.name : t("stealth_project")}</span>
+                              {deal.featured && <span className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-[10px] font-bold">{t("featured_chip")}</span>}
                               {deal.isNew && <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">{t("badge_new")}</span>}
                             </div>
                             <p className="text-sm text-zinc-500 mt-0.5">{deal.tagline}</p>

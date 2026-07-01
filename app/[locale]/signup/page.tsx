@@ -72,7 +72,7 @@ export default function SignupPage() {
       // profiles doc (email, stripe, plan_tier) stays owner-only.
       await setDoc(doc(db, "publicProfiles", user.uid), {
         uid: user.uid, full_name: name, role, avatar_url: "",
-      });
+      }, { merge: true });
       const token = await user.getIdToken();
       await fetch("/api/auth/session", {
         method: "POST",

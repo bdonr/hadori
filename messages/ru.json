@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR: {mrr}",
       "empty_title": "В Deal Flow пока нет стартапов",
       "empty_desc": "Как только стартапы станут видимыми для инвесторов, они появятся здесь.",
-      "watchlist_limit_hit": "Достигнут лимит Watchlist"
+      "watchlist_limit_hit": "Достигнут лимит Watchlist",
+      "featured_chip": "★ Рекомендуемое"
     },
     "portfolio": {
       "gate_title": "Трекер портфеля от Pro (49 €/мес)",
@@ -992,7 +993,10 @@
       "reason_region": "Регион подходит",
       "reason_focus": "Фокус подходит",
       "check_label": "Размер чека",
-      "view_profile": "Посмотреть профиль"
+      "view_profile": "Посмотреть профиль",
+      "gate_title": "Найти инвесторов",
+      "gate_desc": "Находите и запрашивайте подходящих инвесторов с платным тарифом Startup.",
+      "upgrade_cta": "Обновить сейчас"
     },
     "pitchdeck": {
       "slide_problem_title": "Проблема",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 Публично",
       "private_status": "🔒 Приватно",
       "view_public": "Публичный вид →",
-      "release_in_editor": "Открыть в редакторе"
+      "release_in_editor": "Открыть в редакторе",
+      "verified_badge": "Проверено инкубатором"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "Питч-дек",
     "empty_title": "Пока ничего не опубликовано",
     "empty_desc": "Этот стартап ещё не поделился публичным контентом.",
-    "explore_cta": "Смотреть другие стартапы"
+    "explore_cta": "Смотреть другие стартапы",
+    "verified_badge": "Проверено инкубатором"
   },
   "taxonomy": {
     "skills": {

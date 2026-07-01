@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR：{mrr}",
       "empty_title": "Deal Flow 中暂无初创公司",
       "empty_desc": "当初创公司向投资者展示自己后，它们将显示在这里。",
-      "watchlist_limit_hit": "已达到 Watchlist 上限"
+      "watchlist_limit_hit": "已达到 Watchlist 上限",
+      "featured_chip": "★ 精选"
     },
     "portfolio": {
       "gate_title": "投资组合追踪器从 Pro 起（每月 49 €）",
@@ -992,7 +993,10 @@
       "reason_region": "地区契合",
       "reason_focus": "重点契合",
       "check_label": "投资额度",
-      "view_profile": "查看档案"
+      "view_profile": "查看档案",
+      "gate_title": "发现投资者",
+      "gate_desc": "使用付费 Startup 套餐，发现并联系匹配的投资者。",
+      "upgrade_cta": "立即升级"
     },
     "pitchdeck": {
       "slide_problem_title": "问题",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 公开",
       "private_status": "🔒 私密",
       "view_public": "公开视图 →",
-      "release_in_editor": "在编辑器中发布"
+      "release_in_editor": "在编辑器中发布",
+      "verified_badge": "孵化器认证"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "路演材料",
     "empty_title": "尚未公开分享任何内容",
     "empty_desc": "这家初创公司还没有分享任何公开内容。",
-    "explore_cta": "探索其他初创公司"
+    "explore_cta": "探索其他初创公司",
+    "verified_badge": "孵化器认证"
   },
   "taxonomy": {
     "skills": {

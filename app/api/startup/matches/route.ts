@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 import { getServerSession } from "@/lib/firebase/session";
 import { INVESTOR_FOCUS } from "@/lib/funding";
+import { isStartupPaid } from "@/lib/entitlements";
 
 // Returns investors that fit the logged-in startup, ranked by a match score.
 // Runs server-side (Admin SDK) because investor profiles are private by rule;
@@ -10,6 +11,11 @@ export async function GET() {
   const session = await getServerSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!adminDb) return NextResponse.json({ matches: [] });
+
+  // Gate: discovering & requesting investors is a startup+ feature.
+  const callerSnap = await adminDb.collection("profiles").doc(session.uid).get();
+  const callerTier = (callerSnap.data()?.plan_tier as string) ?? "free";
+  if (!isStartupPaid(callerTier)) return NextResponse.json({ matches: [], locked: true });
 
   const startupSnap = await adminDb.collection("startups").doc(session.uid).get();
   const s = startupSnap.data() ?? {};

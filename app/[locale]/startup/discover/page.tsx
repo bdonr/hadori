@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
 import { INVESTOR_FOCUS } from "@/lib/funding";
 import { REGIONS } from "@/lib/regions";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
 import { useTaxonomy } from "@/lib/taxonomy";
+import { isStartupPaid } from "@/lib/entitlements";
 
 interface Match {
   uid: string; name: string; firm: string; role: string; region: string;
@@ -21,13 +25,28 @@ export default function DiscoverInvestorsPage() {
   const [focusFilter, setFocusFilter] = useState<string[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
+  const [locked, setLocked] = useState(false);
 
   useEffect(() => {
-    fetch("/api/startup/matches")
-      .then((r) => r.json())
-      .then((d) => setMatches(Array.isArray(d.matches) ? d.matches : []))
-      .catch(() => setMatches([]))
-      .finally(() => setLoading(false));
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, "profiles", user.uid));
+          if (!isStartupPaid(snap.data()?.plan_tier as string | undefined)) setLocked(true);
+        } catch {
+          // ignore — API is the authoritative gate
+        }
+      }
+      fetch("/api/startup/matches")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.locked) setLocked(true);
+          setMatches(Array.isArray(d.matches) ? d.matches : []);
+        })
+        .catch(() => setMatches([]))
+        .finally(() => setLoading(false));
+    });
+    return () => unsub();
   }, []);
 
   function toggleFocus(id: string) {
@@ -42,6 +61,17 @@ export default function DiscoverInvestorsPage() {
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
       <main className="mx-auto max-w-5xl px-6 py-8">
+        {locked ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-10 text-center">
+            <span className="text-4xl">🔒</span>
+            <h2 className="mt-4 text-xl font-bold text-zinc-900">{t("gate_title")}</h2>
+            <p className="mt-2 text-sm text-zinc-500">{t("gate_desc")}</p>
+            <Link href={`/${locale}/startup/billing`} className="mt-4 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
+              {t("upgrade_cta")}
+            </Link>
+          </div>
+        ) : (
+        <>
         <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
           <span className="text-xl">💡</span>
           <div>
@@ -121,6 +151,8 @@ export default function DiscoverInvestorsPage() {
               })}
             </div>
           </>
+        )}
+        </>
         )}
       </main>
     </div>

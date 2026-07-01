@@ -103,7 +103,7 @@ const SLIDES: Slide[] = [
 /* ──────────────────────────────────────────────
    Data shapes (only the public-facing bits)
 ────────────────────────────────────────────── */
-interface PublicProfile { full_name?: string; role?: string; avatar_url?: string; }
+interface PublicProfile { full_name?: string; role?: string; avatar_url?: string; verified?: boolean; }
 interface StartupDoc {
   name?: string; tagline?: string; description?: string;
   industry?: string; region?: string;
@@ -215,6 +215,11 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
             <h1 className="text-2xl font-extrabold text-zinc-900">
               {startup?.name || t("untitled")}
             </h1>
+            {profile?.verified === true && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                ✔ {t("verified_badge")}
+              </span>
+            )}
             {startup?.industry && (
               <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">
                 {tax.focus(startup.industry)}

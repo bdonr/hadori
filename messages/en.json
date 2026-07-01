@@ -850,7 +850,8 @@
       "mrr_label": "💰 MRR: {mrr}",
       "empty_title": "No startups in the deal flow yet",
       "empty_desc": "Once startups make themselves visible to investors, they will show up here.",
-      "watchlist_limit_hit": "Watchlist limit reached"
+      "watchlist_limit_hit": "Watchlist limit reached",
+      "featured_chip": "★ Featured"
     },
     "portfolio": {
       "gate_title": "Portfolio tracker from Pro (€49/mo)",
@@ -992,7 +993,10 @@
       "reason_region": "Region fits",
       "reason_focus": "Focus fits",
       "check_label": "Check size",
-      "view_profile": "View profile"
+      "view_profile": "View profile",
+      "gate_title": "Discover investors",
+      "gate_desc": "Discover and request matching investors with a paid startup plan.",
+      "upgrade_cta": "Upgrade now"
     },
     "pitchdeck": {
       "slide_problem_title": "The problem",
@@ -1392,7 +1396,8 @@
       "public_status": "🌍 Public",
       "private_status": "🔒 Private",
       "view_public": "Public view →",
-      "release_in_editor": "Release in editor"
+      "release_in_editor": "Release in editor",
+      "verified_badge": "Incubator-verified"
     }
   },
   "glossary": {
@@ -1458,7 +1463,8 @@
     "pitchdeck_heading": "Pitch deck",
     "empty_title": "Nothing shared publicly yet",
     "empty_desc": "This startup hasnt shared anything public yet.",
-    "explore_cta": "Explore other startups"
+    "explore_cta": "Explore other startups",
+    "verified_badge": "Incubator-verified"
   },
   "taxonomy": {
     "skills": {
