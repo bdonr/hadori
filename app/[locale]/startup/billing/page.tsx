@@ -80,7 +80,9 @@ export default function StartupBillingPage() {
           {PROJECT_TIERS.map(tier => {
             const a = ACCENT[tier.id];
             const isCurrent = tier.id === CURRENT;
-            const isDowngrade = ["project"].indexOf(tier.id) < ["project"].indexOf(CURRENT);
+            // Rank by position in PROJECT_TIERS (project < startup < startup_pro).
+            const rank = (id: string) => PROJECT_TIERS.findIndex(x => x.id === id);
+            const isDowngrade = rank(tier.id) < rank(CURRENT);
             return (
               <div key={tier.id} className={`relative rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm flex flex-col ${a.ring}`}>
                 {tier.highlight && (

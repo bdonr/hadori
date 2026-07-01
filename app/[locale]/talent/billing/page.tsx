@@ -65,6 +65,9 @@ export default function TalentBillingPage() {
           {TALENT_TIERS.map(tier => {
             const a = ACCENT[tier.id];
             const isCurrent = tier.id === CURRENT;
+            // Rank by position in TALENT_TIERS (free < plus < pro).
+            const rank = (id: string) => TALENT_TIERS.findIndex(x => x.id === id);
+            const isDowngrade = rank(tier.id) < rank(CURRENT);
             return (
               <div key={tier.id} className={`relative rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm flex flex-col ${a.ring}`}>
                 {tier.highlight && (
@@ -88,7 +91,7 @@ export default function TalentBillingPage() {
                 </ul>
                 {isCurrent ? (
                   <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">{t("current_plan")}</div>
-                ) : tier.price === 0 ? (
+                ) : isDowngrade ? (
                   <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">{t("downgrade")}</div>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
