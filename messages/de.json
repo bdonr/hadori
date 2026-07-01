@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "Sprint-Ziel (optional)",
       "start_date": "Start",
       "end_date": "Ende",
-      "create": "Erstellen"
+      "create": "Erstellen",
+      "ai_plan": "🤖 KI: Plan → Board",
+      "ai_dialog_title": "Plan von KI generieren",
+      "ai_dialog_desc": "Die KI erstellt aus deinem Startup-Kontext Sprints, Tasks und Rollen-Vorschläge.",
+      "ai_goal_placeholder": "Hauptziel (z.B. MVP launchen, erste 100 Nutzer gewinnen)",
+      "ai_horizon": "Zeithorizont",
+      "ai_weeks": "{n} Wochen",
+      "ai_generate": "Generieren",
+      "ai_generating": "KI plant…",
+      "ai_error": "KI konnte keinen Plan erstellen. Bitte erneut versuchen.",
+      "ai_result_title": "Plan erstellt",
+      "ai_result_summary": "{sprints} Sprints · {tasks} Tasks angelegt",
+      "ai_roles_title": "Empfohlene Rollen",
+      "ai_view_roles": "Rollen ausschreiben →",
+      "close": "Schließen"
     },
     "ai": {
       "title": "KI Co-Founder",

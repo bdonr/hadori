@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "迭代目标（可选）",
       "start_date": "开始",
       "end_date": "结束",
-      "create": "创建"
+      "create": "创建",
+      "ai_plan": "🤖 AI：规划 → Board",
+      "ai_dialog_title": "用 AI 生成规划",
+      "ai_dialog_desc": "AI 将你的创业背景转化为 Sprint、任务和角色建议。",
+      "ai_goal_placeholder": "主要目标（例如：发布 MVP、获得前 100 名用户）",
+      "ai_horizon": "时间范围",
+      "ai_weeks": "{n} 周",
+      "ai_generate": "生成",
+      "ai_generating": "AI 规划中…",
+      "ai_error": "AI 无法生成规划，请重试。",
+      "ai_result_title": "规划已生成",
+      "ai_result_summary": "已添加 {sprints} 个 Sprint · {tasks} 个任务",
+      "ai_roles_title": "推荐角色",
+      "ai_view_roles": "发布角色 →",
+      "close": "关闭"
     },
     "ai": {
       "title": "AI 联合创始人",

@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "Objectif du sprint (facultatif)",
       "start_date": "Début",
       "end_date": "Fin",
-      "create": "Créer"
+      "create": "Créer",
+      "ai_plan": "🤖 IA : Plan → Board",
+      "ai_dialog_title": "Générer un plan avec l'IA",
+      "ai_dialog_desc": "L'IA transforme le contexte de votre startup en sprints, tâches et suggestions de rôles.",
+      "ai_goal_placeholder": "Objectif principal (ex. lancer le MVP, obtenir les 100 premiers utilisateurs)",
+      "ai_horizon": "Horizon temporel",
+      "ai_weeks": "{n} semaines",
+      "ai_generate": "Générer",
+      "ai_generating": "Planification par l'IA…",
+      "ai_error": "L'IA n'a pas pu créer de plan. Veuillez réessayer.",
+      "ai_result_title": "Plan créé",
+      "ai_result_summary": "{sprints} sprints · {tasks} tâches ajoutées",
+      "ai_roles_title": "Rôles recommandés",
+      "ai_view_roles": "Publier les rôles →",
+      "close": "Fermer"
     },
     "ai": {
       "title": "Co-fondateur IA",

@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "스프린트 목표 (선택)",
       "start_date": "시작",
       "end_date": "종료",
-      "create": "생성"
+      "create": "생성",
+      "ai_plan": "🤖 AI: 플랜 → Board",
+      "ai_dialog_title": "AI로 플랜 생성",
+      "ai_dialog_desc": "AI가 스타트업 상황을 스프린트, 작업, 역할 제안으로 변환합니다.",
+      "ai_goal_placeholder": "주요 목표 (예: MVP 출시, 첫 100명 사용자 확보)",
+      "ai_horizon": "기간",
+      "ai_weeks": "{n}주",
+      "ai_generate": "생성",
+      "ai_generating": "AI가 계획 중…",
+      "ai_error": "AI가 플랜을 생성하지 못했습니다. 다시 시도해 주세요.",
+      "ai_result_title": "플랜 생성됨",
+      "ai_result_summary": "스프린트 {sprints}개 · 작업 {tasks}개 추가됨",
+      "ai_roles_title": "추천 역할",
+      "ai_view_roles": "역할 게시 →",
+      "close": "닫기"
     },
     "ai": {
       "title": "AI 공동 창업자",

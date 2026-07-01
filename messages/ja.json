@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "スプリントの目標（任意）",
       "start_date": "開始",
       "end_date": "終了",
-      "create": "作成"
+      "create": "作成",
+      "ai_plan": "🤖 AI: プラン → Board",
+      "ai_dialog_title": "AIでプランを生成",
+      "ai_dialog_desc": "AIがあなたのスタートアップの状況をスプリント、タスク、役割の提案に変換します。",
+      "ai_goal_placeholder": "主な目標（例: MVPをローンチ、最初の100ユーザーを獲得）",
+      "ai_horizon": "期間",
+      "ai_weeks": "{n}週間",
+      "ai_generate": "生成",
+      "ai_generating": "AIがプランを作成中…",
+      "ai_error": "AIはプランを作成できませんでした。もう一度お試しください。",
+      "ai_result_title": "プランを作成しました",
+      "ai_result_summary": "{sprints}個のスプリント・{tasks}個のタスクを追加しました",
+      "ai_roles_title": "おすすめの役割",
+      "ai_view_roles": "役割を投稿 →",
+      "close": "閉じる"
     },
     "ai": {
       "title": "AI共同創業者",

@@ -657,7 +657,21 @@
       "sprint_goal_placeholder": "Sprint goal (optional)",
       "start_date": "Start",
       "end_date": "End",
-      "create": "Create"
+      "create": "Create",
+      "ai_plan": "🤖 AI: Plan → Board",
+      "ai_dialog_title": "Generate plan with AI",
+      "ai_dialog_desc": "AI turns your startup context into sprints, tasks and role suggestions.",
+      "ai_goal_placeholder": "Main goal (e.g. launch MVP, get first 100 users)",
+      "ai_horizon": "Time horizon",
+      "ai_weeks": "{n} weeks",
+      "ai_generate": "Generate",
+      "ai_generating": "AI planning…",
+      "ai_error": "AI could not create a plan. Please try again.",
+      "ai_result_title": "Plan created",
+      "ai_result_summary": "{sprints} sprints · {tasks} tasks added",
+      "ai_roles_title": "Recommended roles",
+      "ai_view_roles": "Post roles →",
+      "close": "Close"
     },
     "ai": {
       "title": "AI Co-Founder",

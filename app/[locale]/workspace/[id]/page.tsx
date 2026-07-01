@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -37,7 +38,7 @@ function daysBetween(a: string, b: string) {
 
 export default function WorkspaceBoard() {
   const t = useTranslations("workspace_pages.board");
-  const { id: workspaceId } = useParams<{ id: string }>();
+  const { id: workspaceId, locale } = useParams<{ id: string; locale: string }>();
   const [uid, setUid] = useState<string | null>(null);
   const [tasks, setTasks] = useState<WorkspaceTask[]>([]);
   const [sprints, setSprints] = useState<WorkspaceSprint[]>([]);
@@ -53,6 +54,27 @@ export default function WorkspaceBoard() {
 
   const [sprintDialog, setSprintDialog] = useState(false);
   const [newSprint, setNewSprint] = useState({ name: "", goal: "", startDate: "", endDate: "" });
+
+  const [aiDialog, setAiDialog] = useState(false);
+  const [aiGoal, setAiGoal] = useState("");
+  const [aiHorizon, setAiHorizon] = useState(8);
+  const [aiRunning, setAiRunning] = useState(false);
+  const [aiError, setAiError] = useState(false);
+  const [aiResult, setAiResult] = useState<{ sprintsCreated: number; tasksCreated: number; roles: { title: string; why: string; skills?: string[] }[] } | null>(null);
+
+  async function runAiPlan() {
+    setAiRunning(true); setAiError(false);
+    try {
+      const res = await fetch(`/api/ai/plan-to-board`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspaceId, goal: aiGoal.trim(), horizonWeeks: aiHorizon }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sprintsCreated) { setAiError(true); return; }
+      setAiResult(data); setAiDialog(false);
+    } catch { setAiError(true); }
+    finally { setAiRunning(false); }
+  }
 
   useEffect(() => onAuthStateChanged(auth, (u) => setUid(u?.uid ?? null)), []);
 
@@ -132,6 +154,10 @@ export default function WorkspaceBoard() {
       <div className="flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-4">
         <h1 className="text-lg font-bold text-zinc-900">{t("title")}</h1>
         <div className="flex items-center gap-2">
+          <button onClick={() => setAiDialog(true)}
+            className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 hover:bg-violet-100 transition-colors">
+            {t("ai_plan")}
+          </button>
           <button onClick={() => setSprintDialog(true)}
             className="rounded-lg border border-zinc-200 px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors">
             {t("new_sprint")}
@@ -246,6 +272,75 @@ export default function WorkspaceBoard() {
                 </button>
               </div>
             </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* AI plan dialog */}
+      <Dialog.Root open={aiDialog} onOpenChange={setAiDialog}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <Dialog.Title className="mb-1 text-lg font-bold text-zinc-900">{t("ai_dialog_title")}</Dialog.Title>
+            <p className="mb-4 text-sm text-zinc-500">{t("ai_dialog_desc")}</p>
+            <div className="space-y-3">
+              <textarea autoFocus value={aiGoal} onChange={(e) => setAiGoal(e.target.value)} rows={2}
+                placeholder={t("ai_goal_placeholder")}
+                className="w-full resize-none rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-violet-400" />
+              <label className="block text-xs text-zinc-500">{t("ai_horizon")}
+                <select value={aiHorizon} onChange={(e) => setAiHorizon(Number(e.target.value))}
+                  className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none">
+                  {[4, 6, 8, 12, 16].map((w) => <option key={w} value={w}>{t("ai_weeks", { n: w })}</option>)}
+                </select>
+              </label>
+              {aiError && <p className="text-sm text-red-600">{t("ai_error")}</p>}
+              <div className="flex justify-end gap-2">
+                <Dialog.Close asChild>
+                  <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">{t("cancel")}</button>
+                </Dialog.Close>
+                <button onClick={runAiPlan} disabled={aiRunning}
+                  className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50">
+                  {aiRunning ? t("ai_generating") : t("ai_generate")}
+                </button>
+              </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* AI result — role suggestions */}
+      <Dialog.Root open={!!aiResult} onOpenChange={(o) => { if (!o) setAiResult(null); }}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <Dialog.Title className="text-lg font-bold text-zinc-900">✨ {t("ai_result_title")}</Dialog.Title>
+            {aiResult && (
+              <>
+                <p className="mt-1 text-sm text-zinc-500">{t("ai_result_summary", { sprints: aiResult.sprintsCreated, tasks: aiResult.tasksCreated })}</p>
+                {aiResult.roles.length > 0 && (
+                  <div className="mt-4">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-zinc-400">{t("ai_roles_title")}</p>
+                    <div className="flex flex-col gap-2">
+                      {aiResult.roles.map((r, i) => (
+                        <div key={i} className="rounded-xl border border-zinc-200 p-3">
+                          <p className="text-sm font-semibold text-zinc-900">{r.title}</p>
+                          <p className="text-xs text-zinc-500">{r.why}</p>
+                          {r.skills && r.skills.length > 0 && (
+                            <div className="mt-1.5 flex flex-wrap gap-1">
+                              {r.skills.map((s) => <span key={s} className="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] text-indigo-600">{s}</span>)}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <Link href={`/${locale}/startup/roles`} className="mt-3 inline-block text-sm font-semibold text-indigo-600 hover:text-indigo-700">{t("ai_view_roles")}</Link>
+                  </div>
+                )}
+                <div className="mt-5 flex justify-end">
+                  <button onClick={() => setAiResult(null)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">{t("close")}</button>
+                </div>
+              </>
+            )}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
