@@ -29,6 +29,8 @@ export default function StartupOverviewPage() {
   const [startup, setStartup] = useState<StartupDoc | null>(null);
   const [tier, setTier] = useState("free");
   const [hasDeck, setHasDeck] = useState(false);
+  const [deckPublic, setDeckPublic] = useState(false);
+  const [planPublic, setPlanPublic] = useState(false);
   const [plan, setPlan] = useState<{ external?: { headline?: string; teaser?: string }; internal?: { coreIdea?: string } } | null>(null);
 
   useEffect(() => {
@@ -49,7 +51,8 @@ export default function StartupOverviewPage() {
       if (s?.exists()) setStartup(s.data() as StartupDoc);
       setTier((p?.data()?.plan_tier as string) ?? "free");
       setHasDeck(!!d?.exists());
-      if (bp?.exists()) setPlan(bp.data() as typeof plan);
+      if (d?.exists()) setDeckPublic(d.data()?.isPublic === true);
+      if (bp?.exists()) { setPlan(bp.data() as typeof plan); setPlanPublic(bp.data()?.showExternal === true); }
       setLoading(false);
     });
     return () => unsub();
@@ -175,14 +178,18 @@ export default function StartupOverviewPage() {
         {/* Pitchdeck + Business plan tiles */}
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <DocTile
-            emoji="🎯" title={t("pitchdeck")} href={`/${locale}/startup/pitchdeck`}
-            status={hasDeck ? t("complete") : t("not_created")} ok={hasDeck}
+            emoji="🎯" title={t("pitchdeck")}
+            href={external && deckPublic && uid ? `/${locale}/company/${uid}` : `/${locale}/startup/pitchdeck`}
+            status={external ? (deckPublic ? t("public_status") : t("private_status")) : (hasDeck ? t("complete") : t("not_created"))}
+            ok={external ? deckPublic : hasDeck}
             desc={external ? t("pitchdeck_external") : t("pitchdeck_internal")}
-            cta={hasDeck ? t("open") : t("create_cta")}
+            cta={external ? (deckPublic ? t("view_public") : t("release_in_editor")) : (hasDeck ? t("open") : t("create_cta"))}
           />
           <DocTile
-            emoji="📄" title={t("businessplan")} href={`/${locale}/startup/plan`}
-            status={plan ? t("complete") : t("not_saved_yet")} ok={!!plan}
+            emoji="📄" title={t("businessplan")}
+            href={external && planPublic && uid ? `/${locale}/company/${uid}` : `/${locale}/startup/plan`}
+            status={external ? (planPublic ? t("public_status") : t("private_status")) : (plan ? t("complete") : t("not_saved_yet"))}
+            ok={external ? planPublic : !!plan}
             desc={
               plan
                 ? (external
@@ -190,7 +197,7 @@ export default function StartupOverviewPage() {
                     : (plan.internal?.coreIdea || t("plan_internal")))
                 : (external ? t("plan_external") : t("plan_internal"))
             }
-            cta={plan ? t("open") : t("create_cta")}
+            cta={external ? (planPublic ? t("view_public") : t("release_in_editor")) : (plan ? t("open") : t("create_cta"))}
           />
         </div>
 

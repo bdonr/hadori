@@ -1321,7 +1321,11 @@
       "ai_title": "AI: 사업 계획 → Kanban",
       "ai_desc": "곧 출시: AI가 당신의 사업 계획을 작업으로 바꾸고, 타임라인을 따라 스프린트로 묶으며, 역할과 팀을 제안합니다.",
       "coming_soon": "곧 출시",
-      "view_public_page": "공개 페이지 보기 →"
+      "view_public_page": "공개 페이지 보기 →",
+      "public_status": "🌍 공개",
+      "private_status": "🔒 비공개",
+      "view_public": "공개 보기 →",
+      "release_in_editor": "편집기에서 공개"
     }
   },
   "glossary": {

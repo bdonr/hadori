@@ -1321,7 +1321,11 @@
       "ai_title": "KI: Businessplan → Kanban",
       "ai_desc": "Bald: Die KI macht aus deinem Businessplan Tasks, ordnet sie an der Timeline in Sprints und schlägt Rollen & Teams vor.",
       "coming_soon": "Kommt bald",
-      "view_public_page": "Öffentliche Seite ansehen →"
+      "view_public_page": "Öffentliche Seite ansehen →",
+      "public_status": "🌍 Öffentlich",
+      "private_status": "🔒 Privat",
+      "view_public": "Öffentliche Ansicht →",
+      "release_in_editor": "Im Editor freigeben"
     }
   },
   "glossary": {

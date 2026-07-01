@@ -1321,7 +1321,11 @@
       "ai_title": "AI: Business plan → Kanban",
       "ai_desc": "Soon: AI turns your business plan into tasks, groups them into sprints along the timeline, and suggests roles & teams.",
       "coming_soon": "Coming soon",
-      "view_public_page": "View public page →"
+      "view_public_page": "View public page →",
+      "public_status": "🌍 Public",
+      "private_status": "🔒 Private",
+      "view_public": "Public view →",
+      "release_in_editor": "Release in editor"
     }
   },
   "glossary": {

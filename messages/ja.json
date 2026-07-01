@@ -1321,7 +1321,11 @@
       "ai_title": "AI: 事業計画 → カンバン",
       "ai_desc": "近日公開: AIがあなたの事業計画をタスクに変換し、タイムラインに沿ってスプリントにまとめ、役割やチームを提案します。",
       "coming_soon": "近日公開",
-      "view_public_page": "公開ページを見る →"
+      "view_public_page": "公開ページを見る →",
+      "public_status": "🌍 公開",
+      "private_status": "🔒 非公開",
+      "view_public": "公開ビュー →",
+      "release_in_editor": "エディタで公開"
     }
   },
   "glossary": {

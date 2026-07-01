@@ -1321,7 +1321,11 @@
       "ai_title": "AI：商业计划 → Kanban",
       "ai_desc": "即将推出：AI 将你的商业计划转化为任务，沿时间线归入各个 Sprint，并推荐角色与团队。",
       "coming_soon": "即将推出",
-      "view_public_page": "查看公开页面 →"
+      "view_public_page": "查看公开页面 →",
+      "public_status": "🌍 公开",
+      "private_status": "🔒 私密",
+      "view_public": "公开视图 →",
+      "release_in_editor": "在编辑器中发布"
     }
   },
   "glossary": {

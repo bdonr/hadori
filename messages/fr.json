@@ -1321,7 +1321,11 @@
       "ai_title": "IA : Business plan → Kanban",
       "ai_desc": "Bientôt : l'IA transforme ton business plan en tâches, les regroupe en sprints le long de la timeline et suggère des rôles et des équipes.",
       "coming_soon": "Bientôt disponible",
-      "view_public_page": "Voir la page publique →"
+      "view_public_page": "Voir la page publique →",
+      "public_status": "🌍 Public",
+      "private_status": "🔒 Privé",
+      "view_public": "Vue publique →",
+      "release_in_editor": "Publier dans l’éditeur"
     }
   },
   "glossary": {
