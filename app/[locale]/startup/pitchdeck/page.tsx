@@ -17,13 +17,37 @@ import { useTranslations } from "next-intl";
    Slide definitions
    Free gets slides 0-2, Pro gets all 8
 ────────────────────────────────────────────── */
+type FieldType = "select" | "multiselect";
+
+interface SlideField {
+  labelKey: string;
+  placeholderKey: string;
+  multiline?: boolean;
+  help?: string;
+  type?: FieldType;   // when set → dropdown / multi-select instead of free text
+  options?: string;   // key into OPTIONS
+}
+
 interface Slide {
   id: string;
   icon: string;
   titleKey: string;
   proOnly: boolean;
-  fields: { labelKey: string; placeholderKey: string; multiline?: boolean; help?: string }[];
+  fields: SlideField[];
 }
+
+// Predefined option sets — structured input keeps data clean & AI-trainable.
+// Labels come from i18n as `opt_${set}_${id}` in the pitchdeck namespace.
+const OPTIONS: Record<string, string[]> = {
+  audience: ["consumer", "smb", "enterprise", "freelancer", "creator", "student", "developer", "healthcare", "hr", "founder", "public_sector", "other"],
+  revenue_model: ["subscription", "transaction_fee", "freemium", "one_time", "marketplace_fee", "ads", "licensing", "usage_based", "service", "other"],
+  price_point: ["free", "low", "mid", "high", "enterprise"],
+  money_market: ["lt100k", "m100k_1m", "m1m_10m", "m10m_100m", "m100m_1b", "gt1b"],
+  money_raise: ["lt50k", "r50k_250k", "r250k_1m", "r1m_3m", "r3m_10m", "gt10m"],
+  moat: ["technology", "brand", "network_effect", "data", "cost", "speed", "community", "ip", "other"],
+  roles: ["ceo", "cto", "cmo", "coo", "cfo", "product", "engineering", "design", "sales", "marketing", "ops", "other"],
+  use_of_funds: ["product", "eng_team", "sales", "marketing", "operations", "international", "other"],
+};
 
 const SLIDES: Slide[] = [
   {
@@ -33,7 +57,7 @@ const SLIDES: Slide[] = [
     proOnly: false,
     fields: [
       { labelKey: "slide_problem_f1_label", placeholderKey: "slide_problem_f1_placeholder", multiline: true },
-      { labelKey: "slide_problem_f2_label", placeholderKey: "slide_problem_f2_placeholder" },
+      { labelKey: "slide_problem_f2_label", placeholderKey: "slide_problem_f2_placeholder", type: "multiselect", options: "audience" },
     ],
   },
   {
@@ -52,8 +76,8 @@ const SLIDES: Slide[] = [
     titleKey: "slide_model_title",
     proOnly: false,
     fields: [
-      { labelKey: "slide_model_f1_label", placeholderKey: "slide_model_f1_placeholder" },
-      { labelKey: "slide_model_f2_label", placeholderKey: "slide_model_f2_placeholder" },
+      { labelKey: "slide_model_f1_label", placeholderKey: "slide_model_f1_placeholder", type: "select", options: "revenue_model" },
+      { labelKey: "slide_model_f2_label", placeholderKey: "slide_model_f2_placeholder", type: "select", options: "price_point" },
     ],
   },
   {
@@ -62,8 +86,8 @@ const SLIDES: Slide[] = [
     titleKey: "slide_market_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_market_f1_label", placeholderKey: "slide_market_f1_placeholder", help: "tam" },
-      { labelKey: "slide_market_f2_label", placeholderKey: "slide_market_f2_placeholder", help: "sam_som" },
+      { labelKey: "slide_market_f1_label", placeholderKey: "slide_market_f1_placeholder", help: "tam", type: "select", options: "money_market" },
+      { labelKey: "slide_market_f2_label", placeholderKey: "slide_market_f2_placeholder", help: "sam_som", type: "select", options: "money_market" },
     ],
   },
   {
@@ -83,7 +107,7 @@ const SLIDES: Slide[] = [
     proOnly: true,
     fields: [
       { labelKey: "slide_competitors_f1_label", placeholderKey: "slide_competitors_f1_placeholder" },
-      { labelKey: "slide_competitors_f2_label", placeholderKey: "slide_competitors_f2_placeholder", help: "moat" },
+      { labelKey: "slide_competitors_f2_label", placeholderKey: "slide_competitors_f2_placeholder", help: "moat", type: "multiselect", options: "moat" },
     ],
   },
   {
@@ -92,8 +116,8 @@ const SLIDES: Slide[] = [
     titleKey: "slide_team_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_team_f1_label", placeholderKey: "slide_team_f1_placeholder", multiline: true },
-      { labelKey: "slide_team_f2_label", placeholderKey: "slide_team_f2_placeholder" },
+      { labelKey: "slide_team_f1_label", placeholderKey: "slide_team_f1_placeholder", type: "multiselect", options: "roles" },
+      { labelKey: "slide_team_f2_label", placeholderKey: "slide_team_f2_placeholder", type: "multiselect", options: "roles" },
     ],
   },
   {
@@ -102,8 +126,8 @@ const SLIDES: Slide[] = [
     titleKey: "slide_ask_title",
     proOnly: true,
     fields: [
-      { labelKey: "slide_ask_f1_label", placeholderKey: "slide_ask_f1_placeholder", help: "ask" },
-      { labelKey: "slide_ask_f2_label", placeholderKey: "slide_ask_f2_placeholder", multiline: true },
+      { labelKey: "slide_ask_f1_label", placeholderKey: "slide_ask_f1_placeholder", help: "ask", type: "select", options: "money_raise" },
+      { labelKey: "slide_ask_f2_label", placeholderKey: "slide_ask_f2_placeholder", type: "multiselect", options: "use_of_funds" },
     ],
   },
 ];
@@ -119,7 +143,7 @@ export default function PitchDeckPage() {
 
   const [isPro, setIsPro] = useState(false);
   const [uid, setUid] = useState<string | null>(null);
-  const [values, setValues] = useState<Record<string, Record<string, string>>>({});
+  const [values, setValues] = useState<Record<string, Record<string, string | string[]>>>({});
   const [images, setImages] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
@@ -141,7 +165,7 @@ export default function PitchDeckPage() {
         const deckSnap = await getDoc(doc(db, "pitchdecks", user.uid));
         if (deckSnap.exists()) {
           const d = deckSnap.data();
-          const slides = d.slides as Record<string, Record<string, string>> | undefined;
+          const slides = d.slides as Record<string, Record<string, string | string[]>> | undefined;
           if (slides) setValues(slides);
           const imgs = d.images as Record<string, string> | undefined;
           if (imgs) setImages(imgs);
@@ -154,7 +178,7 @@ export default function PitchDeckPage() {
   const visibleSlides = isPro ? SLIDES : SLIDES.slice(0, 3);
   const lockedSlides = isPro ? [] : SLIDES.slice(3);
 
-  function set(slideId: string, label: string, value: string) {
+  function set(slideId: string, label: string, value: string | string[]) {
     setValues((prev) => ({
       ...prev,
       [slideId]: { ...(prev[slideId] ?? {}), [label]: value },
@@ -334,8 +358,8 @@ function SlideCard({
 }: {
   slide: Slide;
   t: (key: string) => string;
-  values: Record<string, string>;
-  onChange: (label: string, value: string) => void;
+  values: Record<string, string | string[]>;
+  onChange: (label: string, value: string | string[]) => void;
   image?: string;
   uploading: boolean;
   onUpload: (file: File) => void;
@@ -370,31 +394,67 @@ function SlideCard({
       </div>
 
       <div className="flex flex-col gap-3 flex-1">
-        {slide.fields.map((f) =>
-          f.multiline ? (
+        {slide.fields.map((f) => {
+          const raw = values[f.labelKey];
+          const label = (
+            <label className="mb-1 block text-xs font-medium text-zinc-500">
+              {t(f.labelKey)}{f.help && <HelpTip term={f.help} />}
+            </label>
+          );
+
+          // Single-choice dropdown
+          if (f.type === "select" && f.options) {
+            const val = typeof raw === "string" ? raw : "";
+            return (
+              <div key={f.labelKey}>
+                {label}
+                <select value={val} onChange={(e) => onChange(f.labelKey, e.target.value)}
+                  className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400">
+                  <option value="">{t("select_placeholder")}</option>
+                  {OPTIONS[f.options].map((id) => (
+                    <option key={id} value={id}>{t(`opt_${f.options}_${id}`)}</option>
+                  ))}
+                </select>
+              </div>
+            );
+          }
+
+          // Multi-choice chips
+          if (f.type === "multiselect" && f.options) {
+            const arr = Array.isArray(raw) ? raw : [];
+            const toggle = (id: string) => onChange(f.labelKey, arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]);
+            return (
+              <div key={f.labelKey}>
+                {label}
+                <div className="flex flex-wrap gap-1.5">
+                  {OPTIONS[f.options].map((id) => (
+                    <button key={id} type="button" onClick={() => toggle(id)}
+                      className={`rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${arr.includes(id) ? "border-indigo-600 bg-indigo-600 text-white" : "border-zinc-200 bg-white text-zinc-600 hover:border-indigo-400"}`}>
+                      {t(`opt_${f.options}_${id}`)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+
+          // Free text
+          const strVal = typeof raw === "string" ? raw : "";
+          return (
             <div key={f.labelKey}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}{f.help && <HelpTip term={f.help} />}</label>
-              <textarea
-                rows={3}
-                placeholder={t(f.placeholderKey)}
-                value={values[f.labelKey] ?? ""}
-                onChange={(e) => onChange(f.labelKey, e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 resize-none"
-              />
+              {label}
+              {f.multiline ? (
+                <textarea rows={3} placeholder={t(f.placeholderKey)} value={strVal}
+                  onChange={(e) => onChange(f.labelKey, e.target.value)}
+                  className="w-full resize-none rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400" />
+              ) : (
+                <input type="text" placeholder={t(f.placeholderKey)} value={strVal}
+                  onChange={(e) => onChange(f.labelKey, e.target.value)}
+                  className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400" />
+              )}
             </div>
-          ) : (
-            <div key={f.labelKey}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}{f.help && <HelpTip term={f.help} />}</label>
-              <input
-                type="text"
-                placeholder={t(f.placeholderKey)}
-                value={values[f.labelKey] ?? ""}
-                onChange={(e) => onChange(f.labelKey, e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-              />
-            </div>
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );
