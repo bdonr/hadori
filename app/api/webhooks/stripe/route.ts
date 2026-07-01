@@ -87,7 +87,19 @@ export async function POST(req: NextRequest) {
       }
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
-        await setTier(sub.customer as string, "free", sub.metadata?.uid);
+        // Don't blindly downgrade to free — the customer may still have another
+        // active subscription (e.g. after an upgrade left a redundant one).
+        // Recompute the tier from whatever active subscription remains.
+        const remaining = await stripe.subscriptions.list({
+          customer: sub.customer as string,
+          status: "active",
+          limit: 1,
+        });
+        const active = remaining.data.find((s) => s.id !== sub.id);
+        const tier = active
+          ? (active.metadata?.plan_tier || tierForPriceId(active.items.data[0]?.price.id) || "free")
+          : "free";
+        await setTier(sub.customer as string, tier, sub.metadata?.uid, active?.id);
         break;
       }
     }
