@@ -6,10 +6,10 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
-import { getSkillLabel } from "@/lib/skills";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import { Navbar } from "@/components/layout/navbar";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const CATEGORY_ICON: Record<string, string> = {
   creator: "🎬", music: "🎵", gaming: "🎮", app: "📱", ecommerce: "🛒",
@@ -72,6 +72,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const routeParams = useParams();
   const locale = (routeParams.locale as string) ?? "en";
   const t = useTranslations("misc_pages.project_detail");
+  const tax = useTaxonomy();
 
   const [project, setProject] = useState<Project | null>(null);
   const [creator, setCreator] = useState<CreatorData | null>(null);
@@ -185,7 +186,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
           <p className="mt-3 text-zinc-500 text-lg">{t("stealth_project_desc")}</p>
           <div className="mt-8 rounded-2xl border border-indigo-200 bg-indigo-50 p-6 text-left">
             <div className="flex flex-wrap gap-2 mb-3">
-              <span className="rounded-full bg-indigo-600 text-white px-3 py-1 text-sm font-semibold">{project.stealthCategory}</span>
+              <span className="rounded-full bg-indigo-600 text-white px-3 py-1 text-sm font-semibold">{tax.focus(project.stealthCategory)}</span>
               {project.stealthProblems?.map(p => (
                 <span key={p} className="rounded-full bg-white border border-indigo-200 text-indigo-700 px-3 py-1 text-sm">{p}</span>
               ))}
@@ -216,16 +217,16 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-extrabold text-zinc-900">{project.name}</h1>
-                <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">{project.category}</span>
+                <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">{tax.focus(project.category)}</span>
                 <span className="rounded-full bg-zinc-50 border border-zinc-200 px-3 py-0.5 text-xs font-medium text-zinc-500">
-                  {project.regionFlag} {project.region}
+                  {project.regionFlag} {tax.region(project.region)}
                 </span>
               </div>
               <p className="mt-1 text-base text-zinc-600">{project.tagline}</p>
               <div className="mt-3 flex items-center gap-3 flex-wrap text-xs text-zinc-400">
                 {project.foundedYear && <span>{t("founded", { year: project.foundedYear })}</span>}
                 {project.teamSize && <><span>·</span><span>👥 {t("team", { size: project.teamSize })}</span></>}
-                {project.stage && <><span>·</span><span>{project.stageEmoji} {project.stage}</span></>}
+                {project.stage && <><span>·</span><span>{project.stageEmoji} {tax.stage(project.stage)}</span></>}
               </div>
             </div>
           </div>
@@ -272,7 +273,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                   <div className="flex flex-wrap gap-1.5">
                     {project.neededSkills.map(id => (
                       <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">
-                        {getSkillLabel(id)}
+                        {tax.skill(id)}
                       </span>
                     ))}
                   </div>
@@ -315,7 +316,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {(creator.skills ?? []).slice(0, 6).map(s => (
                           <span key={s} className="rounded-full bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-700">
-                            {getSkillLabel(s)}
+                            {tax.skill(s)}
                           </span>
                         ))}
                       </div>
@@ -332,7 +333,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                         {(creator.regions ?? []).map(rId => {
                           const r = REGIONS.find(x => x.id === rId);
                           return r ? (
-                            <span key={rId} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">{r.flag} {r.label}</span>
+                            <span key={rId} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">{r.flag} {tax.region(r.id)}</span>
                           ) : null;
                         })}
                       </div>
@@ -372,12 +373,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">{t("phase")}</p>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">{project.stageEmoji}</span>
-                  <span className="font-bold text-zinc-900">{project.stage}</span>
+                  <span className="font-bold text-zinc-900">{tax.stage(project.stage)}</span>
                 </div>
                 {project.fundingGoal && (
                   <div className="mt-3 rounded-xl border border-green-200 bg-green-50 px-3 py-2">
                     <p className="text-xs font-semibold text-green-700">🎯 {t("fundraising_goal")}</p>
-                    <p className="text-sm font-bold text-green-900 mt-0.5">{project.fundingGoal}</p>
+                    <p className="text-sm font-bold text-green-900 mt-0.5">{tax.fundingRange(project.fundingGoal)}</p>
                   </div>
                 )}
               </div>

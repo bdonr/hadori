@@ -7,16 +7,16 @@ import { INVESTOR_FOCUS } from "@/lib/funding";
 import { REGIONS } from "@/lib/regions";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 interface Match {
   uid: string; name: string; firm: string; role: string; region: string;
   focus: string[]; stages: string[]; checkSize: string; score: number; reasons: string[];
 }
 
-const focusLabel = (id: string) => INVESTOR_FOCUS.find((f) => f.id === id)?.label ?? id;
-
 export default function DiscoverInvestorsPage() {
   const t = useTranslations("startup_pages.discover");
+  const tax = useTaxonomy();
   const { locale } = useParams<{ locale: string }>();
   const [focusFilter, setFocusFilter] = useState<string[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
@@ -59,7 +59,7 @@ export default function DiscoverInvestorsPage() {
                 className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                   focusFilter.includes(f.id) ? "bg-indigo-600 text-white" : "border border-zinc-200 bg-white text-zinc-600 hover:border-indigo-300"
                 }`}>
-                {f.label}
+                {tax.focus(f.id)}
               </button>
             ))}
           </div>
@@ -102,13 +102,13 @@ export default function DiscoverInvestorsPage() {
                     {m.focus.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-1">
                         {m.focus.slice(0, 4).map((f) => (
-                          <span key={f} className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">{focusLabel(f)}</span>
+                          <span key={f} className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">{tax.focus(f)}</span>
                         ))}
                       </div>
                     )}
 
                     <div className="mt-3 flex flex-wrap gap-3 text-xs text-zinc-500">
-                      {region && <span>{region.flag} {region.label}</span>}
+                      {region && <span>{region.flag} {tax.region(region.id)}</span>}
                       {m.checkSize && <span>{t("check_label")}: {m.checkSize}</span>}
                     </div>
 

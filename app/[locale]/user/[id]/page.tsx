@@ -5,7 +5,7 @@ import { useState, use, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LangSwitcher } from "@/components/LangSwitcher";
-import { getSkillLabel } from "@/lib/skills";
+import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -69,6 +69,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   const routeParams = useParams();
   const locale = (routeParams.locale as string) ?? "en";
   const t = useTranslations("misc_pages.user_detail");
+  const tax = useTaxonomy();
 
   const [authUid, setAuthUid] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -265,7 +266,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                     <span key={s} className={`rounded-full px-3 py-1 text-xs font-semibold ${
                       i === 0 ? "bg-indigo-600 text-white" : "bg-indigo-50 border border-indigo-200 text-indigo-700"
                     }`}>
-                      {getSkillLabel(s)}
+                      {tax.skill(s)}
                     </span>
                   ))}
                 </div>
@@ -302,7 +303,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                       {regions.map(r => (
                         <span key={r.id} className="flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm font-medium text-zinc-700">
                           <span>{r.flag}</span>
-                          <span>{r.label}</span>
+                          <span>{tax.region(r.id)}</span>
                         </span>
                       ))}
                     </div>

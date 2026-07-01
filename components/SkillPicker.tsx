@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 import { SKILL_CATEGORIES } from "@/lib/skills";
 
 interface SkillPickerProps {
@@ -13,6 +14,7 @@ interface SkillPickerProps {
 
 export function SkillPicker({ selected, onChange, label = "Skills", max }: SkillPickerProps) {
   const t = useTranslations("misc_pages.skill_picker");
+  const tax = useTaxonomy();
   const [search, setSearch] = useState("");
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
@@ -21,7 +23,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
   const filtered = query
     ? SKILL_CATEGORIES.map(cat => ({
         ...cat,
-        skills: cat.skills.filter(s => s.label.toLowerCase().includes(query)),
+        skills: cat.skills.filter(s => tax.skill(s.id).toLowerCase().includes(query)),
       })).filter(cat => cat.skills.length > 0)
     : SKILL_CATEGORIES;
 
@@ -56,7 +58,6 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
       {selected.length > 0 && !query && (
         <div className="mb-4 flex flex-wrap gap-1.5">
           {selected.map(id => {
-            const skill = SKILL_CATEGORIES.flatMap(c => c.skills).find(s => s.id === id);
             return (
               <button
                 key={id}
@@ -64,7 +65,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
                 onClick={() => toggle(id)}
                 className="flex items-center gap-1 rounded-full bg-indigo-600 px-3 py-1 text-xs font-medium text-white"
               >
-                {skill?.label ?? id}
+                {tax.skill(id)}
                 <span className="ml-1 opacity-70">✕</span>
               </button>
             );
@@ -83,7 +84,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
             >
               <span className="flex items-center gap-2 text-sm font-semibold text-zinc-800">
                 <span>{cat.icon}</span>
-                {cat.label}
+                {tax.skill(cat.id)}
                 {cat.skills.some(s => selected.includes(s.id)) && (
                   <span className="rounded-full bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-600">
                     {cat.skills.filter(s => selected.includes(s.id)).length}
@@ -114,7 +115,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
                           : "border border-zinc-200 bg-white text-zinc-600 hover:border-indigo-300 hover:text-indigo-600"
                       }`}
                     >
-                      {skill.label}
+                      {tax.skill(skill.id)}
                     </button>
                   );
                 })}

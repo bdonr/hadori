@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
+import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS } from "@/lib/regions";
 import { Navbar } from "@/components/layout/navbar";
 
@@ -123,6 +124,7 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
   const t = useTranslations("company");
   // Pitch-deck slide titles + option labels live in the pitchdeck namespace.
   const tp = useTranslations("startup_pages.pitchdeck");
+  const tax = useTaxonomy();
 
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [startup, setStartup] = useState<StartupDoc | null>(null);
@@ -215,12 +217,12 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
             </h1>
             {startup?.industry && (
               <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-0.5 text-xs font-semibold text-indigo-700">
-                {startup.industry}
+                {tax.focus(startup.industry)}
               </span>
             )}
             {region && (
               <span className="rounded-full bg-zinc-50 border border-zinc-200 px-3 py-0.5 text-xs font-medium text-zinc-500">
-                {region.flag} {region.label}
+                {region.flag} {tax.region(region.id)}
               </span>
             )}
           </div>

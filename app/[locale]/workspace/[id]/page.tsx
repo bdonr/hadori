@@ -10,6 +10,7 @@ import type { WorkspaceTask, WorkspaceColumn, WorkspaceSprint } from "@/lib/fire
 import { DEFAULT_COLUMNS } from "@/lib/firebase/workspace";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const PRIORITY_BAR: Record<string, string> = {
   low: "bg-zinc-300", medium: "bg-blue-400", high: "bg-red-500",
@@ -38,6 +39,7 @@ function daysBetween(a: string, b: string) {
 
 export default function WorkspaceBoard() {
   const t = useTranslations("workspace_pages.board");
+  const tax = useTaxonomy();
   const { id: workspaceId, locale } = useParams<{ id: string; locale: string }>();
   const [uid, setUid] = useState<string | null>(null);
   const [tasks, setTasks] = useState<WorkspaceTask[]>([]);
@@ -327,7 +329,7 @@ export default function WorkspaceBoard() {
                           <p className="text-xs text-zinc-500">{r.why}</p>
                           {r.skills && r.skills.length > 0 && (
                             <div className="mt-1.5 flex flex-wrap gap-1">
-                              {r.skills.map((s) => <span key={s} className="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] text-indigo-600">{s}</span>)}
+                              {r.skills.map((s) => <span key={s} className="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] text-indigo-600">{tax.skill(s)}</span>)}
                             </div>
                           )}
                         </div>

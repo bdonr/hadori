@@ -9,6 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { planCaps } from "@/lib/entitlements";
 import { Navbar } from "@/components/layout/navbar";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 type DealStatus = "intro_sent" | "in_talk" | "due_diligence" | "invested" | "passed";
 
@@ -27,6 +28,7 @@ type Deal = {
 
 export default function PortfolioPage() {
   const t = useTranslations("investor_pages.portfolio");
+  const tax = useTaxonomy();
   const params = useParams();
   const locale = (params?.locale as string) ?? "de";
   const [deals, setDeals] = useState<Deal[]>([]);
@@ -157,7 +159,7 @@ export default function PortfolioPage() {
                             <Link href={`/${locale}/project/${deal.id}`} className="font-bold text-zinc-900 hover:text-emerald-600 transition-colors">
                               {deal.name}
                             </Link>
-                            <span className="text-xs text-zinc-400">{deal.category} · {deal.stage}</span>
+                            <span className="text-xs text-zinc-400">{tax.focus(deal.category)} · {tax.stage(deal.stage)}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             {/* Status picker */}

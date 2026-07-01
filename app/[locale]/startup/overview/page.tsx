@@ -10,7 +10,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
 import { isStartupPaid } from "@/lib/entitlements";
 import { REGIONS } from "@/lib/regions";
-import { getFundingRangeLabel } from "@/lib/funding";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 type View = "internal" | "external";
 
@@ -23,6 +23,7 @@ interface StartupDoc {
 
 export default function StartupOverviewPage() {
   const t = useTranslations("startup_pages.overview");
+  const tax = useTaxonomy();
   const { locale } = useParams<{ locale: string }>();
   const [view, setView] = useState<View>("internal");
   const [loading, setLoading] = useState(true);
@@ -133,14 +134,14 @@ export default function StartupOverviewPage() {
                 {startup.tagline && <p className="text-zinc-600">{startup.tagline}</p>}
               </div>
               <div className="flex flex-wrap gap-2 text-xs">
-                {startup.industry && <Chip>{startup.industry}</Chip>}
-                {regionLabel && <Chip>{regionLabel.flag} {regionLabel.label}</Chip>}
+                {startup.industry && <Chip>{tax.focus(startup.industry)}</Chip>}
+                {regionLabel && <Chip>{regionLabel.flag} {tax.region(regionLabel.id)}</Chip>}
                 {startup.teamSize && <Chip>{t("team")}: {startup.teamSize}</Chip>}
               </div>
               {startup.description && <p className="text-sm leading-relaxed text-zinc-600">{startup.description}</p>}
               {startup.neededSkills && startup.neededSkills.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
-                  {startup.neededSkills.map((s) => <span key={s} className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-600">{s}</span>)}
+                  {startup.neededSkills.map((s) => <span key={s} className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-600">{tax.skill(s)}</span>)}
                 </div>
               )}
 
@@ -150,17 +151,17 @@ export default function StartupOverviewPage() {
                 {external ? (
                   showFunding ? (
                     <div className="flex flex-wrap gap-2 text-xs">
-                      {startup.stage && <Chip>{startup.stage}</Chip>}
-                      {startup.mrrRange && <Chip>MRR: {startup.mrrRange}</Chip>}
+                      {startup.stage && <Chip>{tax.stage(startup.stage)}</Chip>}
+                      {startup.mrrRange && <Chip>MRR: {tax.mrr(startup.mrrRange)}</Chip>}
                     </div>
                   ) : (
                     <p className="text-sm text-zinc-400">🔒 {t("funding_hidden")}</p>
                   )
                 ) : (
                   <div className="space-y-1 text-sm text-zinc-600">
-                    <p>{t("stage")}: <strong>{startup.stage || "—"}</strong></p>
-                    <p>MRR: <strong>{startup.mrrRange || "—"}</strong></p>
-                    <p>{t("funding_goal")}: <strong>{startup.fundingGoal ? getFundingRangeLabel(startup.fundingGoal) : "—"}</strong></p>
+                    <p>{t("stage")}: <strong>{startup.stage ? tax.stage(startup.stage) : "—"}</strong></p>
+                    <p>MRR: <strong>{startup.mrrRange ? tax.mrr(startup.mrrRange) : "—"}</strong></p>
+                    <p>{t("funding_goal")}: <strong>{startup.fundingGoal ? tax.fundingRange(startup.fundingGoal) : "—"}</strong></p>
                     <p>{t("seeking_investors")}: <strong>{startup.seekingInvestors ? t("yes") : t("no")}</strong></p>
                     {!paid && <p className="text-xs text-amber-600">{t("funding_pro_only")}</p>}
                   </div>

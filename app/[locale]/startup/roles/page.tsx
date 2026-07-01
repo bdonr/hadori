@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SkillPicker } from "@/components/SkillPicker";
-import { getSkillLabel, SKILL_CATEGORIES } from "@/lib/skills";
+import { SKILL_CATEGORIES } from "@/lib/skills";
 
 // Predefined roles/positions (shared taxonomy) — so a role posting matches the
 // same tags a talent uses to describe themselves. No free-text titles.
@@ -16,6 +16,7 @@ import { collection, getDocs, addDoc, deleteDoc, doc, getDoc, query, where, orde
 import { Navbar } from "@/components/layout/navbar";
 import { planCaps } from "@/lib/entitlements";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const CATEGORIES = [
   "Video & Schnitt",
@@ -58,6 +59,7 @@ interface Role {
 
 export default function RolesPage() {
   const t = useTranslations("startup_pages.roles");
+  const tax = useTaxonomy();
   const [uid, setUid] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -185,7 +187,7 @@ export default function RolesPage() {
                 >
                   <option value="">{t("what_seeking_placeholder")}</option>
                   {ROLE_OPTIONS.map(r => (
-                    <option key={r.id} value={r.label}>{r.label}</option>
+                    <option key={r.id} value={r.label}>{tax.skill(r.id)}</option>
                   ))}
                 </select>
               </div>
@@ -288,7 +290,7 @@ export default function RolesPage() {
                       }`}
                     >
                       <span>{r.flag}</span>
-                      <span>{r.label}</span>
+                      <span>{tax.region(r.id)}</span>
                     </button>
                   ))}
                 </div>
@@ -364,6 +366,7 @@ export default function RolesPage() {
 }
 
 function RoleCard({ role, onDelete, t }: { role: Role; onDelete: (id: string) => void; t: (key: string) => string }) {
+  const tax = useTaxonomy();
   const compLabels: Record<string, string> = {
     revenue_share: t("complabel_revenue_share"),
     equity: t("complabel_equity"),
@@ -391,7 +394,7 @@ function RoleCard({ role, onDelete, t }: { role: Role; onDelete: (id: string) =>
               const reg = getRegion(role.region);
               return reg ? (
                 <span className="rounded-full bg-zinc-50 border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500">
-                  {reg.flag} {reg.label}
+                  {reg.flag} {tax.region(reg.id)}
                 </span>
               ) : null;
             })()}
@@ -404,7 +407,7 @@ function RoleCard({ role, onDelete, t }: { role: Role; onDelete: (id: string) =>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {role.skills.map(id => (
             <span key={id} className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-600">
-              {getSkillLabel(id)}
+              {tax.skill(id)}
             </span>
           ))}
         </div>

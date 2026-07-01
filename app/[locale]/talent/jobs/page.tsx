@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getSkillLabel } from "@/lib/skills";
+import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS, getRegion, regionMatches } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -52,6 +52,7 @@ const FILTER_OPTIONS = [
 
 export default function TalentJobsPage() {
   const t = useTranslations("talent_pages.jobs");
+  const tax = useTaxonomy();
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
   const [mySkills, setMySkills] = useState<string[]>([]);
@@ -142,7 +143,7 @@ export default function TalentJobsPage() {
         r.title.toLowerCase().includes(q) ||
         (r.posterName ?? "").toLowerCase().includes(q) ||
         r.description.toLowerCase().includes(q) ||
-        r.skills.some(s => getSkillLabel(s).toLowerCase().includes(q))
+        r.skills.some(s => tax.skill(s).toLowerCase().includes(q))
       );
     }
 
@@ -159,7 +160,7 @@ export default function TalentJobsPage() {
     if (filter === "all") list = list.sort((a, b) => b.match - a.match);
 
     return list;
-  }, [filter, search, regionFilter, mySkills, myRegions, roles]);
+  }, [filter, search, regionFilter, mySkills, myRegions, roles, tax]);
 
   const topMatch = results.length > 0 ? results[0].match : 0;
 
@@ -200,7 +201,7 @@ export default function TalentJobsPage() {
             <span className="text-xs text-indigo-400 italic">{t("no_skills_yet")}</span>
           ) : mySkills.map(id => (
             <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">
-              {getSkillLabel(id)}
+              {tax.skill(id)}
             </span>
           ))}
           <Link href={`/${locale}/talent/skills`} className="ml-auto text-xs text-indigo-500 hover:underline shrink-0">
@@ -241,7 +242,7 @@ export default function TalentJobsPage() {
             { id: "all", flag: "🌍", label: t("region_all") },
             { id: "my_regions", flag: "⭐", label: t("region_mine") },
             ...REGIONS.filter(r => r.id !== "worldwide" && r.id !== "eu").map(r => ({
-              id: r.id, flag: r.flag, label: r.label,
+              id: r.id, flag: r.flag, label: tax.region(r.id),
             })),
           ].map(r => (
             <button
@@ -322,6 +323,7 @@ function RoleCard({
   onApply: () => void;
 }) {
   const t = useTranslations("talent_pages.jobs");
+  const tax = useTaxonomy();
 
   const matchColor =
     role.match >= 75 ? "bg-green-100 text-green-700" :
@@ -373,7 +375,7 @@ function RoleCard({
                 isMatch ? "bg-indigo-600 text-white" : "bg-zinc-100 text-zinc-500"
               }`}
             >
-              {isMatch && "✓ "}{getSkillLabel(id)}
+              {isMatch && "✓ "}{tax.skill(id)}
             </span>
           );
         })}
@@ -387,7 +389,7 @@ function RoleCard({
           const reg = getRegion(role.region);
           return reg ? (
             <span className="rounded-full bg-zinc-50 border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500">
-              {reg.flag} {reg.label}
+              {reg.flag} {tax.region(reg.id)}
             </span>
           ) : null;
         })()}

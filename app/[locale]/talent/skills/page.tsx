@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SkillPicker } from "@/components/SkillPicker";
-import { getSkillLabel } from "@/lib/skills";
+import { useTaxonomy } from "@/lib/taxonomy";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
@@ -47,6 +47,7 @@ const AVAILABILITY = [
 
 export default function TalentSkillsPage() {
   const t = useTranslations("talent_pages.skills");
+  const tax = useTaxonomy();
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
@@ -270,7 +271,7 @@ export default function TalentSkillsPage() {
                   }`}
                 >
                   <span>{r.flag}</span>
-                  <span>{r.label}</span>
+                  <span>{tax.region(r.id)}</span>
                   {regions.includes(r.id) && <span className="text-indigo-400">✓</span>}
                 </button>
               ))}
@@ -307,7 +308,7 @@ export default function TalentSkillsPage() {
               <div className="flex flex-wrap gap-1.5">
                 {skills.map(id => (
                   <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">
-                    {getSkillLabel(id)}
+                    {tax.skill(id)}
                   </span>
                 ))}
               </div>
@@ -322,7 +323,7 @@ export default function TalentSkillsPage() {
                 <p className="mt-1 text-xs text-indigo-500">
                   {regions.map(id => {
                     const r = REGIONS.find(x => x.id === id);
-                    return r ? `${r.flag} ${r.label}` : id;
+                    return r ? `${r.flag} ${tax.region(r.id)}` : id;
                   }).join(" · ")}
                 </p>
               )}

@@ -10,6 +10,7 @@ import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 type Talent = {
   id: string;
@@ -40,6 +41,7 @@ const AVAIL_DOT: Record<string, string> = {
 
 export default function TalentSearchPage() {
   const t = useTranslations("startup_pages.search");
+  const tax = useTaxonomy();
   const { locale } = useParams<{ locale: string }>();
   const [talents, setTalents] = useState<Talent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -217,7 +219,7 @@ export default function TalentSearchPage() {
                             const hit = wantedTags.includes(s);
                             return (
                               <span key={s} className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${hit ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-indigo-100 bg-indigo-50 text-indigo-700"}`}>
-                                {hit && "✓ "}{getSkillLabel(s)}
+                                {hit && "✓ "}{tax.skill(s)}
                               </span>
                             );
                           })}
@@ -234,7 +236,7 @@ export default function TalentSearchPage() {
                             <span key={l.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{l.label}</span>
                           ))}
                           {talentRegions.map(r => (
-                            <span key={r.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{r.flag} {r.label}</span>
+                            <span key={r.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-500">{r.flag} {tax.region(r.id)}</span>
                           ))}
                         </div>
                       )}

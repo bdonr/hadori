@@ -11,6 +11,7 @@ import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS } from "@/lib/regions";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const CATEGORIES = [
   { id: "creator", label: "Creator / YouTube", emoji: "🎬" },
@@ -41,6 +42,7 @@ export default function CreateProjectPage() {
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
   const t = useTranslations("misc_pages.project_create");
+  const tax = useTaxonomy();
 
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
@@ -209,7 +211,7 @@ export default function CreateProjectPage() {
                       className={`rounded-full px-3 py-1.5 text-sm font-medium border transition-colors flex items-center gap-1.5 ${
                         region === r.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"
                       }`}>
-                      <span>{r.flag}</span><span>{r.label}</span>
+                      <span>{r.flag}</span><span>{tax.region(r.id)}</span>
                     </button>
                   ))}
                 </div>

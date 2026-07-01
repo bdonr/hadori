@@ -13,6 +13,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { planCaps } from "@/lib/entitlements";
 import { HelpTip } from "@/components/HelpTip";
 import { Navbar } from "@/components/layout/navbar";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const ROLES = [
   { id: "angel", labelKey: "role_angel" },
@@ -35,6 +36,7 @@ const STAGE_PREFS = [
 
 export default function InvestorProfilePage() {
   const t = useTranslations("investor_pages.profile");
+  const tax = useTaxonomy();
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
@@ -156,7 +158,7 @@ export default function InvestorProfilePage() {
                 {INVESTOR_FOCUS.map(f => (
                   <button key={f.id} type="button" onClick={() => toggle(setFocus, f.id)}
                     className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${focus.includes(f.id) ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-emerald-300"}`}>
-                    {f.label}
+                    {tax.focus(f.id)}
                   </button>
                 ))}
               </div>
@@ -178,7 +180,7 @@ export default function InvestorProfilePage() {
                 {CHECK_SIZES.map(c => (
                   <button key={c.id} type="button" onClick={() => setCheckSize(c.id === checkSize ? "" : c.id)}
                     className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${checkSize === c.id ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-emerald-300"}`}>
-                    {c.label}
+                    {tax.checkSize(c.id)}
                   </button>
                 ))}
               </div>
@@ -188,7 +190,7 @@ export default function InvestorProfilePage() {
               <select value={dealsPerYear} onChange={e => setDealsPerYear(e.target.value)}
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 w-56">
                 <option value="">{t("deals_per_year_placeholder")}</option>
-                {DEALS_PER_YEAR.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
+                {DEALS_PER_YEAR.map((r) => <option key={r.id} value={r.id}>{tax.dealsPerYear(r.id)}</option>)}
               </select>
             </div>
           </section>
@@ -200,7 +202,7 @@ export default function InvestorProfilePage() {
               {REGIONS.map(r => (
                 <button key={r.id} type="button" onClick={() => setRegion(r.id)}
                   className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors flex items-center gap-1.5 ${region === r.id ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-emerald-300"}`}>
-                  <span>{r.flag}</span><span>{r.label}</span>
+                  <span>{r.flag}</span><span>{tax.region(r.id)}</span>
                 </button>
               ))}
             </div>

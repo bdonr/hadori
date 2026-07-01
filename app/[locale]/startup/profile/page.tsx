@@ -14,6 +14,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { isStartupPaid } from "@/lib/entitlements";
 import { HelpTip } from "@/components/HelpTip";
 import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 const TEAM_SIZES = ["1", "2–5", "6–15", "16–50", "50+"];
 
@@ -25,6 +26,7 @@ const CATEGORIES = [
 
 export default function StartupProfilePage() {
   const t = useTranslations("startup_pages.profile");
+  const tax = useTaxonomy();
   const router = useRouter();
   const locale = (useParams().locale as string) ?? "de";
   const [uid, setUid] = useState<string | null>(null);
@@ -214,7 +216,7 @@ export default function StartupProfilePage() {
                 className={`rounded-full px-3 py-1 text-sm font-medium border transition-colors flex items-center gap-1.5 ${
                   region === r.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"
                 }`}>
-                <span>{r.flag}</span><span>{r.label}</span>
+                <span>{r.flag}</span><span>{tax.region(r.id)}</span>
               </button>
             ))}
           </div>
@@ -234,7 +236,7 @@ export default function StartupProfilePage() {
                       <div className="flex items-center gap-2">
                         <span className="text-xl">{s.emoji}</span>
                         <div>
-                          <div className="text-sm font-semibold text-zinc-900">{s.label}</div>
+                          <div className="text-sm font-semibold text-zinc-900">{tax.stage(s.id)}</div>
                           <div className="text-xs text-zinc-500">{s.desc}</div>
                         </div>
                       </div>
@@ -248,7 +250,7 @@ export default function StartupProfilePage() {
                   {MRR_RANGES.map((m) => (
                     <button key={m.id} type="button" onClick={() => setMrrRange(m.id === mrrRange ? "" : m.id)}
                       className={`rounded-full px-3 py-1 text-sm font-medium border transition-colors ${mrrRange === m.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-indigo-400"}`}>
-                      {m.label}
+                      {tax.mrr(m.id)}
                     </button>
                   ))}
                 </div>
@@ -258,7 +260,7 @@ export default function StartupProfilePage() {
                 <select id="sp-funding" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)}
                   className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
                   <option value="">{t("funding_goal_placeholder")}</option>
-                  {FUNDING_RANGES.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
+                  {FUNDING_RANGES.map((r) => <option key={r.id} value={r.id}>{tax.fundingRange(r.id)}</option>)}
                 </select>
               </div>
               <label className="flex items-center gap-2 cursor-pointer">

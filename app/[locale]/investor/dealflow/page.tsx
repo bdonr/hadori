@@ -11,6 +11,7 @@ import { isInvestorPaid, planCaps } from "@/lib/entitlements";
 import { REGIONS } from "@/lib/regions";
 import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
+import { useTaxonomy } from "@/lib/taxonomy";
 
 type Deal = {
   id: string; name: string; icon: string; tagline: string; industry: string;
@@ -20,6 +21,7 @@ type Deal = {
 
 export default function DealFlowPage() {
   const t = useTranslations("investor_pages.dealflow");
+  const tax = useTaxonomy();
   const params = useParams();
   const locale = (params?.locale as string) ?? "de";
   const [filter, setFilter] = useState("all");
@@ -180,7 +182,7 @@ export default function DealFlowPage() {
               {items.map(deal => {
                 const region = REGIONS.find(r => r.id === deal.region);
                 const stage = FUNDING_STAGES.find(s => s.id === deal.stage);
-                const mrrLabel = MRR_RANGES.find(m => m.id === deal.mrrRange)?.label ?? deal.mrrRange;
+                const mrrLabel = tax.mrr(deal.mrrRange);
                 return (
                   <div key={deal.id} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start gap-4">
@@ -208,11 +210,11 @@ export default function DealFlowPage() {
                           </div>
                         </div>
                         <div className="mt-2 flex flex-wrap gap-2 text-xs text-zinc-400">
-                          {region && <><span>{region.flag} {region.label}</span><span>·</span></>}
-                          {stage && <><span>{stage.emoji} {stage.label}</span><span>·</span></>}
+                          {region && <><span>{region.flag} {tax.region(region.id)}</span><span>·</span></>}
+                          {stage && <><span>{stage.emoji} {tax.stage(stage.id)}</span><span>·</span></>}
                           <span>{canSeeFunding ? t("mrr_label", { mrr: mrrLabel }) : t("mrr_label", { mrr: "🔒" })}</span>
                           {deal.teamSize && <><span>·</span><span>👥 {deal.teamSize}</span></>}
-                          {deal.industry && <><span>·</span><span>{deal.industry}</span></>}
+                          {deal.industry && <><span>·</span><span>{tax.focus(deal.industry)}</span></>}
                         </div>
                       </div>
                     </div>
