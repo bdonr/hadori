@@ -145,6 +145,8 @@ export default function PitchDeckPage() {
   const [uid, setUid] = useState<string | null>(null);
   const [values, setValues] = useState<Record<string, Record<string, string | string[]>>>({});
   const [images, setImages] = useState<Record<string, string>>({});
+  const [deckPublic, setDeckPublic] = useState(false);
+  const [slidePublic, setSlidePublic] = useState<Record<string, boolean>>({});
   const [uploading, setUploading] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -169,6 +171,9 @@ export default function PitchDeckPage() {
           if (slides) setValues(slides);
           const imgs = d.images as Record<string, string> | undefined;
           if (imgs) setImages(imgs);
+          if (typeof d.isPublic === "boolean") setDeckPublic(d.isPublic);
+          const sv = d.slidePublic as Record<string, boolean> | undefined;
+          if (sv) setSlidePublic(sv);
         }
       } catch { /* ignore */ }
     });
@@ -192,7 +197,7 @@ export default function PitchDeckPage() {
     try {
       await setDoc(
         doc(db, "pitchdecks", uid),
-        { slides: values, images, updated_at: serverTimestamp() },
+        { slides: values, images, isPublic: deckPublic, slidePublic, updated_at: serverTimestamp() },
         { merge: true }
       );
       setSaved(true);
@@ -259,6 +264,21 @@ export default function PitchDeckPage() {
           </div>
         )}
 
+        {/* Visibility control — decide IF and WHAT of the deck is public */}
+        <div className={`mb-6 rounded-2xl border p-5 ${deckPublic ? "border-emerald-200 bg-emerald-50" : "border-zinc-200 bg-white"} shadow-sm`}>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-semibold text-zinc-900">{deckPublic ? `🌍 ${t("vis_public_title")}` : `🔒 ${t("vis_private_title")}`}</p>
+              <p className="mt-0.5 text-sm text-zinc-500">{deckPublic ? t("vis_public_desc") : t("vis_private_desc")}</p>
+            </div>
+            <button type="button" aria-label="toggle-deck-public" onClick={() => { setDeckPublic((v) => !v); setSaved(false); }}
+              className={`relative mt-0.5 h-7 w-12 shrink-0 rounded-full transition-colors ${deckPublic ? "bg-emerald-500" : "bg-zinc-300"}`}>
+              <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${deckPublic ? "translate-x-6" : "translate-x-1"}`} />
+            </button>
+          </div>
+          {deckPublic && <p className="mt-3 text-xs text-emerald-700">{t("vis_slide_hint")}</p>}
+        </div>
+
         {/* Active slides */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visibleSlides.map((slide) => (
@@ -272,6 +292,9 @@ export default function PitchDeckPage() {
               uploading={uploading === slide.id}
               onUpload={(file) => uploadImage(slide.id, file)}
               onRemoveImage={() => removeImage(slide.id)}
+              deckPublic={deckPublic}
+              slidePublic={slidePublic[slide.id] ?? false}
+              onTogglePublic={() => { setSlidePublic((p) => ({ ...p, [slide.id]: !(p[slide.id] ?? false) })); setSaved(false); }}
             />
           ))}
         </div>
@@ -355,6 +378,9 @@ function SlideCard({
   uploading,
   onUpload,
   onRemoveImage,
+  deckPublic,
+  slidePublic,
+  onTogglePublic,
 }: {
   slide: Slide;
   t: (key: string) => string;
@@ -364,12 +390,21 @@ function SlideCard({
   uploading: boolean;
   onUpload: (file: File) => void;
   onRemoveImage: () => void;
+  deckPublic: boolean;
+  slidePublic: boolean;
+  onTogglePublic: () => void;
 }) {
   return (
     <div className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">{slide.icon}</span>
         <h3 className="font-bold text-zinc-900">{t(slide.titleKey)}</h3>
+        {deckPublic && (
+          <button type="button" onClick={onTogglePublic} title={slidePublic ? t("vis_slide_public") : t("vis_slide_private")}
+            className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-bold transition-colors ${slidePublic ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"}`}>
+            {slidePublic ? `🌍 ${t("vis_slide_public")}` : `🔒 ${t("vis_slide_private")}`}
+          </button>
+        )}
       </div>
 
       {/* Slide image */}

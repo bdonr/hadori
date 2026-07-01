@@ -1050,7 +1050,14 @@
       "opt_use_of_funds_marketing": "Marketing",
       "opt_use_of_funds_operations": "Betrieb",
       "opt_use_of_funds_international": "Internationalisierung",
-      "opt_use_of_funds_other": "Anderes"
+      "opt_use_of_funds_other": "Anderes",
+      "vis_public_title": "Pitchdeck ist öffentlich",
+      "vis_private_title": "Pitchdeck ist privat",
+      "vis_public_desc": "Investoren & Talente sehen die freigegebenen Slides.",
+      "vis_private_desc": "Nur du siehst dein Pitchdeck. Aktiviere, um einzelne Slides freizugeben.",
+      "vis_slide_hint": "Wähle pro Slide, ob er öffentlich (🌍) oder privat (🔒) ist.",
+      "vis_slide_public": "Öffentlich",
+      "vis_slide_private": "Privat"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

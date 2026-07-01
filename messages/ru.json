@@ -1050,7 +1050,14 @@
       "opt_use_of_funds_marketing": "Маркетинг",
       "opt_use_of_funds_operations": "Операции",
       "opt_use_of_funds_international": "Международная экспансия",
-      "opt_use_of_funds_other": "Другое"
+      "opt_use_of_funds_other": "Другое",
+      "vis_public_title": "Питч-дек является публичным",
+      "vis_private_title": "Питч-дек является приватным",
+      "vis_public_desc": "Инвесторы и специалисты могут видеть слайды, которые вы публикуете.",
+      "vis_private_desc": "Только вы видите свой дек. Включите, чтобы публиковать отдельные слайды.",
+      "vis_slide_hint": "Выберите для каждого слайда, будет ли он публичным (🌍) или приватным (🔒).",
+      "vis_slide_public": "Публичный",
+      "vis_slide_private": "Приватный"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

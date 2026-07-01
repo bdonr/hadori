@@ -1050,7 +1050,14 @@
       "opt_use_of_funds_marketing": "マーケティング",
       "opt_use_of_funds_operations": "オペレーション",
       "opt_use_of_funds_international": "海外展開",
-      "opt_use_of_funds_other": "その他"
+      "opt_use_of_funds_other": "その他",
+      "vis_public_title": "ピッチデックは公開されています",
+      "vis_private_title": "ピッチデックは非公開です",
+      "vis_public_desc": "投資家や人材は、あなたが公開したスライドを見ることができます。",
+      "vis_private_desc": "デックはあなただけが見られます。オンにすると個々のスライドを公開できます。",
+      "vis_slide_hint": "スライドごとに公開（🌍）か非公開（🔒）かを選択します。",
+      "vis_slide_public": "公開",
+      "vis_slide_private": "非公開"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

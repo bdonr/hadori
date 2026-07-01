@@ -1050,7 +1050,14 @@
       "opt_use_of_funds_marketing": "市场营销",
       "opt_use_of_funds_operations": "运营",
       "opt_use_of_funds_international": "国际扩张",
-      "opt_use_of_funds_other": "其他"
+      "opt_use_of_funds_other": "其他",
+      "vis_public_title": "路演材料已公开",
+      "vis_private_title": "路演材料为私密",
+      "vis_public_desc": "投资者和人才可以看到你发布的幻灯片。",
+      "vis_private_desc": "只有你能看到你的路演材料。开启后可发布单张幻灯片。",
+      "vis_slide_hint": "为每张幻灯片选择公开（🌍）还是私密（🔒）。",
+      "vis_slide_public": "公开",
+      "vis_slide_private": "私密"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

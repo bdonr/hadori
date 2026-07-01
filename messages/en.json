@@ -1050,7 +1050,14 @@
       "opt_use_of_funds_marketing": "Marketing",
       "opt_use_of_funds_operations": "Operations",
       "opt_use_of_funds_international": "International expansion",
-      "opt_use_of_funds_other": "Other"
+      "opt_use_of_funds_other": "Other",
+      "vis_public_title": "Pitch deck is public",
+      "vis_private_title": "Pitch deck is private",
+      "vis_public_desc": "Investors & talent can see the slides you release.",
+      "vis_private_desc": "Only you see your deck. Turn on to release individual slides.",
+      "vis_slide_hint": "Choose per slide whether it is public (🌍) or private (🔒).",
+      "vis_slide_public": "Public",
+      "vis_slide_private": "Private"
     },
     "plan": {
       "cat_saas": "B2B SaaS",

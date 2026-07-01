@@ -40,7 +40,7 @@ export default function StartupBillingPage() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, currency, successUrl: "/startup", cancelUrl: "/startup/billing" }),
+        body: JSON.stringify({ priceId, currency, successUrl: "/startup/billing?upgraded=1", cancelUrl: "/startup/billing" }),
       });
       const { url } = await res.json();
       if (url) window.location.href = url;
