@@ -33,18 +33,21 @@ export default function StartupOverviewPage() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) { setLoading(false); return; }
-      try {
-        const [s, p, d, bp] = await Promise.all([
-          getDoc(doc(db, "startups", user.uid)),
-          getDoc(doc(db, "profiles", user.uid)),
-          getDoc(doc(db, "pitchdecks", user.uid)),
-          getDoc(doc(db, "businessplans", user.uid)),
-        ]);
-        if (s.exists()) setStartup(s.data() as StartupDoc);
-        setTier((p.data()?.plan_tier as string) ?? "free");
-        setHasDeck(d.exists());
-        if (bp.exists()) setPlan(bp.data() as typeof plan);
-      } catch { /* ignore */ }
+      // Read each doc independently — one denied/failed read must never blank
+      // out the others (a missing rule on one collection used to hide all).
+      const safe = async <R,>(fn: () => Promise<R>): Promise<R | null> => {
+        try { return await fn(); } catch { return null; }
+      };
+      const [s, p, d, bp] = await Promise.all([
+        safe(() => getDoc(doc(db, "startups", user.uid))),
+        safe(() => getDoc(doc(db, "profiles", user.uid))),
+        safe(() => getDoc(doc(db, "pitchdecks", user.uid))),
+        safe(() => getDoc(doc(db, "businessplans", user.uid))),
+      ]);
+      if (s?.exists()) setStartup(s.data() as StartupDoc);
+      setTier((p?.data()?.plan_tier as string) ?? "free");
+      setHasDeck(!!d?.exists());
+      if (bp?.exists()) setPlan(bp.data() as typeof plan);
       setLoading(false);
     });
     return () => unsub();

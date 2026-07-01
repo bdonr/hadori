@@ -52,6 +52,12 @@ service cloud.firestore {
       allow read, write: if isOwner(uid);
     }
 
+    // Pitch decks (top-level, per user). Owner reads/writes; the deck becomes
+    // shareable to investors in a later phase.
+    match /pitchdecks/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
     // Projects: creator-owned. Anyone authenticated can browse; only owner mutates.
     match /projects/{projectId} {
       allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;
