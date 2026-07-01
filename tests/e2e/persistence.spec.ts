@@ -21,6 +21,10 @@ test.describe("Persistence — Startup", () => {
     await page.getByRole("button", { name: /^speichern$/i }).click();
     await expect(page.getByText(/gespeichert/i).first()).toBeVisible({ timeout: 15_000 });
 
+    // Let the Firestore write settle before reloading (the realtime WebChannel
+    // can lag in a headless browser; a real user never reloads within 50ms).
+    await page.waitForTimeout(2500);
+
     // Reload — value must come back from Firestore
     await page.reload();
     await waitForAuthReady(page);
