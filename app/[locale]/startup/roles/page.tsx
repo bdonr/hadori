@@ -8,8 +8,9 @@ import { getSkillLabel } from "@/lib/skills";
 import { REGIONS, LANGUAGES, getRegion } from "@/lib/regions";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, getDoc, query, where, orderBy, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { planCaps } from "@/lib/entitlements";
 import { useTranslations } from "next-intl";
 
 const CATEGORIES = [
@@ -56,11 +57,20 @@ export default function RolesPage() {
   const [uid, setUid] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [maxRoles, setMaxRoles] = useState(1);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) return;
       setUid(user.uid);
+      try {
+        // Read plan_tier and derive the allowed number of active job postings.
+        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+        const tier = profileSnap.data()?.plan_tier as string | undefined;
+        setMaxRoles(planCaps(tier).activeJobPostings);
+      } catch {
+        // Read failed — keep the free default of 1
+      }
       try {
         const q = query(collection(db, "roles"), where("ownerId", "==", user.uid), orderBy("created_at", "desc"));
         const snap = await getDocs(q);
@@ -71,6 +81,8 @@ export default function RolesPage() {
     });
     return () => unsub();
   }, []);
+
+  const atLimit = roles.length >= maxRoles;
 
   // Form state
   const [title, setTitle] = useState("");
@@ -91,6 +103,7 @@ export default function RolesPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (atLimit) return; // enforce active-job-postings cap
     const roleData = {
       title, category, description,
       compensation: selectedComp,
@@ -127,6 +140,24 @@ export default function RolesPage() {
       <Navbar />
 
       <main className="mx-auto max-w-4xl px-6 py-10">
+
+        {/* Post role action + limit awareness */}
+        {!showForm && (
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <p className="text-sm text-zinc-500">
+              {Number.isFinite(maxRoles)
+                ? t("roles_count", { current: roles.length, max: maxRoles })
+                : t("roles_count_unlimited", { current: roles.length })}
+            </p>
+            {atLimit ? (
+              <Button asChild variant="outline">
+                <Link href="/startup/billing">{t("upgrade_to_pro")}</Link>
+              </Button>
+            ) : (
+              <Button onClick={() => setShowForm(true)}>{t("post_role")}</Button>
+            )}
+          </div>
+        )}
 
         {/* Create form */}
         {showForm && (
@@ -282,7 +313,7 @@ export default function RolesPage() {
             </div>
 
             <div className="mt-6 flex gap-3">
-              <Button type="submit" disabled={!title || selectedComp.length === 0}>
+              <Button type="submit" disabled={!title || selectedComp.length === 0 || atLimit}>
                 {t("submit")}
               </Button>
               <Button type="button" variant="outline" onClick={() => setShowForm(false)}>

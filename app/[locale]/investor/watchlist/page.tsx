@@ -5,13 +5,9 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { planCaps } from "@/lib/entitlements";
 import { Navbar } from "@/components/layout/navbar";
-
-const CURRENT_TIER = "investor_pro";
-const TIER_ORDER = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
-function tierAtLeast(r: string) { return TIER_ORDER.indexOf(CURRENT_TIER) >= TIER_ORDER.indexOf(r); }
-const MAX_WATCHLIST = tierAtLeast("investor_basic") ? (tierAtLeast("investor_pro") ? Infinity : 20) : 5;
 
 const INITIAL: { id: string; name: string; icon: string; category: string; stage: string; regionFlag: string; tagline: string }[] = [
   { id: "dadori",   name: "DADORI",   icon: "🚀", category: "B2B SaaS",    stage: "Pre-Seed", regionFlag: "🇩🇪", tagline: "Dreiseitige Incubator-Plattform." },
@@ -26,6 +22,11 @@ export default function WatchlistPage() {
   const [list, setList] = useState<WatchlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
+  const [tier, setTier] = useState<string | null>(null);
+  const [limitHit, setLimitHit] = useState(false);
+
+  const maxWatchlist = planCaps(tier).watchlistLimit; // free 5, angel 20, pro+ ∞
+  const atLimit = list.length >= maxWatchlist;
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -35,6 +36,12 @@ export default function WatchlistPage() {
         return;
       }
       setUid(user.uid);
+      try {
+        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+        if (profileSnap.exists()) setTier((profileSnap.data().plan_tier as string) ?? null);
+      } catch {
+        // Firebase not configured
+      }
       try {
         const snap = await getDocs(collection(db, "investors", user.uid, "watchlist"));
         if (snap.empty) {
@@ -62,7 +69,24 @@ export default function WatchlistPage() {
     return () => unsub();
   }, []);
 
+  async function add(item: WatchlistItem) {
+    if (list.some(x => x.id === item.id)) return;
+    if (list.length >= maxWatchlist) {
+      setLimitHit(true);
+      return;
+    }
+    setList(prev => [...prev, item]);
+    if (uid) {
+      try {
+        await setDoc(doc(db, "investors", uid, "watchlist", item.id), item);
+      } catch {
+        // optimistic update already applied; silently ignore
+      }
+    }
+  }
+
   async function remove(id: string) {
+    setLimitHit(false);
     setList(prev => prev.filter(x => x.id !== id));
     if (uid) {
       try {
@@ -108,7 +132,12 @@ export default function WatchlistPage() {
             ))}
           </div>
         )}
-        {!tierAtLeast("investor_basic") && (
+        {!loading && (
+          <p className="mt-4 text-center text-xs text-zinc-400">
+            {list.length} / {Number.isFinite(maxWatchlist) ? maxWatchlist : "∞"}
+          </p>
+        )}
+        {!loading && (atLimit || limitHit) && Number.isFinite(maxWatchlist) && (
           <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center text-sm text-emerald-700">
             {t("free_limit")} · <Link href="/investor/billing" className="font-bold hover:underline">{t("upgrade_angel")}</Link>
           </div>

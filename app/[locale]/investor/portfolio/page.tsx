@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { auth, db } from "@/lib/firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { planCaps } from "@/lib/entitlements";
 import { Navbar } from "@/components/layout/navbar";
-
-const CURRENT_TIER = "investor_pro";
-const TIER_ORDER = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
-function tierAtLeast(required: string) {
-  return TIER_ORDER.indexOf(CURRENT_TIER) >= TIER_ORDER.indexOf(required);
-}
 
 type DealStatus = "intro_sent" | "in_talk" | "due_diligence" | "invested" | "passed";
 
@@ -36,8 +34,22 @@ export default function PortfolioPage() {
   const [deals, setDeals] = useState(INITIAL_DEALS);
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [notesDraft, setNotesDraft] = useState("");
+  const [tier, setTier] = useState<string | null>(null);
 
-  const canAccess = tierAtLeast("investor_pro");
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      try {
+        const snap = await getDoc(doc(db, "profiles", user.uid));
+        if (snap.exists()) setTier((snap.data().plan_tier as string) ?? null);
+      } catch {
+        // Firebase not configured
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const canAccess = planCaps(tier).portfolioTracker; // Pro+
 
   function updateStatus(id: string, status: DealStatus) {
     setDeals(prev => prev.map(d => d.id === id ? { ...d, status } : d));

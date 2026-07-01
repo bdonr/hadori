@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { auth, db } from "@/lib/firebase/client";
 import { collection, getDocs, addDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { planCaps } from "@/lib/entitlements";
 
-const TIER_LIMITS: Record<string, number> = { free: 1, pro: 10, scale: Infinity };
 // Tier is loaded from Firestore profile — defaults to free until fetched
 const DEFAULT_TIER = "free";
 
@@ -59,7 +59,7 @@ export default function PortfolioPage() {
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
-  const LIMIT = TIER_LIMITS[tier] ?? 1;
+  const LIMIT = planCaps(tier).portfolioItems;
   const atLimit = items.length >= LIMIT;
   const isScale = LIMIT === Infinity;
 

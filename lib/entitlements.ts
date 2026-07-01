@@ -231,3 +231,126 @@ export function isTalentPaid(planTier?: string | null): boolean {
 export function isInvestorPaid(planTier?: string | null): boolean {
   return !!planTier && planTier.startsWith("investor_") && planTier !== "investor_free";
 }
+
+// ---------------------------------------------------------------------------
+// Per-tier capability matrix — the promised perks for every purchasable tier,
+// mirroring lib/tiers.ts. This is the SINGLE source of truth for what a
+// purchase unlocks. Read plan_tier from the profile and pass it here.
+// ---------------------------------------------------------------------------
+
+export interface PlanCaps {
+  // --- Startup / creator ---
+  fundingDetails: boolean;          // funding stage & MRR fields (startup+)
+  aiBusinessPlan: boolean;          // KI business plan generator (startup+)
+  fullPitchDeck: boolean;           // 8-slide deck vs 3 (startup+)
+  discoverInvestors: boolean;       // browse & request investors (startup+)
+  dadoriIntro: boolean;             // curated intros (startup+)
+  investorVisibility: boolean;      // be discoverable/toggle visibility (startup+)
+  verifiedBadge: boolean;           // incubator-verified (startup_pro)
+  featuredInvestorDiscovery: boolean; // featured placement (startup_pro)
+  dataRoom: boolean;                // data room for investors (startup_pro)
+  unlimitedStartupIntros: boolean;  // unlimited intros (startup_pro)
+  activeJobPostings: number;        // open roles (project/startup: limited, pro: more)
+  workspaceAi: boolean;             // AI co-founder in workspace (startup+)
+
+  // --- Talent ---
+  applicationsPerMonth: number;     // free 3, plus 20, pro ∞
+  searchPriority: boolean;          // plus+
+  directMessages: boolean;          // plus+
+  activelyLookingBadge: boolean;    // plus+
+  featuredProfile: boolean;         // pro
+  profileAnalytics: boolean;        // pro
+  matchScore: boolean;              // pro
+  portfolioItems: number;           // free 1, plus 10, pro ∞
+
+  // --- Investor ---
+  introsPerMonth: number;           // scout 0, angel 3, pro 10, premium 25, elite ∞
+  startupDetails: boolean;          // angel+
+  watchlistLimit: number;           // free 5, angel 20, pro+ ∞
+  weeklyDigest: boolean;            // angel+
+  advancedFilters: boolean;         // pro+
+  stealthProjects: boolean;         // pro+
+  portfolioTracker: boolean;        // pro+
+  fundingData: boolean;             // pro+ (MRR/stage on startups)
+  investorVerifiedBadge: boolean;   // premium+
+  featuredInSearch: boolean;        // premium+
+  investorDataRoom: boolean;        // premium+
+  earlyAccess: boolean;             // premium+ (72h)
+  analystReport: boolean;           // premium+
+  dealFlowManager: boolean;         // elite
+  apiAccess: boolean;               // elite
+
+  // --- General ---
+  prioritySupport: boolean;
+}
+
+const NONE: PlanCaps = {
+  fundingDetails: false, aiBusinessPlan: false, fullPitchDeck: false,
+  discoverInvestors: false, dadoriIntro: false, investorVisibility: false,
+  verifiedBadge: false, featuredInvestorDiscovery: false, dataRoom: false,
+  unlimitedStartupIntros: false, activeJobPostings: 1, workspaceAi: false,
+  applicationsPerMonth: 3, searchPriority: false, directMessages: false,
+  activelyLookingBadge: false, featuredProfile: false, profileAnalytics: false,
+  matchScore: false, portfolioItems: 1,
+  introsPerMonth: 0, startupDetails: false, watchlistLimit: 5, weeklyDigest: false,
+  advancedFilters: false, stealthProjects: false, portfolioTracker: false,
+  fundingData: false, investorVerifiedBadge: false, featuredInSearch: false,
+  investorDataRoom: false, earlyAccess: false, analystReport: false,
+  dealFlowManager: false, apiAccess: false, prioritySupport: false,
+};
+
+export function planCaps(planTier?: string | null): PlanCaps {
+  const t = planTier ?? "free";
+  switch (t) {
+    // ---- Startup / creator ----
+    case "project":
+      return { ...NONE, activeJobPostings: 1 };
+    case "startup":
+      return { ...NONE, fundingDetails: true, aiBusinessPlan: true, fullPitchDeck: true,
+        discoverInvestors: true, dadoriIntro: true, investorVisibility: true,
+        activeJobPostings: 5, workspaceAi: true };
+    case "startup_pro":
+    case "scale": // legacy
+      return { ...NONE, fundingDetails: true, aiBusinessPlan: true, fullPitchDeck: true,
+        discoverInvestors: true, dadoriIntro: true, investorVisibility: true,
+        verifiedBadge: true, featuredInvestorDiscovery: true, dataRoom: true,
+        unlimitedStartupIntros: true, activeJobPostings: Infinity, workspaceAi: true,
+        prioritySupport: true };
+
+    // ---- Talent ----
+    case "plus":
+      return { ...NONE, applicationsPerMonth: 20, searchPriority: true,
+        directMessages: true, activelyLookingBadge: true, portfolioItems: 10 };
+    case "pro": // talent pro (also legacy startup "pro" — handled as talent here;
+                // startup pages should use isStartupPaid/planCaps with real ids)
+      return { ...NONE, applicationsPerMonth: Infinity, searchPriority: true,
+        directMessages: true, activelyLookingBadge: true, featuredProfile: true,
+        profileAnalytics: true, matchScore: true, portfolioItems: Infinity,
+        prioritySupport: true };
+
+    // ---- Investor ----
+    case "investor_basic":
+      return { ...NONE, introsPerMonth: 3, startupDetails: true, watchlistLimit: 20,
+        weeklyDigest: true };
+    case "investor_pro":
+      return { ...NONE, introsPerMonth: 10, startupDetails: true, watchlistLimit: Infinity,
+        weeklyDigest: true, advancedFilters: true, stealthProjects: true,
+        portfolioTracker: true, fundingData: true };
+    case "investor_premium":
+      return { ...NONE, introsPerMonth: 25, startupDetails: true, watchlistLimit: Infinity,
+        weeklyDigest: true, advancedFilters: true, stealthProjects: true,
+        portfolioTracker: true, fundingData: true, investorVerifiedBadge: true,
+        featuredInSearch: true, investorDataRoom: true, earlyAccess: true,
+        analystReport: true };
+    case "investor_elite":
+      return { ...NONE, introsPerMonth: Infinity, startupDetails: true, watchlistLimit: Infinity,
+        weeklyDigest: true, advancedFilters: true, stealthProjects: true,
+        portfolioTracker: true, fundingData: true, investorVerifiedBadge: true,
+        featuredInSearch: true, investorDataRoom: true, earlyAccess: true,
+        analystReport: true, dealFlowManager: true, apiAccess: true,
+        prioritySupport: true };
+
+    default: // free / project / investor_free / unknown
+      return NONE;
+  }
+}

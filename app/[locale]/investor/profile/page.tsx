@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { planCaps } from "@/lib/entitlements";
 import { Navbar } from "@/components/layout/navbar";
 
 const ROLES = [
@@ -49,12 +50,21 @@ export default function InvestorProfilePage() {
   const [region, setRegion] = useState("de");
   const [openToIntros, setOpenToIntros] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [tier, setTier] = useState<string | null>(null);
+
+  const caps = planCaps(tier);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) return;
       setUid(user.uid);
       if (!name) setName(user.displayName ?? "");
+      try {
+        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+        if (profileSnap.exists()) setTier((profileSnap.data().plan_tier as string) ?? null);
+      } catch {
+        // Firebase not configured
+      }
       try {
         const snap = await getDoc(doc(db, "investors", user.uid));
         if (snap.exists()) {
@@ -196,7 +206,12 @@ export default function InvestorProfilePage() {
           <section className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-zinc-900">{t("open_to_intros")}</p>
+                <p className="font-semibold text-zinc-900 flex items-center gap-2">
+                  {t("open_to_intros")}
+                  {caps.investorVerifiedBadge && (
+                    <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">✔ Verified</span>
+                  )}
+                </p>
                 <p className="text-sm text-zinc-500 mt-0.5">{t("open_to_intros_desc")}</p>
               </div>
               <button type="button" onClick={() => setOpenToIntros(!openToIntros)}
@@ -204,6 +219,9 @@ export default function InvestorProfilePage() {
                 <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${openToIntros ? "translate-x-5" : "translate-x-0.5"}`} />
               </button>
             </div>
+            <p className="mt-3 text-xs text-zinc-400">
+              {Number.isFinite(caps.introsPerMonth) ? caps.introsPerMonth : "∞"} intros / month
+            </p>
           </section>
 
           <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white">

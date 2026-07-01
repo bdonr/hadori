@@ -434,7 +434,10 @@
       "remote": "远程",
       "details": "详情 →",
       "requested": "✓ 已申请",
-      "express_interest": "表达兴趣"
+      "express_interest": "表达兴趣",
+      "apply_limit_title": "已达申请上限（每月 {n} 个）",
+      "apply_limit_hint": "升级以在本月发送更多申请。",
+      "apply_limit_cta": "升级"
     },
     "portfolio": {
       "media_video": "视频 / Reel",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "曝光机会",
       "remote": "远程",
       "edit": "编辑",
-      "remove": "移除"
+      "remove": "移除",
+      "post_role": "发布职位",
+      "roles_count": "{max} 个活跃职位中的 {current} 个",
+      "roles_count_unlimited": "{current} 个活跃职位 · 无限"
     },
     "search": {
       "exp_beginner": "入门",

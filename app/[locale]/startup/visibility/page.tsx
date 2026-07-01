@@ -6,7 +6,7 @@ import type { Profile } from "@/lib/firebase/collections";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
-import { isStartupPaid } from "@/lib/entitlements";
+import { isStartupPaid, isStartupProPlus } from "@/lib/entitlements";
 import { getTranslations } from "next-intl/server";
 
 export default async function VisibilityPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -20,13 +20,16 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
   if (!profile || (profile.role !== "startup" && profile.role !== "creator")) redirect(`/${locale}/login`);
 
   const isPro = isStartupPaid(profile.plan_tier);
+  const isProPlus = isStartupProPlus(profile.plan_tier);
   const isVisible = profile.investor_visible ?? false;
 
+  // Investor visibility + requests are startup+ perks; the verified badge and
+  // data room are top-tier (startup_pro) only.
   const perks = [
-    { icon: "🔍", title: t("perk_findable_title"), desc: t("perk_findable_desc") },
-    { icon: "📬", title: t("perk_requests_title"), desc: t("perk_requests_desc") },
-    { icon: "🏅", title: t("perk_badge_title"), desc: t("perk_badge_desc") },
-    { icon: "🔒", title: t("perk_dataroom_title"), desc: t("perk_dataroom_desc") },
+    { icon: "🔍", title: t("perk_findable_title"), desc: t("perk_findable_desc"), unlocked: isPro },
+    { icon: "📬", title: t("perk_requests_title"), desc: t("perk_requests_desc"), unlocked: isPro },
+    { icon: "🏅", title: t("perk_badge_title"), desc: t("perk_badge_desc"), unlocked: isProPlus },
+    { icon: "🔒", title: t("perk_dataroom_title"), desc: t("perk_dataroom_desc"), unlocked: isProPlus },
   ];
 
   return (
@@ -72,7 +75,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
             {perks.map((p) => (
               <div
                 key={p.title}
-                className={`flex gap-4 rounded-xl border bg-white p-5 shadow-sm ${!isPro ? "opacity-60" : ""}`}
+                className={`flex gap-4 rounded-xl border bg-white p-5 shadow-sm ${!p.unlocked ? "opacity-60" : ""}`}
               >
                 <span className="text-2xl">{p.icon}</span>
                 <div>

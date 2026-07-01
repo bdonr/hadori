@@ -4,6 +4,7 @@ import { adminDb } from "@/lib/firebase/admin";
 import { getTranslations } from "next-intl/server";
 import type { Profile } from "@/lib/firebase/collections";
 import { Navbar } from "@/components/layout/navbar";
+import { planCaps } from "@/lib/entitlements";
 import Link from "next/link";
 
 export default async function InvestorDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -17,13 +18,15 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
 
   const t = await getTranslations("investor");
 
+  const caps = planCaps(profile.plan_tier);
+
   const cards = [
-    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",         desc: "New Startups & Stealth Projects", tier: "Angel+" },
-    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Discover Startups", desc: "Filter by stage, MRR, focus",     tier: null },
-    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio Tracker", desc: "Track deals & notes",             tier: "Pro+" },
-    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",         desc: "Saved startups at a glance",      tier: null },
-    { href: `/${locale}/investor/profile`,   icon: "💼", title: "My Profile",        desc: "Investment focus & check size",   tier: null },
-    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Subscription",      desc: "Scout → Angel → Pro → Lead → Elite", tier: null },
+    { href: `/${locale}/investor/dealflow`,  icon: "📬", title: "Deal Flow",         desc: "New Startups & Stealth Projects", tier: "Angel+", locked: !caps.startupDetails },
+    { href: `/${locale}/investor/discover`,  icon: "🔭", title: "Discover Startups", desc: "Filter by stage, MRR, focus",     tier: null,     locked: false },
+    { href: `/${locale}/investor/portfolio`, icon: "📊", title: "Portfolio Tracker", desc: "Track deals & notes",             tier: "Pro+",   locked: !caps.portfolioTracker },
+    { href: `/${locale}/investor/watchlist`, icon: "⭐", title: "Watchlist",         desc: "Saved startups at a glance",      tier: null,     locked: false },
+    { href: `/${locale}/investor/profile`,   icon: "💼", title: "My Profile",        desc: "Investment focus & check size",   tier: null,     locked: false },
+    { href: `/${locale}/investor/billing`,   icon: "💳", title: "Subscription",      desc: "Scout → Angel → Pro → Lead → Elite", tier: null,  locked: false },
   ];
 
   return (
@@ -39,7 +42,11 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
             >
               <div className="flex items-start justify-between">
                 <span className="text-3xl">{c.icon}</span>
-                {c.tier && <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">{c.tier}</span>}
+                {c.tier && (
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${c.locked ? "bg-zinc-100 text-zinc-500" : "bg-emerald-100 text-emerald-700"}`}>
+                    {c.locked ? `🔒 ${c.tier}` : c.tier}
+                  </span>
+                )}
               </div>
               <h2 className="mt-3 font-semibold text-zinc-900">{c.title}</h2>
               <p className="mt-1 text-sm text-zinc-500">{c.desc}</p>

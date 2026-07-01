@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { auth, db } from "@/lib/firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { isInvestorPaid, planCaps } from "@/lib/entitlements";
 import { Navbar } from "@/components/layout/navbar";
-
-const TIER_GATE = "investor_basic"; // angel+
 
 const DEAL_FLOW: {
   id: string; name: string; icon: string; category: string; stage: string; stageEmoji: string;
@@ -20,18 +22,30 @@ const DEAL_FLOW: {
   { id: "stealth-2", name: "???", icon: "🥷", category: "Deep Tech / AI", stage: "Pre-Seed", stageEmoji: "🌱", region: "AT", regionFlag: "🇦🇹", mrr: "€0", teamSize: "2–5", tagline: "", addedDaysAgo: 1, isNew: true, isStealth: true, stealthProblems: ["Informationsasymmetrie", "Effizienz"] },
 ];
 
-const CURRENT_TIER = "investor_pro";
-const TIER_ORDER = ["investor_free", "investor_basic", "investor_pro", "investor_premium", "investor_elite"];
-function tierAtLeast(required: string) {
-  return TIER_ORDER.indexOf(CURRENT_TIER) >= TIER_ORDER.indexOf(required);
-}
-
 export default function DealFlowPage() {
   const t = useTranslations("investor_pages.dealflow");
   const [filter, setFilter] = useState("all");
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const [tier, setTier] = useState<string | null>(null);
 
-  const canSeeDeals = tierAtLeast(TIER_GATE);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      try {
+        const snap = await getDoc(doc(db, "profiles", user.uid));
+        if (snap.exists()) setTier((snap.data().plan_tier as string) ?? null);
+      } catch {
+        // Firebase not configured
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const caps = planCaps(tier);
+  const canSeeDeals = isInvestorPaid(tier);        // Angel+
+  const canSeeStealth = caps.stealthProjects;      // Pro+
+  const canSeeDetails = caps.startupDetails;       // Angel+ (names)
+  const canSeeFunding = caps.fundingData;          // Pro+ (MRR/stage)
 
   const items = filter === "new" ? DEAL_FLOW.filter(d => d.isNew)
     : filter === "stealth" ? DEAL_FLOW.filter(d => d.isStealth)
@@ -66,7 +80,7 @@ export default function DealFlowPage() {
               <span className="text-lg">📬</span>
               <p className="text-sm text-emerald-800">
                 <strong>{t("new_startups", { n: DEAL_FLOW.filter(d => d.isNew).length })}</strong> {t("this_week")} ·
-                {tierAtLeast("investor_pro") ? ` ${t("incl_stealth", { n: DEAL_FLOW.filter(d => d.isStealth).length })}` : ` ${t("stealth_from_pro")}`}
+                {canSeeStealth ? ` ${t("incl_stealth", { n: DEAL_FLOW.filter(d => d.isStealth).length })}` : ` ${t("stealth_from_pro")}`}
               </p>
             </div>
 
@@ -82,7 +96,7 @@ export default function DealFlowPage() {
 
             <div className="flex flex-col gap-4">
               {items.map(deal => {
-                const isStealthLocked = deal.isStealth && !tierAtLeast("investor_pro");
+                const isStealthLocked = deal.isStealth && !canSeeStealth;
                 return (
                   <div key={deal.id} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start gap-4">
@@ -93,7 +107,7 @@ export default function DealFlowPage() {
                         <div className="flex items-start justify-between gap-3 flex-wrap">
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-zinc-900">{deal.isStealth ? t("stealth_project") : deal.name}</span>
+                              <span className="font-bold text-zinc-900">{deal.isStealth ? t("stealth_project") : canSeeDetails ? deal.name : t("stealth_project")}</span>
                               {deal.isNew && <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">{t("badge_new")}</span>}
                               {deal.isStealth && <span className="rounded-full bg-zinc-100 text-zinc-500 px-2 py-0.5 text-[10px] font-semibold">{t("badge_stealth")}</span>}
                               <span className="text-xs text-zinc-400">{t("days_ago", { n: deal.addedDaysAgo })}</span>
@@ -122,7 +136,7 @@ export default function DealFlowPage() {
                           <span>·</span>
                           <span>{deal.stageEmoji} {deal.stage}</span>
                           <span>·</span>
-                          <span>{t("mrr_label", { mrr: deal.mrr })}</span>
+                          <span>{canSeeFunding ? t("mrr_label", { mrr: deal.mrr }) : t("mrr_label", { mrr: "🔒" })}</span>
                           <span>·</span>
                           <span>👥 {deal.teamSize}</span>
                           <span>·</span>

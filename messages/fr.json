@@ -434,7 +434,10 @@
       "remote": "Remote",
       "details": "Détails →",
       "requested": "✓ Demandé",
-      "express_interest": "Manifester de l'intérêt"
+      "express_interest": "Manifester de l'intérêt",
+      "apply_limit_title": "Limite de candidatures atteinte ({n} / mois)",
+      "apply_limit_hint": "Passez à un forfait supérieur pour envoyer plus de candidatures ce mois-ci.",
+      "apply_limit_cta": "Améliorer"
     },
     "portfolio": {
       "media_video": "Vidéo / Reel",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "Visibilité",
       "remote": "Remote",
       "edit": "Modifier",
-      "remove": "Supprimer"
+      "remove": "Supprimer",
+      "post_role": "Publier un rôle",
+      "roles_count": "{current} sur {max} rôles actifs",
+      "roles_count_unlimited": "{current} rôles actifs · illimité"
     },
     "search": {
       "exp_beginner": "Débutant",

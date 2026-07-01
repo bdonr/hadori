@@ -434,7 +434,10 @@
       "remote": "Удалённо",
       "details": "Детали →",
       "requested": "✓ Запрос отправлен",
-      "express_interest": "Проявить интерес"
+      "express_interest": "Проявить интерес",
+      "apply_limit_title": "Достигнут лимит заявок ({n} / месяц)",
+      "apply_limit_hint": "Оформите подписку, чтобы отправлять больше заявок в этом месяце.",
+      "apply_limit_cta": "Улучшить"
     },
     "portfolio": {
       "media_video": "Видео / Reel",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "Известность",
       "remote": "Удалённо",
       "edit": "Редактировать",
-      "remove": "Удалить"
+      "remove": "Удалить",
+      "post_role": "Разместить роль",
+      "roles_count": "{current} из {max} активных ролей",
+      "roles_count_unlimited": "{current} активных ролей · без ограничений"
     },
     "search": {
       "exp_beginner": "Новичок",

@@ -434,7 +434,10 @@
       "remote": "リモート",
       "details": "詳細 →",
       "requested": "✓ リクエスト済み",
-      "express_interest": "興味を示す"
+      "express_interest": "興味を示す",
+      "apply_limit_title": "応募上限に達しました（月{n}件）",
+      "apply_limit_hint": "今月さらに応募するにはアップグレードしてください。",
+      "apply_limit_cta": "アップグレード"
     },
     "portfolio": {
       "media_video": "動画 / リール",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "露出（エクスポージャー）",
       "remote": "リモート",
       "edit": "編集",
-      "remove": "削除"
+      "remove": "削除",
+      "post_role": "募集を掲載",
+      "roles_count": "アクティブな募集 {current}/{max}",
+      "roles_count_unlimited": "アクティブな募集 {current}件・無制限"
     },
     "search": {
       "exp_beginner": "初心者",

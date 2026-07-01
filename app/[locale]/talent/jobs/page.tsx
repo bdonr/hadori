@@ -10,6 +10,7 @@ import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { planCaps } from "@/lib/entitlements";
 
 const COMP_LABEL_KEY: Record<string, string> = {
   revenue_share: "comp_revenue_share",
@@ -60,6 +61,10 @@ export default function TalentJobsPage() {
   const [regionFilter, setRegionFilter] = useState<string>("all");
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tier, setTier] = useState("free");
+  // Roles the user has expressed interest in this session — counts toward the
+  // monthly application cap (applications are not persisted server-side yet).
+  const [appliedIds, setAppliedIds] = useState<string[]>([]);
 
   // Load user skills & roles from Firestore
   useEffect(() => {
@@ -74,6 +79,10 @@ export default function TalentJobsPage() {
             if (Array.isArray(d.regions) && (d.regions as string[]).length > 0)
               setMyRegions(d.regions as string[]);
           }
+          // Plan tier lives on the profile doc, not the talent doc.
+          const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+          if (profileSnap.exists())
+            setTier((profileSnap.data().plan_tier as string) ?? "free");
         } catch { /* ignore */ }
       }
 
@@ -154,11 +163,35 @@ export default function TalentJobsPage() {
 
   const topMatch = results.length > 0 ? results[0].match : 0;
 
+  const applicationsCap = planCaps(tier).applicationsPerMonth;
+  const applicationsLeft = applicationsCap - appliedIds.length;
+  const atApplicationLimit = applicationsLeft <= 0;
+
+  function apply(roleId: string) {
+    setAppliedIds(prev => (prev.includes(roleId) ? prev : [...prev, roleId]));
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
 
       <main className="mx-auto max-w-4xl px-6 py-8">
+
+        {/* Applications-per-month limit banner */}
+        {atApplicationLimit && applicationsCap !== Infinity && (
+          <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+            <div>
+              <p className="font-semibold text-amber-900">{t("apply_limit_title", { n: applicationsCap })}</p>
+              <p className="mt-0.5 text-sm text-amber-700">{t("apply_limit_hint")}</p>
+            </div>
+            <Link
+              href={`/${locale}/talent/billing`}
+              className="shrink-0 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 transition-colors"
+            >
+              {t("apply_limit_cta")}
+            </Link>
+          </div>
+        )}
 
         {/* Skill context bar */}
         <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50 px-5 py-3 flex items-center gap-3 flex-wrap">
@@ -256,7 +289,15 @@ export default function TalentJobsPage() {
         ) : (
           <div className="flex flex-col gap-4">
             {results.map(role => (
-              <RoleCard key={role.id} role={role} mySkills={mySkills} locale={locale} />
+              <RoleCard
+                key={role.id}
+                role={role}
+                mySkills={mySkills}
+                locale={locale}
+                applied={appliedIds.includes(role.id)}
+                canApply={!atApplicationLimit}
+                onApply={() => apply(role.id)}
+              />
             ))}
           </div>
         )}
@@ -269,13 +310,18 @@ function RoleCard({
   role,
   mySkills,
   locale,
+  applied,
+  canApply,
+  onApply,
 }: {
   role: Role & { match: number };
   mySkills: string[];
   locale: string;
+  applied: boolean;
+  canApply: boolean;
+  onApply: () => void;
 }) {
   const t = useTranslations("talent_pages.jobs");
-  const [applied, setApplied] = useState(false);
 
   const matchColor =
     role.match >= 75 ? "bg-green-100 text-green-700" :
@@ -361,13 +407,20 @@ function RoleCard({
             <span className="rounded-lg bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
               {t("requested")}
             </span>
-          ) : (
+          ) : canApply ? (
             <button
-              onClick={() => setApplied(true)}
+              onClick={onApply}
               className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
             >
               {t("express_interest")}
             </button>
+          ) : (
+            <Link
+              href={`/${locale}/talent/billing`}
+              className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-100 transition-colors"
+            >
+              {t("apply_limit_cta")}
+            </Link>
           )}
         </div>
       </div>

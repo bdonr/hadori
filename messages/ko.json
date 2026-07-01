@@ -434,7 +434,10 @@
       "remote": "Remote",
       "details": "상세 →",
       "requested": "✓ 요청됨",
-      "express_interest": "관심 표시하기"
+      "express_interest": "관심 표시하기",
+      "apply_limit_title": "지원 한도에 도달했습니다 (월 {n}건)",
+      "apply_limit_hint": "이번 달에 더 지원하려면 업그레이드하세요.",
+      "apply_limit_cta": "업그레이드"
     },
     "portfolio": {
       "media_video": "영상 / 릴",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "Exposure",
       "remote": "Remote",
       "edit": "편집",
-      "remove": "삭제"
+      "remove": "삭제",
+      "post_role": "역할 게시",
+      "roles_count": "활성 역할 {current}/{max}",
+      "roles_count_unlimited": "활성 역할 {current}개 · 무제한"
     },
     "search": {
       "exp_beginner": "입문자",

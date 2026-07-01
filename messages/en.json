@@ -434,7 +434,10 @@
       "remote": "Remote",
       "details": "Details →",
       "requested": "✓ Requested",
-      "express_interest": "Express interest"
+      "express_interest": "Express interest",
+      "apply_limit_title": "Application limit reached ({n} / month)",
+      "apply_limit_hint": "Upgrade to send more applications this month.",
+      "apply_limit_cta": "Upgrade"
     },
     "portfolio": {
       "media_video": "Video / Reel",
@@ -1072,7 +1075,10 @@
       "complabel_exposure": "Exposure",
       "remote": "Remote",
       "edit": "Edit",
-      "remove": "Remove"
+      "remove": "Remove",
+      "post_role": "Post a role",
+      "roles_count": "{current} of {max} active roles",
+      "roles_count_unlimited": "{current} active roles · unlimited"
     },
     "search": {
       "exp_beginner": "Beginner",
