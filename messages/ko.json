@@ -448,11 +448,11 @@
       "media_link": "링크 / 웹사이트",
       "media_pdf": "PDF / 문서",
       "limit_free_title": "Free 플랜: 포트폴리오 1개",
-      "limit_pro_title": "Pro 플랜: 포트폴리오 10개",
-      "limit_free_hint": "Pro로 업그레이드하면 10개, Scale은 무제한입니다.",
-      "limit_pro_hint": "무제한 항목을 원하시면 Scale로 업그레이드하세요.",
+      "limit_pro_title": "Plus 플랜: 포트폴리오 10개",
+      "limit_free_hint": "Plus는 10개, Pro는 무제한으로 업그레이드.",
+      "limit_pro_hint": "무제한 항목은 Pro로 업그레이드하세요.",
       "upgrade_to_pro": "Pro로 업그레이드",
-      "upgrade_to_scale": "Scale로 업그레이드",
+      "upgrade_to_scale": "Pro로 업그레이드",
       "unlimited": "무제한",
       "remaining_free": "{n}개 더 가능",
       "form_title": "새 포트폴리오 작품",
@@ -1241,7 +1241,8 @@
       "remove": "삭제",
       "post_role": "역할 게시",
       "roles_count": "활성 역할 {current}/{max}",
-      "roles_count_unlimited": "활성 역할 {current}개 · 무제한"
+      "roles_count_unlimited": "활성 역할 {current}개 · 무제한",
+      "roles_allowance": "현재 플랜: 활성 역할 {max}개."
     },
     "search": {
       "exp_beginner": "입문자",

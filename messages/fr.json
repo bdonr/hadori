@@ -448,11 +448,11 @@
       "media_link": "Lien / Site web",
       "media_pdf": "PDF / Document",
       "limit_free_title": "Plan Free : 1 entrée de portfolio",
-      "limit_pro_title": "Plan Pro : 10 entrées de portfolio",
-      "limit_free_hint": "Passe à Pro pour 10 entrées, à Scale pour un nombre illimité.",
-      "limit_pro_hint": "Passe à Scale pour des entrées illimitées.",
+      "limit_pro_title": "Forfait Plus : 10 éléments de portfolio",
+      "limit_free_hint": "Passez à Plus pour 10 éléments, Pro pour illimité.",
+      "limit_pro_hint": "Passez à Pro pour des éléments illimités.",
       "upgrade_to_pro": "Passer à Pro",
-      "upgrade_to_scale": "Passer à Scale",
+      "upgrade_to_scale": "Passer à Pro",
       "unlimited": "Illimité",
       "remaining_free": "Encore {n} disponible(s)",
       "form_title": "Nouvelle réalisation de portfolio",
@@ -1241,7 +1241,8 @@
       "remove": "Supprimer",
       "post_role": "Publier un rôle",
       "roles_count": "{current} sur {max} rôles actifs",
-      "roles_count_unlimited": "{current} rôles actifs · illimité"
+      "roles_count_unlimited": "{current} rôles actifs · illimité",
+      "roles_allowance": "Votre forfait : {max} rôles actifs."
     },
     "search": {
       "exp_beginner": "Débutant",

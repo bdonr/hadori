@@ -448,11 +448,11 @@
       "media_link": "Link / Website",
       "media_pdf": "PDF / Dokument",
       "limit_free_title": "Free-Plan: 1 Portfolio-Eintrag",
-      "limit_pro_title": "Pro-Plan: 10 Portfolio-Einträge",
-      "limit_free_hint": "Upgrade auf Pro für 10 Einträge, auf Scale für unbegrenzt.",
-      "limit_pro_hint": "Upgrade auf Scale für unbegrenzte Einträge.",
+      "limit_pro_title": "Plus-Plan: 10 Portfolio-Einträge",
+      "limit_free_hint": "Upgrade auf Plus für 10 Einträge, auf Pro für unbegrenzt.",
+      "limit_pro_hint": "Upgrade auf Pro für unbegrenzte Einträge.",
       "upgrade_to_pro": "Auf Pro upgraden",
-      "upgrade_to_scale": "Auf Scale upgraden",
+      "upgrade_to_scale": "Auf Pro upgraden",
       "unlimited": "Unbegrenzt",
       "remaining_free": "Noch {n} frei",
       "form_title": "Neues Portfolio-Stück",
@@ -1241,7 +1241,8 @@
       "remove": "Entfernen",
       "post_role": "Rolle ausschreiben",
       "roles_count": "{current} von {max} aktiven Rollen",
-      "roles_count_unlimited": "{current} aktive Rollen · unbegrenzt"
+      "roles_count_unlimited": "{current} aktive Rollen · unbegrenzt",
+      "roles_allowance": "Dein Plan: {max} aktive Rollen."
     },
     "search": {
       "exp_beginner": "Einsteiger",

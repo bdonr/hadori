@@ -448,11 +448,11 @@
       "media_link": "Ссылка / Сайт",
       "media_pdf": "PDF / Документ",
       "limit_free_title": "План Free: 1 запись в портфолио",
-      "limit_pro_title": "План Pro: 10 записей в портфолио",
-      "limit_free_hint": "Перейди на Pro для 10 записей, на Scale — для безлимита.",
-      "limit_pro_hint": "Перейди на Scale для безлимитных записей.",
+      "limit_pro_title": "План Plus: 10 элементов портфолио",
+      "limit_free_hint": "Plus — 10 элементов, Pro — без ограничений.",
+      "limit_pro_hint": "Перейдите на Pro для неограниченных элементов.",
       "upgrade_to_pro": "Перейти на Pro",
-      "upgrade_to_scale": "Перейти на Scale",
+      "upgrade_to_scale": "Перейти на Pro",
       "unlimited": "Безлимитно",
       "remaining_free": "Ещё {n} доступно",
       "form_title": "Новая работа в портфолио",
@@ -1241,7 +1241,8 @@
       "remove": "Удалить",
       "post_role": "Разместить роль",
       "roles_count": "{current} из {max} активных ролей",
-      "roles_count_unlimited": "{current} активных ролей · без ограничений"
+      "roles_count_unlimited": "{current} активных ролей · без ограничений",
+      "roles_allowance": "Ваш план: {max} активных ролей."
     },
     "search": {
       "exp_beginner": "Новичок",

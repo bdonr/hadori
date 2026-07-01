@@ -350,10 +350,14 @@ export default function RolesPage() {
           </div>
         )}
 
-        {/* Free plan note */}
-        <p className="mt-8 text-center text-xs text-zinc-400">
-          {t("free_note_prefix")} <Link href="/startup/billing" className="underline hover:text-zinc-600">{t("upgrade_to_pro")}</Link> {t("free_note_suffix")}
-        </p>
+        {/* Plan note — only when a higher tier would actually give more roles.
+            Unlimited (startup_pro) shows nothing. */}
+        {Number.isFinite(maxRoles) && (
+          <p className="mt-8 text-center text-xs text-zinc-400">
+            {t("roles_allowance", { max: maxRoles })}{" "}
+            <Link href="/startup/billing" className="underline hover:text-zinc-600">{t("upgrade_to_pro")}</Link>
+          </p>
+        )}
       </main>
     </div>
   );

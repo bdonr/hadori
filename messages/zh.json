@@ -448,11 +448,11 @@
       "media_link": "链接 / 网站",
       "media_pdf": "PDF / 文档",
       "limit_free_title": "Free 方案：1 个作品集条目",
-      "limit_pro_title": "Pro 方案：10 个作品集条目",
-      "limit_free_hint": "升级到 Pro 可拥有 10 个条目，升级到 Scale 可拥有无限个。",
-      "limit_pro_hint": "升级到 Scale 可拥有无限个条目。",
+      "limit_pro_title": "Plus 方案：10 个作品集条目",
+      "limit_free_hint": "升级到 Plus 获得 10 个，Pro 获得无限。",
+      "limit_pro_hint": "升级到 Pro 以获得无限条目。",
       "upgrade_to_pro": "升级到 Pro",
-      "upgrade_to_scale": "升级到 Scale",
+      "upgrade_to_scale": "升级到 Pro",
       "unlimited": "无限",
       "remaining_free": "还剩 {n} 个",
       "form_title": "新的作品集条目",
@@ -1241,7 +1241,8 @@
       "remove": "移除",
       "post_role": "发布职位",
       "roles_count": "{max} 个活跃职位中的 {current} 个",
-      "roles_count_unlimited": "{current} 个活跃职位 · 无限"
+      "roles_count_unlimited": "{current} 个活跃职位 · 无限",
+      "roles_allowance": "你的方案：{max} 个活跃职位。"
     },
     "search": {
       "exp_beginner": "入门",

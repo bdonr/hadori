@@ -448,11 +448,11 @@
       "media_link": "リンク / ウェブサイト",
       "media_pdf": "PDF / ドキュメント",
       "limit_free_title": "Freeプラン: ポートフォリオ1点",
-      "limit_pro_title": "Proプラン: ポートフォリオ10点",
-      "limit_free_hint": "Proにアップグレードで10点、Scaleで無制限に。",
-      "limit_pro_hint": "Scaleにアップグレードで無制限の登録に。",
+      "limit_pro_title": "Plusプラン：ポートフォリオ10件",
+      "limit_free_hint": "Plusで10件、Proで無制限にアップグレード。",
+      "limit_pro_hint": "無制限にするには Pro にアップグレード。",
       "upgrade_to_pro": "Proにアップグレード",
-      "upgrade_to_scale": "Scaleにアップグレード",
+      "upgrade_to_scale": "Pro にアップグレード",
       "unlimited": "無制限",
       "remaining_free": "あと{n}点追加できます",
       "form_title": "新しいポートフォリオ作品",
@@ -1241,7 +1241,8 @@
       "remove": "削除",
       "post_role": "募集を掲載",
       "roles_count": "アクティブな募集 {current}/{max}",
-      "roles_count_unlimited": "アクティブな募集 {current}件・無制限"
+      "roles_count_unlimited": "アクティブな募集 {current}件・無制限",
+      "roles_allowance": "現在のプラン：アクティブな募集 {max} 件。"
     },
     "search": {
       "exp_beginner": "初心者",
