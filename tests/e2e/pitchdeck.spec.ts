@@ -15,9 +15,11 @@ test("pitch deck: a slide field persists after save + reload", async ({ page }) 
   await firstField.fill(value);
 
   await page.getByRole("button", { name: /Pitchdeck speichern/i }).click();
-  await expect(page.getByText(/Gespeichert/i).first()).toBeVisible({ timeout: 15_000 });
+  // After saving, the page redirects to the overview (standing rule #6).
+  await expect(page).toHaveURL(/\/de\/startup\/overview/, { timeout: 15_000 });
 
-  await page.reload();
+  // Navigate back to the deck — the saved value must still be there.
+  await page.goto("/de/startup/pitchdeck");
   await waitForAuthReady(page);
   await expect(page.locator("textarea, input[type=text]").first()).toHaveValue(value, { timeout: 20_000 });
 });
