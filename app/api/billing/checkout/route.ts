@@ -73,6 +73,26 @@ async function handleCheckout(req: NextRequest) {
   // plan_tier deterministically without re-matching price IDs.
   const tier = tierForPriceId(resolvedPriceId) ?? tierForPriceId(priceId) ?? "";
 
+  // If the customer already has an active subscription, SWITCH the plan in
+  // place (with proration) instead of creating a second parallel subscription
+  // — otherwise an "upgrade" would double-bill the customer.
+  const existing = await stripe.subscriptions.list({
+    customer: customerId,
+    status: "active",
+    limit: 1,
+  });
+  if (existing.data.length > 0) {
+    const sub = existing.data[0];
+    const itemId = sub.items.data[0]?.id;
+    await stripe.subscriptions.update(sub.id, {
+      items: [{ id: itemId, price: resolvedPriceId }],
+      proration_behavior: "create_prorations",
+      metadata: { uid: session.uid, plan_tier: tier },
+    });
+    // The customer.subscription.updated webhook writes the new plan_tier.
+    return NextResponse.json({ url: `${origin}${successUrl}` });
+  }
+
   const checkoutSession = await stripe.checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
