@@ -99,6 +99,9 @@ service cloud.firestore {
       match /tasks/{taskId} {
         allow read, write: if isMember();
       }
+      match /sprints/{sprintId} {
+        allow read, write: if isMember();
+      }
       match /milestones/{milestoneId} {
         allow read, write: if isMember();
       }

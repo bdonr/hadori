@@ -36,6 +36,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       assignedName: task.assignedName ?? null,
       dueDate: task.dueDate ?? null,
       priority: task.priority ?? "medium",
+      labels: Array.isArray(task.labels) ? task.labels : [],
+      sprintId: task.sprintId ?? null,
       order: task.order ?? 0,
       createdBy: session.uid,
       createdAt: now,
@@ -45,6 +47,23 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (action === "move" && taskId && columnId) {
     await tasksCol.doc(taskId).update({ columnId, updatedAt: now });
+    return NextResponse.json({ ok: true });
+  }
+
+  // Claim a card for yourself, or release it (assignedTo=null).
+  if (action === "claim" && taskId) {
+    const claim = body.claim !== false; // default true
+    await tasksCol.doc(taskId).update({
+      assignedTo: claim ? session.uid : null,
+      assignedName: claim ? (member.full_name ?? null) : null,
+      updatedAt: now,
+    });
+    return NextResponse.json({ ok: true });
+  }
+
+  // Assign / clear the sprint of a card.
+  if (action === "setSprint" && taskId) {
+    await tasksCol.doc(taskId).update({ sprintId: body.sprintId ?? null, updatedAt: now });
     return NextResponse.json({ ok: true });
   }
 

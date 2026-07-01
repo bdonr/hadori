@@ -15,6 +15,7 @@ export type TaskPriority = "low" | "medium" | "high";
 export type TaskStatus = "open" | "in_progress" | "review" | "done";
 export type MilestoneStatus = "upcoming" | "in_progress" | "completed" | "missed";
 export type InviteStatus = "pending" | "accepted" | "expired";
+export type SprintStatus = "planned" | "active" | "completed";
 
 export interface WorkspaceColumn {
   id: string;
@@ -42,14 +43,28 @@ export interface WorkspaceTask {
   columnId: string;
   title: string;
   description?: string;
-  assignedTo?: string;       // uid
+  assignedTo?: string;       // uid — who claimed/owns the card
   assignedName?: string;     // display name cache
   dueDate?: string;          // ISO date
   priority: TaskPriority;
+  labels?: string[];         // free-form visual tags
+  sprintId?: string;         // which sprint the card belongs to
   order: number;
   createdBy: string;
   createdAt: string;
   // extensible: milestoneId?, paymentTrigger? (Phase X)
+}
+
+export interface WorkspaceSprint {
+  id: string;
+  workspaceId: string;
+  name: string;
+  goal?: string;
+  startDate: string;         // ISO date
+  endDate: string;           // ISO date
+  status: SprintStatus;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface WorkspaceMember {
