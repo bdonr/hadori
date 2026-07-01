@@ -62,6 +62,7 @@ export default function SignupPage() {
         uid: user.uid,
         role,
         full_name: name,
+        email,
         plan_tier: "free",
         created_at: now,
         updated_at: now,

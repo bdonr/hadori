@@ -5,6 +5,16 @@ import { getStripe } from "@/lib/stripe";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
+  try {
+    return await handleCheckout(req);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Checkout failed";
+    console.error("[billing/checkout] error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+async function handleCheckout(req: NextRequest) {
   const session = await getServerSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -42,8 +52,12 @@ export async function POST(req: NextRequest) {
   let customerId: string = profile?.stripe_customer_id ?? "";
 
   if (!customerId) {
+    // Never pass a UID as email — Stripe rejects it. Omit if we don't have a
+    // real address; Stripe Checkout collects it from the customer instead.
+    const email: string | undefined =
+      typeof profile?.email === "string" && profile.email.includes("@") ? profile.email : undefined;
     const customer = await stripe.customers.create({
-      email: profile?.email ?? session.uid,
+      email,
       metadata: { uid: session.uid },
     });
     customerId = customer.id;

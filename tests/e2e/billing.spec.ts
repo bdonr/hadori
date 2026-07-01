@@ -28,11 +28,11 @@ test.describe("Startup billing", () => {
     await expect(page.getByText("Aktueller Plan")).toBeVisible();
   });
 
-  test.skip("clicking upgrade opens Stripe Checkout — needs NEXT_PUBLIC_STRIPE_PRICE_* in Firebase Console", async ({ page }) => {
+  test("clicking upgrade fires the Stripe Checkout call (priceId now present in bundle)", async ({ page }) => {
     await login(page, email);
     await page.goto("/de/startup/billing");
 
-    // Mock checkout API so test doesn't depend on Stripe env vars in production
+    // Mock checkout API so the test doesn't create a real Stripe session
     let checkoutCalled = false;
     await page.route("**/api/billing/checkout", async (route) => {
       checkoutCalled = true;

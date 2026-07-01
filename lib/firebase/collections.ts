@@ -21,6 +21,7 @@ export interface Profile {
   uid: string;
   role: UserRole;
   full_name: string;
+  email?: string;
   avatar_url?: string;
   plan_tier: PlanTier;
   stripe_customer_id?: string;
