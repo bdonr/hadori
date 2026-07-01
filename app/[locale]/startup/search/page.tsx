@@ -8,6 +8,7 @@ import { REGIONS, LANGUAGES } from "@/lib/regions";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 type Talent = {
   id: string;
@@ -22,12 +23,12 @@ type Talent = {
 };
 
 const EXPERIENCE_LABEL: Record<string, string> = {
-  beginner: "Einsteiger", intermediate: "Fortgeschritten",
-  experienced: "Erfahren", expert: "Experte", junior: "Junior",
+  beginner: "exp_beginner", intermediate: "exp_intermediate",
+  experienced: "exp_experienced", expert: "exp_expert", junior: "exp_junior",
 };
 const AVAILABILITY_LABEL: Record<string, string> = {
-  immediately: "Sofort verfügbar", part_time: "Nebenbei",
-  project_based: "Projektbasiert", not_available: "Nicht verfügbar",
+  immediately: "avail_immediately", part_time: "avail_part_time",
+  project_based: "avail_project_based", not_available: "avail_not_available",
 };
 const AVAIL_DOT: Record<string, string> = {
   immediately: "bg-green-400",
@@ -37,6 +38,7 @@ const AVAIL_DOT: Record<string, string> = {
 };
 
 export default function TalentSearchPage() {
+  const t = useTranslations("startup_pages.search");
   const { locale } = useParams<{ locale: string }>();
   const [talents, setTalents] = useState<Talent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,14 +108,14 @@ export default function TalentSearchPage() {
         <div className="mb-4 flex flex-wrap gap-3">
           <input
             type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Name, Bio oder Skill …"
+            placeholder={t("search_placeholder")}
             className="flex-1 min-w-[200px] rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
           />
           <button
             onClick={() => setRemoteOnly(!remoteOnly)}
             className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${remoteOnly ? "bg-indigo-600 text-white" : "border border-zinc-200 bg-white text-zinc-500 hover:border-indigo-300"}`}
           >
-            🌍 Remote
+            {t("remote_filter")}
           </button>
         </div>
 
@@ -142,12 +144,12 @@ export default function TalentSearchPage() {
           <div className="mt-16 text-center">
             <span className="text-5xl">🎯</span>
             <p className="mt-4 text-lg font-semibold text-zinc-700">
-              {talents.length === 0 ? "Noch keine Talente registriert" : "Keine Treffer"}
+              {talents.length === 0 ? t("empty_no_talents") : t("empty_no_results")}
             </p>
             <p className="mt-2 text-sm text-zinc-400">
               {talents.length === 0
-                ? "Talente erscheinen hier sobald sie sich auf DADORI registrieren."
-                : "Andere Filter oder Suchbegriff probieren."}
+                ? t("empty_no_talents_desc")
+                : t("empty_no_results_desc")}
             </p>
           </div>
         ) : (
@@ -175,15 +177,15 @@ export default function TalentSearchPage() {
                         {talent.availability && AVAILABILITY_LABEL[talent.availability] && (
                           <span className="flex items-center gap-1 text-xs text-zinc-500">
                             <span className={`h-1.5 w-1.5 rounded-full ${AVAIL_DOT[talent.availability] ?? "bg-zinc-300"}`} />
-                            {AVAILABILITY_LABEL[talent.availability]}
+                            {t(AVAILABILITY_LABEL[talent.availability])}
                           </span>
                         )}
                         {talent.remote && (
-                          <span className="text-xs text-zinc-400">🌍 Remote</span>
+                          <span className="text-xs text-zinc-400">{t("remote_badge")}</span>
                         )}
                       </div>
                       {talent.experience && EXPERIENCE_LABEL[talent.experience] && (
-                        <p className="mt-0.5 text-xs text-zinc-500">{EXPERIENCE_LABEL[talent.experience]}</p>
+                        <p className="mt-0.5 text-xs text-zinc-500">{t(EXPERIENCE_LABEL[talent.experience])}</p>
                       )}
                       {talent.bio && (
                         <p className="mt-2 text-sm text-zinc-600 line-clamp-2">{talent.bio}</p>
@@ -215,7 +217,7 @@ export default function TalentSearchPage() {
                         </div>
                       )}
                     </div>
-                    <span className="shrink-0 text-xs text-indigo-600 font-semibold mt-1">Profil →</span>
+                    <span className="shrink-0 text-xs text-indigo-600 font-semibold mt-1">{t("profile_link")}</span>
                   </div>
                 </Link>
               );

@@ -7,6 +7,7 @@ import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import type { WorkspaceTask, WorkspaceColumn } from "@/lib/firebase/workspace";
 import { DEFAULT_COLUMNS } from "@/lib/firebase/workspace";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useTranslations } from "next-intl";
 
 const PRIORITY_COLORS: Record<string, string> = {
   low:    "bg-zinc-100 text-zinc-600",
@@ -15,6 +16,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 export default function WorkspaceBoard() {
+  const t = useTranslations("workspace_pages.board");
   const { id: workspaceId } = useParams<{ id: string }>();
   const [tasks, setTasks] = useState<WorkspaceTask[]>([]);
   const [columns] = useState<WorkspaceColumn[]>(DEFAULT_COLUMNS);
@@ -77,24 +79,24 @@ export default function WorkspaceBoard() {
     <div className="flex h-full flex-col">
       {/* Toolbar */}
       <div className="flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-4">
-        <h1 className="text-lg font-bold text-zinc-900">Board</h1>
+        <h1 className="text-lg font-bold text-zinc-900">{t("title")}</h1>
         <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
           <Dialog.Trigger asChild>
             <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-              + Add task
+              {t("add_task_button")}
             </button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 bg-black/40 z-40" />
             <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
-              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">New task</Dialog.Title>
+              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">{t("new_task_title")}</Dialog.Title>
               <div className="space-y-3">
                 <input
                   autoFocus
                   value={newTask.title}
                   onChange={(e) => setNewTask((p) => ({ ...p, title: e.target.value }))}
                   onKeyDown={(e) => e.key === "Enter" && createTask()}
-                  placeholder="Task title"
+                  placeholder={t("task_title_placeholder")}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                 />
                 <div className="flex gap-3">
@@ -112,21 +114,21 @@ export default function WorkspaceBoard() {
                     onChange={(e) => setNewTask((p) => ({ ...p, priority: e.target.value }))}
                     className="flex-1 rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="low">{t("priority_low")}</option>
+                    <option value="medium">{t("priority_medium")}</option>
+                    <option value="high">{t("priority_high")}</option>
                   </select>
                 </div>
                 <div className="flex gap-2 justify-end">
                   <Dialog.Close asChild>
-                    <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">Cancel</button>
+                    <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">{t("cancel")}</button>
                   </Dialog.Close>
                   <button
                     onClick={createTask}
                     disabled={saving || !newTask.title.trim()}
                     className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
                   >
-                    {saving ? "Saving…" : "Add task"}
+                    {saving ? t("saving") : t("add_task_button")}
                   </button>
                 </div>
               </div>
@@ -177,6 +179,7 @@ function TaskCard({
   onMove: (id: string, col: string) => void;
   onDelete: (id: string) => void;
 }) {
+  const t = useTranslations("workspace_pages.board");
   const [menuOpen, setMenuOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -201,7 +204,7 @@ function TaskCard({
           </button>
           {menuOpen && (
             <div className="absolute right-0 top-6 z-10 min-w-36 rounded-xl border border-zinc-200 bg-white py-1 shadow-lg">
-              <p className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Move to</p>
+              <p className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">{t("move_to")}</p>
               {columns.filter((c) => c.id !== task.columnId).map((c) => (
                 <button
                   key={c.id}
@@ -216,7 +219,7 @@ function TaskCard({
                 onClick={() => { onDelete(task.id); setMenuOpen(false); }}
                 className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
               >
-                Delete
+                {t("delete")}
               </button>
             </div>
           )}

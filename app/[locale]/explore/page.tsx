@@ -7,6 +7,7 @@ import { LangSwitcher } from "@/components/LangSwitcher";
 import { db } from "@/lib/firebase/client";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 function deriveCategoryIcon(category: string): string {
   const c = category.toLowerCase();
@@ -49,6 +50,7 @@ const SKILL_LABELS: Record<string, string> = {
 };
 
 export default function ExplorePage() {
+  const t = useTranslations("explore");
   const params = useParams();
   const locale = (params?.locale as string) ?? "en";
 
@@ -113,8 +115,8 @@ export default function ExplorePage() {
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-zinc-900">Projekte & Startups entdecken</h1>
-          <p className="mt-2 text-zinc-500">Finde Startups, Creator-Projekte und Teams die auf Talente warten.</p>
+          <h1 className="text-3xl font-extrabold text-zinc-900">{t("heading")}</h1>
+          <p className="mt-2 text-zinc-500">{t("subheading")}</p>
         </div>
 
         {loading ? (
@@ -129,24 +131,24 @@ export default function ExplorePage() {
             <div className="mb-4 flex gap-3">
               <input
                 type="text" value={search} onChange={e => setSearch(e.target.value)}
-                placeholder="Startup-Name, Kategorie oder gesuchte Skills …"
+                placeholder={t("search_placeholder")}
                 className="flex-1 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
               />
               <button
                 onClick={() => setInvestorOnly(!investorOnly)}
                 className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${investorOnly ? "bg-amber-500 text-white" : "border border-zinc-200 bg-white text-zinc-500 hover:border-amber-300"}`}
               >
-                💰 Investierbar
+                {t("filter_investable")}
               </button>
             </div>
 
             {results.length === 0 ? (
               <div className="mt-16 text-center">
                 <span className="text-5xl">🚀</span>
-                <p className="mt-4 text-lg font-semibold text-zinc-700">Noch keine Projekte</p>
-                <p className="mt-2 text-sm text-zinc-400">Sei das erste Startup auf DADORI.</p>
+                <p className="mt-4 text-lg font-semibold text-zinc-700">{t("empty_title")}</p>
+                <p className="mt-2 text-sm text-zinc-400">{t("empty_desc")}</p>
                 <Link href={`/${locale}/signup`} className="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                  Jetzt registrieren →
+                  {t("empty_cta")}
                 </Link>
               </div>
             ) : (
@@ -184,7 +186,7 @@ export default function ExplorePage() {
                     </div>
                     {project.lookingFor.length > 0 && (
                       <div className="mt-3 pt-3 border-t border-zinc-100 text-xs text-zinc-500">
-                        Sucht: <span className="font-semibold text-zinc-700">{project.lookingFor.join(", ")}</span>
+                        {t("looking_for_label")} <span className="font-semibold text-zinc-700">{project.lookingFor.join(", ")}</span>
                       </div>
                     )}
                   </Link>
@@ -195,10 +197,10 @@ export default function ExplorePage() {
         )}
 
         <div className="mt-12 rounded-2xl border border-indigo-100 bg-indigo-50 p-8 text-center">
-          <h2 className="text-xl font-extrabold text-indigo-900">Du bist Talent?</h2>
-          <p className="mt-2 text-sm text-indigo-700">Erstell dein DADORI-Profil und lass Startups zu dir kommen.</p>
+          <h2 className="text-xl font-extrabold text-indigo-900">{t("talent_cta_title")}</h2>
+          <p className="mt-2 text-sm text-indigo-700">{t("talent_cta_desc")}</p>
           <Link href={`/${locale}/signup`} className="mt-4 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-            Kostenlos registrieren →
+            {t("talent_cta_button")}
           </Link>
         </div>
       </main>

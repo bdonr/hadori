@@ -9,18 +9,25 @@ import { Button } from "@/components/ui/button";
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
 
-  // Redirect logged-in users to their dashboard
+  // Redirect logged-in users to their dashboard.
+  // IMPORTANT: redirect() works by throwing a NEXT_REDIRECT error, so it must
+  // NOT be called inside a try/catch — the catch would swallow the redirect
+  // and the logged-in user would wrongly see the marketing landing page.
   const session = await getServerSession();
+  let role: string | null = null;
   if (session && adminDb) {
     try {
       const snap = await adminDb.collection("profiles").doc(session.uid).get();
-      const profile = snap.data();
-      if (profile?.role === "startup" || profile?.role === "creator") redirect(`/${locale}/startup`);
-      if (profile?.role === "talent") redirect(`/${locale}/talent`);
-      if (profile?.role === "investor") redirect(`/${locale}/investor`);
+      role = (snap.data()?.role as string) ?? null;
     } catch {
-      // Fall through to homepage
+      // Could not read profile — treat as logged-in but unknown role below.
     }
+  }
+  if (session) {
+    if (role === "talent") redirect(`/${locale}/talent`);
+    if (role === "investor") redirect(`/${locale}/investor`);
+    // Default any other logged-in user (startup/creator/unknown) to the startup dashboard.
+    redirect(`/${locale}/startup`);
   }
 
   const t = await getTranslations("landing");

@@ -8,6 +8,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 /* ──────────────────────────────────────────────
    Slide definitions
@@ -16,90 +17,90 @@ import { Navbar } from "@/components/layout/navbar";
 interface Slide {
   id: string;
   icon: string;
-  title: string;
+  titleKey: string;
   proOnly: boolean;
-  fields: { label: string; placeholder: string; multiline?: boolean }[];
+  fields: { labelKey: string; placeholderKey: string; multiline?: boolean }[];
 }
 
 const SLIDES: Slide[] = [
   {
     id: "problem",
     icon: "🔥",
-    title: "Das Problem",
+    titleKey: "slide_problem_title",
     proOnly: false,
     fields: [
-      { label: "Welches Problem löst du?", placeholder: "Beschreibe den Schmerzpunkt deiner Zielgruppe …", multiline: true },
-      { label: "Betroffene Zielgruppe", placeholder: "z.B. KMU-Gründer, HR-Manager in Unternehmen 50–500 MA" },
+      { labelKey: "slide_problem_f1_label", placeholderKey: "slide_problem_f1_placeholder", multiline: true },
+      { labelKey: "slide_problem_f2_label", placeholderKey: "slide_problem_f2_placeholder" },
     ],
   },
   {
     id: "solution",
     icon: "💡",
-    title: "Deine Lösung",
+    titleKey: "slide_solution_title",
     proOnly: false,
     fields: [
-      { label: "Wie löst du das Problem?", placeholder: "Dein Produkt / Service in 2–3 Sätzen …", multiline: true },
-      { label: "Einzigartiger Vorteil (USP)", placeholder: "Was macht dich besser als der Status Quo?" },
+      { labelKey: "slide_solution_f1_label", placeholderKey: "slide_solution_f1_placeholder", multiline: true },
+      { labelKey: "slide_solution_f2_label", placeholderKey: "slide_solution_f2_placeholder" },
     ],
   },
   {
     id: "model",
     icon: "💰",
-    title: "Geschäftsmodell",
+    titleKey: "slide_model_title",
     proOnly: false,
     fields: [
-      { label: "Wie verdienst du Geld?", placeholder: "z.B. SaaS-Abo, Transaktionsgebühr, Lizenz …" },
-      { label: "Preismodell", placeholder: "z.B. 49 €/Monat pro Nutzer, Freemium + Upgrade" },
+      { labelKey: "slide_model_f1_label", placeholderKey: "slide_model_f1_placeholder" },
+      { labelKey: "slide_model_f2_label", placeholderKey: "slide_model_f2_placeholder" },
     ],
   },
   {
     id: "market",
     icon: "📊",
-    title: "Marktgröße",
+    titleKey: "slide_market_title",
     proOnly: true,
     fields: [
-      { label: "TAM (Total Addressable Market)", placeholder: "z.B. 4,2 Mrd. € — Quelle: Statista 2024" },
-      { label: "SAM / SOM", placeholder: "Realistisch erreichbarer Marktanteil in 3 Jahren" },
+      { labelKey: "slide_market_f1_label", placeholderKey: "slide_market_f1_placeholder" },
+      { labelKey: "slide_market_f2_label", placeholderKey: "slide_market_f2_placeholder" },
     ],
   },
   {
     id: "traction",
     icon: "🚀",
-    title: "Traction & Meilensteine",
+    titleKey: "slide_traction_title",
     proOnly: true,
     fields: [
-      { label: "Bisherige Erfolge", placeholder: "Nutzer, Umsatz, Pilotpartner, Preise …", multiline: true },
-      { label: "Nächste 12 Monate", placeholder: "Was willst du mit dem Investment erreichen?" },
+      { labelKey: "slide_traction_f1_label", placeholderKey: "slide_traction_f1_placeholder", multiline: true },
+      { labelKey: "slide_traction_f2_label", placeholderKey: "slide_traction_f2_placeholder" },
     ],
   },
   {
     id: "competitors",
     icon: "⚔️",
-    title: "Wettbewerb",
+    titleKey: "slide_competitors_title",
     proOnly: true,
     fields: [
-      { label: "Hauptwettbewerber", placeholder: "z.B. Wettbewerber A, B, C" },
-      { label: "Dein Wettbewerbsvorteil", placeholder: "Warum gewinnt ihr trotzdem?" },
+      { labelKey: "slide_competitors_f1_label", placeholderKey: "slide_competitors_f1_placeholder" },
+      { labelKey: "slide_competitors_f2_label", placeholderKey: "slide_competitors_f2_placeholder" },
     ],
   },
   {
     id: "team",
     icon: "👥",
-    title: "Team",
+    titleKey: "slide_team_title",
     proOnly: true,
     fields: [
-      { label: "Gründer & Rollen", placeholder: "Name, Rolle, relevante Erfahrung …", multiline: true },
-      { label: "Offene Schlüsselstellen", placeholder: "z.B. suchen CTO mit ML-Erfahrung" },
+      { labelKey: "slide_team_f1_label", placeholderKey: "slide_team_f1_placeholder", multiline: true },
+      { labelKey: "slide_team_f2_label", placeholderKey: "slide_team_f2_placeholder" },
     ],
   },
   {
     id: "ask",
     icon: "🎯",
-    title: "Der Ask",
+    titleKey: "slide_ask_title",
     proOnly: true,
     fields: [
-      { label: "Wie viel Kapital suchst du?", placeholder: "z.B. 500.000 € Seed-Runde" },
-      { label: "Verwendung der Mittel", placeholder: "z.B. 60 % Produkt, 30 % Marketing, 10 % Ops", multiline: true },
+      { labelKey: "slide_ask_f1_label", placeholderKey: "slide_ask_f1_placeholder" },
+      { labelKey: "slide_ask_f2_label", placeholderKey: "slide_ask_f2_placeholder", multiline: true },
     ],
   },
 ];
@@ -108,6 +109,7 @@ const SLIDES: Slide[] = [
    Component
 ────────────────────────────────────────────── */
 export default function PitchDeckPage() {
+  const t = useTranslations("startup_pages.pitchdeck");
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
 
@@ -175,14 +177,14 @@ export default function PitchDeckPage() {
             <span className="text-xl">✨</span>
             <div>
               <p className="text-sm font-semibold text-indigo-900">
-                Kostenlos: 3 Kernslides — Pro: vollständiges 8-Slide-Deck
+                {t("upsell_title")}
               </p>
               <p className="mt-0.5 text-sm text-indigo-600">
-                Mit Pro erhältst du Markt, Traction, Wettbewerb, Team & Ask — plus PDF-Export für Investorengespräche.
+                {t("upsell_desc")}
               </p>
             </div>
             <Button size="sm" className="ml-auto shrink-0" asChild>
-              <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden</Link>
+              <Link href={`/${locale}/startup/billing`}>{t("upgrade_to_pro")}</Link>
             </Button>
           </div>
         )}
@@ -193,6 +195,7 @@ export default function PitchDeckPage() {
             <SlideCard
               key={slide.id}
               slide={slide}
+              t={t}
               values={values[slide.id] ?? {}}
               onChange={(label, val) => set(slide.id, label, val)}
             />
@@ -205,7 +208,7 @@ export default function PitchDeckPage() {
             <div className="mb-4 flex items-center gap-3">
               <div className="h-px flex-1 bg-zinc-200" />
               <span className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                Im Pro-Plan
+                {t("in_pro_plan")}
               </span>
               <div className="h-px flex-1 bg-zinc-200" />
             </div>
@@ -220,11 +223,11 @@ export default function PitchDeckPage() {
                   >
                     <div className="mb-4 flex items-center gap-2">
                       <span className="text-2xl">{slide.icon}</span>
-                      <h3 className="font-bold text-zinc-900">{slide.title}</h3>
+                      <h3 className="font-bold text-zinc-900">{t(slide.titleKey)}</h3>
                     </div>
                     {slide.fields.map((f) => (
-                      <div key={f.label} className="mb-3">
-                        <p className="mb-1 text-xs font-medium text-zinc-500">{f.label}</p>
+                      <div key={f.labelKey} className="mb-3">
+                        <p className="mb-1 text-xs font-medium text-zinc-500">{t(f.labelKey)}</p>
                         <div className="h-8 rounded-lg bg-zinc-100" />
                       </div>
                     ))}
@@ -237,16 +240,15 @@ export default function PitchDeckPage() {
                 <div className="text-center px-8">
                   <span className="text-4xl">🔒</span>
                   <h3 className="mt-3 text-lg font-black text-zinc-900">
-                    5 weitere Slides im Pro-Plan
+                    {t("locked_title")}
                   </h3>
                   <p className="mt-2 text-sm text-zinc-500 max-w-sm">
-                    Marktgröße, Traction, Wettbewerb, Team & Investor-Ask —
-                    das vollständige Pitchdeck für echte Investorengespräche.
+                    {t("locked_desc")}
                   </p>
                   <Button className="mt-5" size="lg" asChild>
-                    <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden — 49 €/Monat</Link>
+                    <Link href={`/${locale}/startup/billing`}>{t("locked_cta")}</Link>
                   </Button>
-                  <p className="mt-2 text-xs text-zinc-400">Monatlich kündbar · PDF-Export inklusive</p>
+                  <p className="mt-2 text-xs text-zinc-400">{t("locked_note")}</p>
                 </div>
               </div>
             </div>
@@ -256,10 +258,10 @@ export default function PitchDeckPage() {
         {/* Save button for active slides */}
         <div className="mt-8 flex items-center justify-end gap-3">
           {saved && (
-            <span className="text-sm font-medium text-green-600">✓ Gespeichert</span>
+            <span className="text-sm font-medium text-green-600">{t("saved")}</span>
           )}
           <Button size="lg" onClick={handleSave} disabled={saving}>
-            {saving ? "Speichern …" : "Pitchdeck speichern"}
+            {saving ? t("saving") : t("save_pitchdeck")}
           </Button>
         </div>
       </main>
@@ -272,10 +274,12 @@ export default function PitchDeckPage() {
 ────────────────────────────────────────────── */
 function SlideCard({
   slide,
+  t,
   values,
   onChange,
 }: {
   slide: Slide;
+  t: (key: string) => string;
   values: Record<string, string>;
   onChange: (label: string, value: string) => void;
 }) {
@@ -283,30 +287,30 @@ function SlideCard({
     <div className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">{slide.icon}</span>
-        <h3 className="font-bold text-zinc-900">{slide.title}</h3>
+        <h3 className="font-bold text-zinc-900">{t(slide.titleKey)}</h3>
       </div>
 
       <div className="flex flex-col gap-3 flex-1">
         {slide.fields.map((f) =>
           f.multiline ? (
-            <div key={f.label}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{f.label}</label>
+            <div key={f.labelKey}>
+              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}</label>
               <textarea
                 rows={3}
-                placeholder={f.placeholder}
-                value={values[f.label] ?? ""}
-                onChange={(e) => onChange(f.label, e.target.value)}
+                placeholder={t(f.placeholderKey)}
+                value={values[f.labelKey] ?? ""}
+                onChange={(e) => onChange(f.labelKey, e.target.value)}
                 className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 resize-none"
               />
             </div>
           ) : (
-            <div key={f.label}>
-              <label className="mb-1 block text-xs font-medium text-zinc-500">{f.label}</label>
+            <div key={f.labelKey}>
+              <label className="mb-1 block text-xs font-medium text-zinc-500">{t(f.labelKey)}</label>
               <input
                 type="text"
-                placeholder={f.placeholder}
-                value={values[f.label] ?? ""}
-                onChange={(e) => onChange(f.label, e.target.value)}
+                placeholder={t(f.placeholderKey)}
+                value={values[f.labelKey] ?? ""}
+                onChange={(e) => onChange(f.labelKey, e.target.value)}
                 className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
               />
             </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { getSkillLabel } from "@/lib/skills";
@@ -70,6 +71,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const { id } = use(params);
   const routeParams = useParams();
   const locale = (routeParams.locale as string) ?? "en";
+  const t = useTranslations("misc_pages.project_detail");
 
   const [project, setProject] = useState<Project | null>(null);
   const [creator, setCreator] = useState<CreatorData | null>(null);
@@ -165,10 +167,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     return (
       <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center gap-4">
         <span className="text-5xl">🔍</span>
-        <h1 className="text-xl font-bold text-zinc-900">Projekt nicht gefunden</h1>
-        <p className="text-sm text-zinc-500">Dieses Projekt existiert nicht oder wurde entfernt.</p>
+        <h1 className="text-xl font-bold text-zinc-900">{t("not_found_title")}</h1>
+        <p className="text-sm text-zinc-500">{t("not_found_desc")}</p>
         <Link href={`/${locale}/explore`} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-          Alle Projekte →
+          {t("all_projects")}
         </Link>
       </div>
     );
@@ -179,8 +181,8 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
       <div className="min-h-screen bg-zinc-50">
         <main className="mx-auto max-w-2xl px-6 py-16 text-center">
           <span className="text-5xl">🥷</span>
-          <h1 className="mt-4 text-2xl font-extrabold text-zinc-900">Stealth-Projekt</h1>
-          <p className="mt-3 text-zinc-500 text-lg">Dieses Projekt ist im Stealth-Modus.</p>
+          <h1 className="mt-4 text-2xl font-extrabold text-zinc-900">{t("stealth_project")}</h1>
+          <p className="mt-3 text-zinc-500 text-lg">{t("stealth_project_desc")}</p>
           <div className="mt-8 rounded-2xl border border-indigo-200 bg-indigo-50 p-6 text-left">
             <div className="flex flex-wrap gap-2 mb-3">
               <span className="rounded-full bg-indigo-600 text-white px-3 py-1 text-sm font-semibold">{project.stealthCategory}</span>
@@ -191,10 +193,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
           </div>
           <div className="mt-6">
             {interested ? (
-              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ Interesse bekundet</span>
+              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ {t("interest_shown")}</span>
             ) : (
               <button onClick={() => setInterested(true)} className="rounded-xl bg-indigo-600 px-8 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                Interesse bekunden →
+                {t("show_interest_arrow")}
               </button>
             )}
           </div>
@@ -221,18 +223,18 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
               </div>
               <p className="mt-1 text-base text-zinc-600">{project.tagline}</p>
               <div className="mt-3 flex items-center gap-3 flex-wrap text-xs text-zinc-400">
-                {project.foundedYear && <span>Gegründet {project.foundedYear}</span>}
-                {project.teamSize && <><span>·</span><span>👥 Team: {project.teamSize}</span></>}
+                {project.foundedYear && <span>{t("founded", { year: project.foundedYear })}</span>}
+                {project.teamSize && <><span>·</span><span>👥 {t("team", { size: project.teamSize })}</span></>}
                 {project.stage && <><span>·</span><span>{project.stageEmoji} {project.stage}</span></>}
               </div>
             </div>
           </div>
           <div className="mt-6 flex gap-3 flex-wrap">
             {interested ? (
-              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ Anfrage gesendet</span>
+              <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ {t("request_sent")}</span>
             ) : (
               <button onClick={() => setInterested(true)} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                Interesse bekunden
+                {t("show_interest")}
               </button>
             )}
             {project.website && (
@@ -249,7 +251,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Beschreibung */}
             {project.description && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-3 font-bold text-zinc-900">Über das Projekt</h2>
+                <h2 className="mb-3 font-bold text-zinc-900">{t("about_project")}</h2>
                 <p className="text-sm leading-relaxed text-zinc-600">{project.description}</p>
               </div>
             )}
@@ -257,7 +259,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Gesuchte Rollen */}
             {project.lookingFor.length > 0 && (
               <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
-                <h2 className="mb-3 font-bold text-indigo-900">Wir suchen</h2>
+                <h2 className="mb-3 font-bold text-indigo-900">{t("we_are_looking")}</h2>
                 <div className="flex flex-col gap-2 mb-4">
                   {project.lookingFor.map(role => (
                     <div key={role} className="flex items-center gap-2">
@@ -281,7 +283,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Ersteller-Profil */}
             {creator && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 font-bold text-zinc-900">Ersteller</h2>
+                <h2 className="mb-4 font-bold text-zinc-900">{t("creator")}</h2>
                 <div className="flex items-start gap-4">
                   {creator.avatar_url ? (
                     <img src={creator.avatar_url} alt={creator.full_name}
@@ -300,7 +302,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                         </span>
                       )}
                       {creator.remote && (
-                        <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">🌍 Remote</span>
+                        <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600">🌍 {t("remote")}</span>
                       )}
                     </div>
                     {creator.experience && EXPERIENCE_LABEL[creator.experience] && (
@@ -337,7 +339,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     )}
                     <Link href={`/${locale}/user/${creator.uid}`}
                       className="mt-3 inline-block text-xs font-semibold text-indigo-600 hover:underline">
-                      Vollständiges Profil ansehen →
+                      {t("view_full_profile")}
                     </Link>
                   </div>
                 </div>
@@ -347,7 +349,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Co-Founder / Team */}
             {project.founders.length > 0 && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 font-bold text-zinc-900">Team</h2>
+                <h2 className="mb-4 font-bold text-zinc-900">{t("team_heading")}</h2>
                 <div className="flex flex-col gap-3">
                   {project.founders.map(f => (
                     <div key={f.name} className="flex items-center gap-3">
@@ -367,14 +369,14 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
           <div className="flex flex-col gap-4">
             {project.stage && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Phase</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">{t("phase")}</p>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">{project.stageEmoji}</span>
                   <span className="font-bold text-zinc-900">{project.stage}</span>
                 </div>
                 {project.fundingGoal && (
                   <div className="mt-3 rounded-xl border border-green-200 bg-green-50 px-3 py-2">
-                    <p className="text-xs font-semibold text-green-700">🎯 Fundraising-Ziel</p>
+                    <p className="text-xs font-semibold text-green-700">🎯 {t("fundraising_goal")}</p>
                     <p className="text-sm font-bold text-green-900 mt-0.5">{project.fundingGoal}</p>
                   </div>
                 )}
@@ -382,26 +384,26 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             )}
             {project.investorVisible && (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-                <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">Investor-Status</p>
-                <p className="text-sm font-semibold text-amber-900">🟢 Offen für Investoren</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">{t("investor_status")}</p>
+                <p className="text-sm font-semibold text-amber-900">🟢 {t("open_for_investors")}</p>
                 <Link href={`/${locale}/signup`} className="mt-3 block w-full rounded-lg bg-amber-500 py-2 text-center text-xs font-bold text-white hover:bg-amber-600 transition-colors">
-                  Als Investor Kontakt aufnehmen
+                  {t("contact_as_investor")}
                 </Link>
               </div>
             )}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Teilen</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">{t("share")}</p>
               <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
                 className="w-full rounded-lg border border-zinc-200 py-2 text-xs font-semibold text-zinc-600 hover:border-indigo-300 transition-colors">
-                🔗 Link kopieren
+                🔗 {t("copy_link")}
               </button>
             </div>
           </div>
         </div>
 
         <p className="mt-8 text-center text-sm text-zinc-400">
-          Auf DADORI entdecken:{" "}
-          <Link href={`/${locale}/explore`} className="text-indigo-600 hover:underline">Alle Projekte & Startups →</Link>
+          {t("discover_on_dadori")}{" "}
+          <Link href={`/${locale}/explore`} className="text-indigo-600 hover:underline">{t("all_projects_startups")}</Link>
         </p>
       </main>
     </div>

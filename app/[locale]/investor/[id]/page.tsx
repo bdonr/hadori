@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
+import { useTranslations } from "next-intl";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { LangSwitcher } from "@/components/LangSwitcher";
@@ -16,6 +17,7 @@ type Investor = {
 };
 
 export default function InvestorProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations("investor_pages.detail");
   const { id } = use(params);
   const [investor, setInvestor] = useState<Investor | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
       <Navbar />
-        <div className="text-zinc-400 text-sm animate-pulse">Wird geladen…</div>
+        <div className="text-zinc-400 text-sm animate-pulse">{t("loading")}</div>
       </div>
     );
   }
@@ -68,9 +70,9 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
     return (
       <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center gap-4">
         <span className="text-5xl">💼</span>
-        <h1 className="text-xl font-bold text-zinc-900">Investor nicht gefunden</h1>
+        <h1 className="text-xl font-bold text-zinc-900">{t("not_found")}</h1>
         <Link href="/en/explore" className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-          Zurück →
+          {t("back")}
         </Link>
       </div>
     );
@@ -99,17 +101,17 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
           <div className="mt-6 flex gap-3">
             {investor.openToIntros && (
               requested ? (
-                <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">✓ Intro angefragt</span>
+                <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">{t("intro_requested")}</span>
               ) : (
                 <button onClick={() => setRequested(true)} className="rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-white hover:bg-amber-600 transition-colors">
-                  🤝 Intro anfragen
+                  {t("request_intro")}
                 </button>
               )
             )}
             {investor.website && (
               <a href={investor.website} target="_blank" rel="noopener noreferrer"
                 className="rounded-xl border border-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-600 hover:border-zinc-300 transition-colors">
-                🌐 Website
+                {t("website")}
               </a>
             )}
           </div>
@@ -119,13 +121,13 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
           <div className="lg:col-span-2 flex flex-col gap-6">
             {investor.bio && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-3 font-bold text-zinc-900">Über {investor.name}</h2>
+                <h2 className="mb-3 font-bold text-zinc-900">{t("about", { name: investor.name })}</h2>
                 <p className="text-sm leading-relaxed text-zinc-600">{investor.bio}</p>
               </div>
             )}
             {investor.portfolio.length > 0 && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 font-bold text-zinc-900">Portfolio</h2>
+                <h2 className="mb-4 font-bold text-zinc-900">{t("portfolio")}</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {investor.portfolio.map(p => (
                     <div key={p.name} className="rounded-xl border border-zinc-200 px-4 py-3 flex items-center gap-2">
@@ -142,7 +144,7 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
           </div>
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 text-xs text-amber-700">
-              <strong>Hinweis:</strong> DADORI vermittelt Introductions. Keine Erfolgsgebühren, keine Transaktionsbeteiligung.
+              <strong>{t("notice_label")}</strong> {t("notice_text")}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { TALENT_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
@@ -20,6 +21,7 @@ const ACCENT: Record<string, { ring: string; btn: string; badge: string }> = {
 };
 
 export default function TalentBillingPage() {
+  const t = useTranslations("talent_pages.billing");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
@@ -28,7 +30,7 @@ export default function TalentBillingPage() {
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];
     if (!priceId) {
-      setError("Dieser Plan ist noch nicht buchbar. Bitte versuche es später erneut.");
+      setError(t("not_bookable"));
       return;
     }
     setLoading(tierId);
@@ -43,7 +45,7 @@ export default function TalentBillingPage() {
       if (url) window.location.href = url;
       else throw new Error("Keine Checkout-URL");
     } catch {
-      setError("Zahlung konnte nicht gestartet werden.");
+      setError(t("payment_failed"));
     } finally {
       setLoading(null);
     }
@@ -55,8 +57,8 @@ export default function TalentBillingPage() {
 
       <main className="mx-auto max-w-4xl px-6 py-10">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-extrabold text-zinc-900">Dein Talent-Plan</h2>
-          <p className="mt-2 text-zinc-500">Aktuell: <strong>{TALENT_TIERS.find(t => t.id === CURRENT)?.name ?? "Free"}</strong></p>
+          <h2 className="text-2xl font-extrabold text-zinc-900">{t("heading")}</h2>
+          <p className="mt-2 text-zinc-500">{t("current_label")} <strong>{TALENT_TIERS.find(t => t.id === CURRENT)?.name ?? "Free"}</strong></p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-3">
@@ -67,15 +69,15 @@ export default function TalentBillingPage() {
               <div key={tier.id} className={`relative rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm flex flex-col ${a.ring}`}>
                 {tier.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-white shadow">Beliebt ⭐</span>
+                    <span className="rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-white shadow">{t("popular")}</span>
                   </div>
                 )}
                 <span className="text-3xl">{tier.emoji}</span>
                 <h3 className="mt-2 text-xl font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-5">
                   {tier.price === 0
-                    ? <span className="text-2xl font-black text-zinc-900">Gratis</span>
-                    : <><span className="text-2xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-sm text-zinc-400">/ Mo</span></>}
+                    ? <span className="text-2xl font-black text-zinc-900">{t("free_price")}</span>
+                    : <><span className="text-2xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-sm text-zinc-400">{t("per_month")}</span></>}
                 </div>
                 <ul className="flex-1 flex flex-col gap-2 mb-7">
                   {tier.features.map(f => (
@@ -85,13 +87,13 @@ export default function TalentBillingPage() {
                   ))}
                 </ul>
                 {isCurrent ? (
-                  <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">Aktueller Plan</div>
+                  <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">{t("current_plan")}</div>
                 ) : tier.price === 0 ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">Downgrade</div>
+                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">{t("downgrade")}</div>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2.5 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>
-                    {loading === tier.id ? "Wird gestartet…" : tier.cta}
+                    {loading === tier.id ? t("starting") : tier.cta}
                   </button>
                 )}
               </div>
@@ -102,27 +104,27 @@ export default function TalentBillingPage() {
         {error && <p className="mt-4 text-center text-sm text-red-600">{error}</p>}
 
         <div className="mt-10 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-zinc-900 mb-4">Vergleich im Detail</h3>
+          <h3 className="font-bold text-zinc-900 mb-4">{t("comparison_title")}</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-100">
-                  <th className="text-left py-2 text-zinc-500 font-medium">Feature</th>
+                  <th className="text-left py-2 text-zinc-500 font-medium">{t("col_feature")}</th>
                   {TALENT_TIERS.map(t => <th key={t.id} className="py-2 text-center font-semibold text-zinc-700">{t.emoji} {t.name}</th>)}
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-50">
                 {[
-                  ["Profil sichtbar", "✓", "✓", "✓"],
-                  ["Bewerbungen / Mo", "3", "20", "∞"],
-                  ["Direktnachrichten", "–", "✓", "✓"],
-                  ["Priorität in Suche", "–", "✓", "✓"],
-                  ["Featured Placement", "–", "–", "✓"],
-                  ["Profil-Analytics", "–", "–", "✓"],
-                  ["Match Score", "–", "–", "✓"],
-                ].map(([feat, ...vals]) => (
-                  <tr key={feat}>
-                    <td className="py-2 text-zinc-600">{feat}</td>
+                  ["feat_profile_visible", "Profil sichtbar", "✓", "✓", "✓"],
+                  ["feat_applications", "Bewerbungen / Mo", "3", "20", "∞"],
+                  ["feat_direct_messages", "Direktnachrichten", "–", "✓", "✓"],
+                  ["feat_search_priority", "Priorität in Suche", "–", "✓", "✓"],
+                  ["feat_featured_placement", "Featured Placement", "–", "–", "✓"],
+                  ["feat_profile_analytics", "Profil-Analytics", "–", "–", "✓"],
+                  ["feat_match_score", "Match Score", "–", "–", "✓"],
+                ].map(([key, feat, ...vals]) => (
+                  <tr key={key}>
+                    <td className="py-2 text-zinc-600">{t(key)}</td>
                     {vals.map((v, i) => (
                       <td key={i} className={`py-2 text-center ${v === "–" ? "text-zinc-300" : "text-zinc-800 font-medium"}`}>{v}</td>
                     ))}
@@ -133,7 +135,7 @@ export default function TalentBillingPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-zinc-400">Monatlich kündbar · Zahlung über Stripe · Sofort aktiv</p>
+        <p className="mt-6 text-center text-xs text-zinc-400">{t("footer_note")}</p>
       </main>
     </div>
   );

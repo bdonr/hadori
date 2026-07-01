@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getSkillLabel } from "@/lib/skills";
@@ -10,11 +11,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 
-const COMP_LABEL: Record<string, string> = {
-  revenue_share: "Revenue Share",
-  equity: "Equity",
-  cash: "Cash / Honorar",
-  exposure: "Exposure",
+const COMP_LABEL_KEY: Record<string, string> = {
+  revenue_share: "comp_revenue_share",
+  equity: "comp_equity",
+  cash: "comp_cash",
+  exposure: "comp_exposure",
 };
 
 interface Role {
@@ -41,14 +42,15 @@ function matchScore(roleSkills: string[], mySkills: string[]): number {
 }
 
 const FILTER_OPTIONS = [
-  { id: "all", label: "Alle" },
-  { id: "match", label: "Beste Matches" },
-  { id: "remote", label: "Remote" },
-  { id: "freelance", label: "Freelance" },
-  { id: "equity", label: "Equity" },
+  { id: "all", labelKey: "filter_all" },
+  { id: "match", labelKey: "filter_best_matches" },
+  { id: "remote", labelKey: "filter_remote" },
+  { id: "freelance", labelKey: "filter_freelance" },
+  { id: "equity", labelKey: "filter_equity" },
 ];
 
 export default function TalentJobsPage() {
+  const t = useTranslations("talent_pages.jobs");
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
   const [mySkills, setMySkills] = useState<string[]>([]);
@@ -160,16 +162,16 @@ export default function TalentJobsPage() {
 
         {/* Skill context bar */}
         <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50 px-5 py-3 flex items-center gap-3 flex-wrap">
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">Deine Skills</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">{t("your_skills")}</span>
           {mySkills.length === 0 ? (
-            <span className="text-xs text-indigo-400 italic">Noch keine Skills — jetzt hinzufügen</span>
+            <span className="text-xs text-indigo-400 italic">{t("no_skills_yet")}</span>
           ) : mySkills.map(id => (
             <span key={id} className="rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-medium text-white">
               {getSkillLabel(id)}
             </span>
           ))}
           <Link href={`/${locale}/talent/skills`} className="ml-auto text-xs text-indigo-500 hover:underline shrink-0">
-            Bearbeiten →
+            {t("edit")}
           </Link>
         </div>
 
@@ -179,7 +181,7 @@ export default function TalentJobsPage() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Rolle, Projekt oder Skill suchen …"
+            placeholder={t("search_placeholder")}
             className="flex-1 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
           />
           <div className="flex gap-1.5 flex-wrap">
@@ -193,7 +195,7 @@ export default function TalentJobsPage() {
                     : "border border-zinc-200 bg-white text-zinc-600 hover:border-indigo-300"
                 }`}
               >
-                {f.label}
+                {t(f.labelKey)}
               </button>
             ))}
           </div>
@@ -201,10 +203,10 @@ export default function TalentJobsPage() {
 
         {/* Region filter */}
         <div className="mb-5 flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Region:</span>
+          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">{t("region_label")}</span>
           {[
-            { id: "all", flag: "🌍", label: "Alle" },
-            { id: "my_regions", flag: "⭐", label: "Meine Regionen" },
+            { id: "all", flag: "🌍", label: t("region_all") },
+            { id: "my_regions", flag: "⭐", label: t("region_mine") },
             ...REGIONS.filter(r => r.id !== "worldwide" && r.id !== "eu").map(r => ({
               id: r.id, flag: r.flag, label: r.label,
             })),
@@ -227,9 +229,9 @@ export default function TalentJobsPage() {
         {/* Result count */}
         {!loading && (
           <p className="mb-4 text-sm text-zinc-500">
-            <span className="font-semibold text-zinc-900">{results.length}</span> Rollen gefunden
+            <span className="font-semibold text-zinc-900">{results.length}</span> {t("roles_found")}
             {filter === "match" && topMatch > 0 && (
-              <span className="ml-2 text-indigo-600">· Bester Match: {topMatch} %</span>
+              <span className="ml-2 text-indigo-600">{t("best_match", { n: topMatch })}</span>
             )}
           </p>
         )}
@@ -237,18 +239,18 @@ export default function TalentJobsPage() {
         {/* Role cards */}
         {loading ? (
           <div className="py-20 text-center text-zinc-400">
-            <p className="text-sm">Laden …</p>
+            <p className="text-sm">{t("loading")}</p>
           </div>
         ) : results.length === 0 ? (
           <div className="py-20 text-center text-zinc-400">
             <p className="text-4xl mb-3">🔍</p>
             <p className="font-semibold text-zinc-600">
-              {roles.length === 0 ? "Noch keine offenen Stellen" : "Keine Treffer"}
+              {roles.length === 0 ? t("empty_no_roles") : t("empty_no_hits")}
             </p>
             <p className="mt-1 text-sm">
               {roles.length === 0
-                ? "Schau später wieder rein — Startups und Creator posten hier ihre offenen Rollen."
-                : "Andere Suchbegriffe oder Filter versuchen."}
+                ? t("empty_no_roles_hint")
+                : t("empty_no_hits_hint")}
             </p>
           </div>
         ) : (
@@ -272,6 +274,7 @@ function RoleCard({
   mySkills: string[];
   locale: string;
 }) {
+  const t = useTranslations("talent_pages.jobs");
   const [applied, setApplied] = useState(false);
 
   const matchColor =
@@ -294,7 +297,7 @@ function RoleCard({
               <span className="font-bold text-zinc-900">{role.title}</span>
               {role.match > 0 && (
                 <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${matchColor}`}>
-                  {role.match} % Match
+                  {t("match_badge", { n: role.match })}
                 </span>
               )}
             </div>
@@ -333,7 +336,7 @@ function RoleCard({
       {/* Meta + CTA */}
       <div className="mt-4 flex items-center gap-3 flex-wrap">
         <span className="text-xs text-zinc-400">{role.commitment}</span>
-        {role.remote && <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600">Remote</span>}
+        {role.remote && <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600">{t("remote")}</span>}
         {(() => {
           const reg = getRegion(role.region);
           return reg ? (
@@ -344,7 +347,7 @@ function RoleCard({
         })()}
         {role.compensation.map(c => (
           <span key={c} className="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500">
-            {COMP_LABEL[c] ?? c}
+            {COMP_LABEL_KEY[c] ? t(COMP_LABEL_KEY[c]) : c}
           </span>
         ))}
         <div className="ml-auto flex items-center gap-2">
@@ -352,18 +355,18 @@ function RoleCard({
             href={`/${locale}/user/${role.ownerId}`}
             className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-600 hover:border-indigo-300 hover:text-indigo-600 transition-colors"
           >
-            Details →
+            {t("details")}
           </Link>
           {applied ? (
             <span className="rounded-lg bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
-              ✓ Angefragt
+              {t("requested")}
             </span>
           ) : (
             <button
               onClick={() => setApplied(true)}
               className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
             >
-              Interesse bekunden
+              {t("express_interest")}
             </button>
           )}
         </div>

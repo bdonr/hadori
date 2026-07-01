@@ -6,15 +6,17 @@ import { db } from "@/lib/firebase/client";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import type { WorkspaceMilestone, MilestoneStatus } from "@/lib/firebase/workspace";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useTranslations } from "next-intl";
 
-const STATUS_STYLES: Record<MilestoneStatus, { label: string; color: string }> = {
-  upcoming:    { label: "Upcoming",    color: "bg-zinc-100 text-zinc-600" },
-  in_progress: { label: "In progress", color: "bg-blue-100 text-blue-700" },
-  completed:   { label: "Completed",   color: "bg-green-100 text-green-700" },
-  missed:      { label: "Missed",      color: "bg-red-100 text-red-700" },
+const STATUS_STYLES: Record<MilestoneStatus, { labelKey: string; color: string }> = {
+  upcoming:    { labelKey: "status_upcoming",    color: "bg-zinc-100 text-zinc-600" },
+  in_progress: { labelKey: "status_in_progress", color: "bg-blue-100 text-blue-700" },
+  completed:   { labelKey: "status_completed",   color: "bg-green-100 text-green-700" },
+  missed:      { labelKey: "status_missed",      color: "bg-red-100 text-red-700" },
 };
 
 export default function MilestonesPage() {
+  const t = useTranslations("workspace_pages.milestones");
   const { id: workspaceId } = useParams<{ id: string }>();
   const [milestones, setMilestones] = useState<WorkspaceMilestone[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,33 +62,33 @@ export default function MilestonesPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-lg font-bold text-zinc-900">Milestones</h1>
+          <h1 className="text-lg font-bold text-zinc-900">{t("title")}</h1>
           {overdue.length > 0 && (
-            <p className="text-sm text-red-600 mt-0.5">⚠️ {overdue.length} overdue</p>
+            <p className="text-sm text-red-600 mt-0.5">⚠️ {t("overdue_count", { n: overdue.length })}</p>
           )}
         </div>
         <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
           <Dialog.Trigger asChild>
             <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-              + Add milestone
+              {t("add_milestone_button")}
             </button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 bg-black/40 z-40" />
             <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
-              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">New milestone</Dialog.Title>
+              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">{t("new_milestone_title")}</Dialog.Title>
               <div className="space-y-3">
                 <input
                   autoFocus
                   value={form.title}
                   onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-                  placeholder="Milestone title"
+                  placeholder={t("milestone_title_placeholder")}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400"
                 />
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-                  placeholder="Description (optional)"
+                  placeholder={t("description_placeholder")}
                   rows={2}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 resize-none"
                 />
@@ -98,14 +100,14 @@ export default function MilestonesPage() {
                 />
                 <div className="flex gap-2 justify-end">
                   <Dialog.Close asChild>
-                    <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">Cancel</button>
+                    <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">{t("cancel")}</button>
                   </Dialog.Close>
                   <button
                     onClick={createMilestone}
                     disabled={saving || !form.title.trim() || !form.dueDate}
                     className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
                   >
-                    {saving ? "Saving…" : "Add"}
+                    {saving ? t("saving") : t("add")}
                   </button>
                 </div>
               </div>
@@ -116,7 +118,7 @@ export default function MilestonesPage() {
 
       {milestones.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-zinc-200 p-12 text-center">
-          <p className="text-zinc-400">No milestones yet. Add your first one.</p>
+          <p className="text-zinc-400">{t("empty")}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -130,11 +132,11 @@ export default function MilestonesPage() {
                     <p className={`font-medium text-zinc-900 ${m.status === "completed" ? "line-through text-zinc-400" : ""}`}>
                       {m.title}
                     </p>
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${s.color}`}>{s.label}</span>
-                    {isOverdue && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">OVERDUE</span>}
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${s.color}`}>{t(s.labelKey)}</span>
+                    {isOverdue && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{t("overdue_badge")}</span>}
                   </div>
                   {m.description && <p className="mt-1 text-sm text-zinc-500">{m.description}</p>}
-                  <p className="mt-1 text-xs text-zinc-400">Due: {new Date(m.dueDate).toLocaleDateString()}</p>
+                  <p className="mt-1 text-xs text-zinc-400">{t("due_label")} {new Date(m.dueDate).toLocaleDateString()}</p>
                 </div>
                 <select
                   value={m.status}
@@ -142,7 +144,7 @@ export default function MilestonesPage() {
                   className="shrink-0 rounded-lg border border-zinc-200 px-2 py-1 text-xs outline-none"
                 >
                   {(Object.keys(STATUS_STYLES) as MilestoneStatus[]).map((s) => (
-                    <option key={s} value={s}>{STATUS_STYLES[s].label}</option>
+                    <option key={s} value={s}>{t(STATUS_STYLES[s].labelKey)}</option>
                   ))}
                 </select>
               </div>

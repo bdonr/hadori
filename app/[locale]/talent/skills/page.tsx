@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,20 +14,21 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
 
 const EXPERIENCE_LEVELS = [
-  { id: "beginner", label: "Einsteiger", desc: "< 1 Jahr" },
-  { id: "intermediate", label: "Fortgeschritten", desc: "1–3 Jahre" },
-  { id: "experienced", label: "Erfahren", desc: "3–5 Jahre" },
-  { id: "expert", label: "Experte", desc: "5+ Jahre" },
+  { id: "beginner", labelKey: "exp_beginner", descKey: "exp_beginner_desc" },
+  { id: "intermediate", labelKey: "exp_intermediate", descKey: "exp_intermediate_desc" },
+  { id: "experienced", labelKey: "exp_experienced", descKey: "exp_experienced_desc" },
+  { id: "expert", labelKey: "exp_expert", descKey: "exp_expert_desc" },
 ];
 
 const AVAILABILITY = [
-  { id: "immediately", label: "Sofort verfügbar" },
-  { id: "part_time", label: "Nebenbei (< 20h/Woche)" },
-  { id: "project_based", label: "Projektbasiert" },
-  { id: "not_available", label: "Gerade nicht verfügbar" },
+  { id: "immediately", labelKey: "avail_immediately" },
+  { id: "part_time", labelKey: "avail_part_time" },
+  { id: "project_based", labelKey: "avail_project_based" },
+  { id: "not_available", labelKey: "avail_not_available" },
 ];
 
 export default function TalentSkillsPage() {
+  const t = useTranslations("talent_pages.skills");
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
@@ -108,13 +110,13 @@ export default function TalentSkillsPage() {
 
           {/* Intro */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-1 text-base font-bold text-zinc-900">Wer bist du?</h2>
-            <p className="mb-4 text-sm text-zinc-500">Ein kurzer Satz über dich — was machst du, womit hilfst du?</p>
+            <h2 className="mb-1 text-base font-bold text-zinc-900">{t("who_title")}</h2>
+            <p className="mb-4 text-sm text-zinc-500">{t("who_hint")}</p>
             <textarea
               rows={3}
               value={bio}
               onChange={e => setBio(e.target.value)}
-              placeholder="z.B. Ich bin freiberuflicher Video-Editor mit Fokus auf Gaming-Content und schneide seit 3 Jahren YouTube-Videos für Creator mit 10k–500k Subs."
+              placeholder={t("bio_placeholder")}
               className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 resize-none"
             />
           </div>
@@ -122,7 +124,7 @@ export default function TalentSkillsPage() {
           {/* Skills */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
             <SkillPicker
-              label="Was kannst du? (bis zu 15 Skills)"
+              label={t("skills_label")}
               selected={skills}
               onChange={setSkills}
               max={15}
@@ -132,7 +134,7 @@ export default function TalentSkillsPage() {
           {/* Experience + Availability */}
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <p className="mb-3 text-sm font-semibold text-zinc-800">Erfahrungslevel</p>
+              <p className="mb-3 text-sm font-semibold text-zinc-800">{t("experience_title")}</p>
               <div className="flex flex-col gap-2">
                 {EXPERIENCE_LEVELS.map(l => (
                   <button
@@ -144,15 +146,15 @@ export default function TalentSkillsPage() {
                         : "border-zinc-200 hover:border-zinc-300"
                     }`}
                   >
-                    <span className="text-sm font-medium text-zinc-900">{l.label}</span>
-                    <span className="text-xs text-zinc-400">{l.desc}</span>
+                    <span className="text-sm font-medium text-zinc-900">{t(l.labelKey)}</span>
+                    <span className="text-xs text-zinc-400">{t(l.descKey)}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <p className="mb-3 text-sm font-semibold text-zinc-800">Verfügbarkeit</p>
+              <p className="mb-3 text-sm font-semibold text-zinc-800">{t("availability_title")}</p>
               <div className="flex flex-col gap-2">
                 {AVAILABILITY.map(a => (
                   <button
@@ -164,7 +166,7 @@ export default function TalentSkillsPage() {
                         : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
                     }`}
                   >
-                    {a.label}
+                    {t(a.labelKey)}
                   </button>
                 ))}
               </div>
@@ -176,15 +178,15 @@ export default function TalentSkillsPage() {
                   onChange={e => setRemote(e.target.checked)}
                   className="h-4 w-4 rounded border-zinc-300 text-indigo-600"
                 />
-                <span className="text-sm text-zinc-700">Remote bevorzugt</span>
+                <span className="text-sm text-zinc-700">{t("remote_preferred")}</span>
               </label>
             </div>
           </div>
 
           {/* Region & Language */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-1 text-base font-bold text-zinc-900">Wo möchtest du arbeiten?</h2>
-            <p className="mb-4 text-sm text-zinc-500">Wähle Länder oder Regionen — du kannst mehrere auswählen.</p>
+            <h2 className="mb-1 text-base font-bold text-zinc-900">{t("where_title")}</h2>
+            <p className="mb-4 text-sm text-zinc-500">{t("where_hint")}</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {REGIONS.map(r => (
                 <button
@@ -204,8 +206,8 @@ export default function TalentSkillsPage() {
               ))}
             </div>
 
-            <h2 className="mb-1 text-sm font-bold text-zinc-900">Sprachen</h2>
-            <p className="mb-3 text-sm text-zinc-500">In welchen Sprachen kannst du arbeiten?</p>
+            <h2 className="mb-1 text-sm font-bold text-zinc-900">{t("languages_title")}</h2>
+            <p className="mb-3 text-sm text-zinc-500">{t("languages_hint")}</p>
             <div className="flex flex-wrap gap-2">
               {LANGUAGES.map(l => (
                 <button
@@ -227,7 +229,7 @@ export default function TalentSkillsPage() {
           {/* Preview */}
           {skills.length > 0 && (
             <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-6">
-              <p className="mb-3 text-sm font-semibold text-indigo-900">Profilvorschau — so sehen dich Startups & Creator</p>
+              <p className="mb-3 text-sm font-semibold text-indigo-900">{t("preview_title")}</p>
               {bio && <p className="mb-3 text-sm text-indigo-800 italic">"{bio}"</p>}
               <div className="flex flex-wrap gap-1.5">
                 {skills.map(id => (
@@ -238,9 +240,9 @@ export default function TalentSkillsPage() {
               </div>
               {experience && (
                 <p className="mt-2 text-xs text-indigo-600">
-                  {EXPERIENCE_LEVELS.find(l => l.id === experience)?.label} ·{" "}
-                  {AVAILABILITY.find(a => a.id === availability)?.label ?? ""}
-                  {remote ? " · Remote" : ""}
+                  {(() => { const l = EXPERIENCE_LEVELS.find(l => l.id === experience); return l ? t(l.labelKey) : ""; })()} ·{" "}
+                  {(() => { const a = AVAILABILITY.find(a => a.id === availability); return a ? t(a.labelKey) : ""; })()}
+                  {remote ? t("preview_remote_suffix") : ""}
                 </p>
               )}
               {regions.length > 0 && (
@@ -256,10 +258,10 @@ export default function TalentSkillsPage() {
 
           <div className="flex items-center gap-4">
             <Button type="submit" size="lg" disabled={skills.length === 0}>
-              {saved ? "✓ Gespeichert!" : "Profil speichern"}
+              {saved ? t("saved") : t("save_profile")}
             </Button>
             {skills.length === 0 && (
-              <p className="text-sm text-zinc-400">Wähl mindestens einen Skill aus</p>
+              <p className="text-sm text-zinc-400">{t("min_one_skill")}</p>
             )}
           </div>
         </form>

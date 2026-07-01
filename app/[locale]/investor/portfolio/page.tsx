@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Navbar } from "@/components/layout/navbar";
 
 const CURRENT_TIER = "investor_pro";
@@ -12,12 +13,12 @@ function tierAtLeast(required: string) {
 
 type DealStatus = "intro_sent" | "in_talk" | "due_diligence" | "invested" | "passed";
 
-const STATUS_META: Record<DealStatus, { label: string; color: string; dot: string }> = {
-  intro_sent:     { label: "Intro gesendet",   color: "bg-blue-50 text-blue-700 border-blue-200",    dot: "bg-blue-400" },
-  in_talk:        { label: "Im Gespräch",       color: "bg-amber-50 text-amber-700 border-amber-200", dot: "bg-amber-400" },
-  due_diligence:  { label: "Due Diligence",     color: "bg-indigo-50 text-indigo-700 border-indigo-200", dot: "bg-indigo-500" },
-  invested:       { label: "Investiert ✓",      color: "bg-green-50 text-green-700 border-green-200", dot: "bg-green-500" },
-  passed:         { label: "Abgelehnt",         color: "bg-zinc-100 text-zinc-500 border-zinc-200",   dot: "bg-zinc-300" },
+const STATUS_META: Record<DealStatus, { labelKey: string; color: string; dot: string }> = {
+  intro_sent:     { labelKey: "status_intro_sent",    color: "bg-blue-50 text-blue-700 border-blue-200",    dot: "bg-blue-400" },
+  in_talk:        { labelKey: "status_in_talk",       color: "bg-amber-50 text-amber-700 border-amber-200", dot: "bg-amber-400" },
+  due_diligence:  { labelKey: "status_due_diligence", color: "bg-indigo-50 text-indigo-700 border-indigo-200", dot: "bg-indigo-500" },
+  invested:       { labelKey: "status_invested",      color: "bg-green-50 text-green-700 border-green-200", dot: "bg-green-500" },
+  passed:         { labelKey: "status_passed",        color: "bg-zinc-100 text-zinc-500 border-zinc-200",   dot: "bg-zinc-300" },
 };
 
 const INITIAL_DEALS: {
@@ -31,6 +32,7 @@ const INITIAL_DEALS: {
 ];
 
 export default function PortfolioPage() {
+  const t = useTranslations("investor_pages.portfolio");
   const [deals, setDeals] = useState(INITIAL_DEALS);
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [notesDraft, setNotesDraft] = useState("");
@@ -57,10 +59,10 @@ export default function PortfolioPage() {
         {!canAccess ? (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-10 text-center">
             <span className="text-4xl">🔒</span>
-            <h2 className="mt-4 text-xl font-bold text-zinc-900">Portfolio-Tracker ab Pro (49 €/Mo)</h2>
-            <p className="mt-2 text-sm text-zinc-500">Deals verfolgen, Notizen hinterlegen, Status updaten.</p>
+            <h2 className="mt-4 text-xl font-bold text-zinc-900">{t("gate_title")}</h2>
+            <p className="mt-2 text-sm text-zinc-500">{t("gate_subtitle")}</p>
             <Link href="/investor/billing" className="mt-4 inline-block rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors">
-              Jetzt upgraden →
+              {t("upgrade_now")}
             </Link>
           </div>
         ) : (
@@ -68,10 +70,10 @@ export default function PortfolioPage() {
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
               {[
-                { label: "Aktive Deals",   value: active.length,                        color: "text-indigo-600" },
-                { label: "Investiert",      value: invested.length,                      color: "text-green-600" },
-                { label: "Due Diligence",   value: byStatus("due_diligence").length,      color: "text-amber-600" },
-                { label: "Gesamt gesehen",  value: deals.length,                         color: "text-zinc-700" },
+                { label: t("stat_active_deals"),   value: active.length,                        color: "text-indigo-600" },
+                { label: t("stat_invested"),        value: invested.length,                      color: "text-green-600" },
+                { label: t("stat_due_diligence"),   value: byStatus("due_diligence").length,      color: "text-amber-600" },
+                { label: t("stat_total_seen"),      value: deals.length,                         color: "text-zinc-700" },
               ].map(s => (
                 <div key={s.label} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm text-center">
                   <p className={`text-3xl font-black ${s.color}`}>{s.value}</p>
@@ -81,7 +83,7 @@ export default function PortfolioPage() {
             </div>
 
             {/* Pipeline */}
-            <h2 className="font-bold text-zinc-900 mb-4">Deal Pipeline</h2>
+            <h2 className="font-bold text-zinc-900 mb-4">{t("deal_pipeline")}</h2>
             <div className="flex flex-col gap-4 mb-10">
               {deals.filter(d => d.status !== "passed").map(deal => {
                 const sm = STATUS_META[deal.status];
@@ -111,7 +113,7 @@ export default function PortfolioPage() {
                             className={`rounded-full border px-3 py-1 text-xs font-semibold outline-none cursor-pointer ${sm.color}`}
                           >
                             {(Object.keys(STATUS_META) as DealStatus[]).map(s => (
-                              <option key={s} value={s}>{STATUS_META[s].label}</option>
+                              <option key={s} value={s}>{t(STATUS_META[s].labelKey)}</option>
                             ))}
                           </select>
                         </div>
@@ -123,10 +125,10 @@ export default function PortfolioPage() {
                               <input
                                 value={notesDraft} onChange={e => setNotesDraft(e.target.value)}
                                 className="flex-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs outline-none focus:border-emerald-400"
-                                placeholder="Notiz hinzufügen …"
+                                placeholder={t("note_placeholder")}
                                 autoFocus
                               />
-                              <button onClick={() => saveNotes(deal.id)} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white">Speichern</button>
+                              <button onClick={() => saveNotes(deal.id)} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white">{t("save")}</button>
                               <button onClick={() => setEditingNotes(null)} className="text-xs text-zinc-400 px-2">✕</button>
                             </div>
                           ) : (
@@ -134,11 +136,11 @@ export default function PortfolioPage() {
                               onClick={() => { setEditingNotes(deal.id); setNotesDraft(deal.notes); }}
                               className="text-xs text-zinc-400 hover:text-zinc-600 mt-1"
                             >
-                              {deal.notes ? `📝 ${deal.notes}` : "+ Notiz hinzufügen"}
+                              {deal.notes ? `📝 ${deal.notes}` : t("add_note")}
                             </button>
                           )}
                         </div>
-                        <p className="mt-1 text-[10px] text-zinc-300">Hinzugefügt: {deal.addedDate}</p>
+                        <p className="mt-1 text-[10px] text-zinc-300">{t("added", { date: deal.addedDate })}</p>
                       </div>
                     </div>
                   </div>
@@ -149,7 +151,7 @@ export default function PortfolioPage() {
             {/* Passed deals */}
             {byStatus("passed").length > 0 && (
               <>
-                <h2 className="font-bold text-zinc-400 mb-3 text-sm">Abgelehnt ({byStatus("passed").length})</h2>
+                <h2 className="font-bold text-zinc-400 mb-3 text-sm">{t("rejected", { n: byStatus("passed").length })}</h2>
                 <div className="flex flex-col gap-2">
                   {byStatus("passed").map(deal => (
                     <div key={deal.id} className="rounded-xl border border-zinc-100 bg-zinc-50 px-5 py-3 flex items-center gap-3 opacity-60">
@@ -157,7 +159,7 @@ export default function PortfolioPage() {
                       <span className="text-sm text-zinc-500">{deal.name}</span>
                       <span className="text-xs text-zinc-400">· {deal.notes}</span>
                       <button onClick={() => updateStatus(deal.id, "intro_sent")} className="ml-auto text-xs text-zinc-400 hover:text-zinc-600">
-                        Reaktivieren
+                        {t("reactivate")}
                       </button>
                     </div>
                   ))}

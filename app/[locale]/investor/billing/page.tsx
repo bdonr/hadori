@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { INVESTOR_TIERS } from "@/lib/tiers";
 import { STRIPE_PRICES } from "@/lib/stripe-prices";
@@ -24,6 +25,7 @@ const ACCENT: Record<string, { ring: string; btn: string }> = {
 };
 
 export default function InvestorBillingPage() {
+  const t = useTranslations("investor_pages.billing");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
@@ -36,7 +38,7 @@ export default function InvestorBillingPage() {
     }
     const priceId = STRIPE_PRICE_IDS[tierId];
     if (!priceId) {
-      setError("Dieser Plan ist noch nicht buchbar. Bitte versuche es später erneut.");
+      setError(t("error_not_bookable"));
       return;
     }
     setLoading(tierId);
@@ -51,7 +53,7 @@ export default function InvestorBillingPage() {
       if (url) window.location.href = url;
       else throw new Error("Keine Checkout-URL");
     } catch {
-      setError("Zahlung konnte nicht gestartet werden.");
+      setError(t("error_payment_failed"));
     } finally {
       setLoading(null);
     }
@@ -66,9 +68,9 @@ export default function InvestorBillingPage() {
 
       <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-extrabold text-zinc-900">Dein Investor-Plan</h2>
+          <h2 className="text-2xl font-extrabold text-zinc-900">{t("title")}</h2>
           <p className="mt-2 text-zinc-500">
-            Aktuell: <strong>{INVESTOR_TIERS.find(t => t.id === CURRENT)?.name ?? "Scout"}</strong>
+            {t("current_label")} <strong>{INVESTOR_TIERS.find(ti => ti.id === CURRENT)?.name ?? "Scout"}</strong>
           </p>
         </div>
 
@@ -94,22 +96,22 @@ export default function InvestorBillingPage() {
               <div key={tier.id} className={`relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm flex flex-col ${a.ring}`}>
                 {tier.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="rounded-full bg-emerald-600 px-4 py-1 text-xs font-bold text-white shadow">Beliebt ⭐</span>
+                    <span className="rounded-full bg-emerald-600 px-4 py-1 text-xs font-bold text-white shadow">{t("popular")}</span>
                   </div>
                 )}
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-3xl">{tier.emoji}</span>
                   {"introsPerMonth" in tier && (tier.introsPerMonth as number) > 0 && (
                     <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                      {tier.introsPerMonth === -1 ? "∞" : tier.introsPerMonth} Intros/Mo
+                      {t("intros_per_month", { n: tier.introsPerMonth === -1 ? "∞" : tier.introsPerMonth })}
                     </span>
                   )}
                 </div>
                 <h3 className="text-lg font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-4">
                   {tier.price === 0
-                    ? <span className="text-xl font-black text-zinc-900">Gratis</span>
-                    : <><span className="text-xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-xs text-zinc-400">/ Mo</span></>}
+                    ? <span className="text-xl font-black text-zinc-900">{t("free")}</span>
+                    : <><span className="text-xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span><span className="text-xs text-zinc-400">{t("per_month")}</span></>}
                 </div>
                 <ul className="flex-1 flex flex-col gap-1.5 mb-5">
                   {tier.features.map(f => (
@@ -119,9 +121,9 @@ export default function InvestorBillingPage() {
                   ))}
                 </ul>
                 {isCurrent ? (
-                  <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">Aktuell</div>
+                  <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">{t("current")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">Downgrade</div>
+                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">{t("downgrade")}</div>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>
@@ -144,14 +146,14 @@ export default function InvestorBillingPage() {
                   <span className="text-3xl">{tier.emoji}</span>
                   {"introsPerMonth" in tier && (
                     <span className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-700">
-                      {(tier as { introsPerMonth: number }).introsPerMonth === -1 ? "∞ Intros" : `${(tier as { introsPerMonth: number }).introsPerMonth} Intros/Mo`}
+                      {(tier as { introsPerMonth: number }).introsPerMonth === -1 ? t("intros_unlimited") : t("intros_per_month", { n: (tier as { introsPerMonth: number }).introsPerMonth })}
                     </span>
                   )}
                 </div>
                 <h3 className="text-lg font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-4">
                   <span className="text-xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span>
-                  <span className="text-xs text-zinc-400">/ Mo</span>
+                  <span className="text-xs text-zinc-400">{t("per_month")}</span>
                 </div>
                 <ul className="flex-1 grid grid-cols-2 gap-x-4 gap-y-1.5 mb-5">
                   {tier.features.map(f => (
@@ -161,9 +163,9 @@ export default function InvestorBillingPage() {
                   ))}
                 </ul>
                 {isCurrent ? (
-                  <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">Aktuell</div>
+                  <div className="rounded-xl bg-zinc-100 py-2 text-center text-sm font-semibold text-zinc-500">{t("current")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">Downgrade</div>
+                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2 text-center text-xs text-zinc-400">{t("downgrade")}</div>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>
@@ -179,31 +181,31 @@ export default function InvestorBillingPage() {
 
         {/* Intro quota comparison */}
         <div className="mt-10 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-zinc-900 mb-4">Feature-Vergleich</h3>
+          <h3 className="font-bold text-zinc-900 mb-4">{t("feature_comparison")}</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-zinc-100">
-                  <th className="text-left py-2 text-zinc-500 font-medium pr-4">Feature</th>
-                  {INVESTOR_TIERS.map(t => <th key={t.id} className="py-2 text-center font-semibold text-zinc-700 px-2">{t.emoji}<br/>{t.name}</th>)}
+                  <th className="text-left py-2 text-zinc-500 font-medium pr-4">{t("feature_col")}</th>
+                  {INVESTOR_TIERS.map(ti => <th key={ti.id} className="py-2 text-center font-semibold text-zinc-700 px-2">{ti.emoji}<br/>{ti.name}</th>)}
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-50">
                 {[
-                  ["Investor-Profil",         "✓","✓","✓","✓","✓"],
-                  ["Startups entdecken",       "✓","✓","✓","✓","✓"],
-                  ["Deal Flow Feed",           "–","✓","✓","✓","✓"],
-                  ["Watchlist",               "5","20","∞","∞","∞"],
-                  ["DADORI Intros / Mo",       "–","3","10","25","∞"],
-                  ["Stealth-Projekte",         "–","–","✓","✓","✓"],
-                  ["Portfolio-Tracker",        "–","–","✓","✓","✓"],
-                  ["Verified Badge",           "–","–","–","✓","✓"],
-                  ["Frühzugang (72h)",         "–","–","–","✓","✓"],
-                  ["Analyst-Report",           "–","–","–","✓","✓"],
-                  ["Datenraum-Zugang",         "–","–","–","✓","✓"],
-                  ["API / Webhook",            "–","–","–","–","✓"],
-                  ["Co-Investor Netzwerk",     "–","–","–","–","✓"],
-                  ["Deal Flow Manager",        "–","–","–","–","✓"],
+                  [t("feat_investor_profile"),  "✓","✓","✓","✓","✓"],
+                  [t("feat_discover_startups"), "✓","✓","✓","✓","✓"],
+                  [t("feat_deal_flow_feed"),    "–","✓","✓","✓","✓"],
+                  [t("feat_watchlist"),         "5","20","∞","∞","∞"],
+                  [t("feat_dadori_intros"),     "–","3","10","25","∞"],
+                  [t("feat_stealth_projects"),  "–","–","✓","✓","✓"],
+                  [t("feat_portfolio_tracker"), "–","–","✓","✓","✓"],
+                  [t("feat_verified_badge"),    "–","–","–","✓","✓"],
+                  [t("feat_early_access"),      "–","–","–","✓","✓"],
+                  [t("feat_analyst_report"),    "–","–","–","✓","✓"],
+                  [t("feat_dataroom_access"),   "–","–","–","✓","✓"],
+                  [t("feat_api_webhook"),       "–","–","–","–","✓"],
+                  [t("feat_coinvestor_network"),"–","–","–","–","✓"],
+                  [t("feat_deal_flow_manager"), "–","–","–","–","✓"],
                 ].map(([feat, ...vals]) => (
                   <tr key={feat}>
                     <td className="py-2 text-zinc-600 pr-4">{feat}</td>
@@ -218,7 +220,7 @@ export default function InvestorBillingPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-zinc-400">
-          Monatlich kündbar · Zahlung über Stripe · Elite-Zugang per E-Mail anfragen
+          {t("footer")}
         </p>
       </main>
     </div>

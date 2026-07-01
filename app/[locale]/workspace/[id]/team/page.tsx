@@ -6,6 +6,7 @@ import { db } from "@/lib/firebase/client";
 import { collection, onSnapshot } from "firebase/firestore";
 import type { WorkspaceMember, WorkspaceMemberRole } from "@/lib/firebase/workspace";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useTranslations } from "next-intl";
 
 const ROLE_COLORS: Record<WorkspaceMemberRole, string> = {
   owner:       "bg-indigo-100 text-indigo-700",
@@ -19,6 +20,7 @@ const ROLE_COLORS: Record<WorkspaceMemberRole, string> = {
 const ROLES: WorkspaceMemberRole[] = ["admin", "member", "contributor", "investor", "guest"];
 
 export default function TeamPage() {
+  const t = useTranslations("workspace_pages.team");
   const { id: workspaceId } = useParams<{ id: string }>();
   const [members, setMembers] = useState<WorkspaceMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,17 +61,17 @@ export default function TeamPage() {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-lg font-bold text-zinc-900">Team ({members.length})</h1>
+        <h1 className="text-lg font-bold text-zinc-900">{t("title", { n: members.length })}</h1>
         <Dialog.Root open={inviteOpen} onOpenChange={(o) => { setInviteOpen(o); if (!o) { setInviteLink(""); setInvite({ email: "", role: "member" }); } }}>
           <Dialog.Trigger asChild>
             <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
-              + Invite member
+              {t("invite_member_button")}
             </button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 bg-black/40 z-40" />
             <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
-              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">Invite to workspace</Dialog.Title>
+              <Dialog.Title className="text-lg font-bold text-zinc-900 mb-4">{t("invite_dialog_title")}</Dialog.Title>
               {!inviteLink ? (
                 <div className="space-y-3">
                   <input
@@ -77,7 +79,7 @@ export default function TeamPage() {
                     type="email"
                     value={invite.email}
                     onChange={(e) => setInvite((p) => ({ ...p, email: e.target.value }))}
-                    placeholder="Email address"
+                    placeholder={t("email_placeholder")}
                     className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                   />
                   <select
@@ -90,28 +92,28 @@ export default function TeamPage() {
                     ))}
                   </select>
                   <p className="text-xs text-zinc-400">
-                    {invite.role === "investor" && "👁 Read-only access to board, milestones & data room."}
-                    {invite.role === "contributor" && "✏️ Can edit tasks assigned to them."}
-                    {invite.role === "member" && "✏️ Full board & milestone access."}
-                    {invite.role === "admin" && "🔧 Can manage team and invite others."}
-                    {invite.role === "guest" && "👁 View-only access to board."}
+                    {invite.role === "investor" && `👁 ${t("role_hint_investor")}`}
+                    {invite.role === "contributor" && `✏️ ${t("role_hint_contributor")}`}
+                    {invite.role === "member" && `✏️ ${t("role_hint_member")}`}
+                    {invite.role === "admin" && `🔧 ${t("role_hint_admin")}`}
+                    {invite.role === "guest" && `👁 ${t("role_hint_guest")}`}
                   </p>
                   <div className="flex gap-2 justify-end">
                     <Dialog.Close asChild>
-                      <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">Cancel</button>
+                      <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50">{t("cancel")}</button>
                     </Dialog.Close>
                     <button
                       onClick={sendInvite}
                       disabled={sending || !invite.email.trim()}
                       className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
                     >
-                      {sending ? "Sending…" : "Send invite"}
+                      {sending ? t("sending") : t("send_invite")}
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <p className="text-sm text-zinc-600">Invite sent! Share this link:</p>
+                  <p className="text-sm text-zinc-600">{t("invite_sent")}</p>
                   <div className="flex gap-2">
                     <input
                       readOnly
@@ -122,12 +124,12 @@ export default function TeamPage() {
                       onClick={() => navigator.clipboard.writeText(inviteLink)}
                       className="rounded-lg border border-zinc-200 px-3 py-2 text-sm hover:bg-zinc-50"
                     >
-                      Copy
+                      {t("copy")}
                     </button>
                   </div>
                   <div className="flex justify-end">
                     <Dialog.Close asChild>
-                      <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Done</button>
+                      <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">{t("done")}</button>
                     </Dialog.Close>
                   </div>
                 </div>
@@ -145,7 +147,7 @@ export default function TeamPage() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-zinc-900 truncate">{m.full_name}</p>
-              <p className="text-xs text-zinc-400">Joined {new Date(m.joinedAt).toLocaleDateString()}</p>
+              <p className="text-xs text-zinc-400">{t("joined", { date: new Date(m.joinedAt).toLocaleDateString() })}</p>
             </div>
             <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${ROLE_COLORS[m.role] ?? "bg-zinc-100 text-zinc-500"}`}>
               {m.role}

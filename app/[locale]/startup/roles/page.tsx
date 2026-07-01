@@ -10,6 +10,7 @@ import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy, serverTimestamp } from "firebase/firestore";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 const CATEGORIES = [
   "Video & Schnitt",
@@ -24,10 +25,10 @@ const CATEGORIES = [
 ];
 
 const COMPENSATION = [
-  { id: "revenue_share", label: "Revenue Share", desc: "% vom Umsatz / Kanal-Einnahmen" },
-  { id: "equity", label: "Equity", desc: "Unternehmensanteile" },
-  { id: "cash", label: "Gehalt / Honorar", desc: "Fixer Betrag oder Stundensatz" },
-  { id: "exposure", label: "Exposure", desc: "Sichtbarkeit & Portfolio-Aufbau" },
+  { id: "revenue_share", labelKey: "comp_revenue_share_label", descKey: "comp_revenue_share_desc" },
+  { id: "equity", labelKey: "comp_equity_label", descKey: "comp_equity_desc" },
+  { id: "cash", labelKey: "comp_cash_label", descKey: "comp_cash_desc" },
+  { id: "exposure", labelKey: "comp_exposure_label", descKey: "comp_exposure_desc" },
 ];
 
 const COMMITMENT = [
@@ -51,6 +52,7 @@ interface Role {
 }
 
 export default function RolesPage() {
+  const t = useTranslations("startup_pages.roles");
   const [uid, setUid] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -129,24 +131,24 @@ export default function RolesPage() {
         {/* Create form */}
         {showForm && (
           <form onSubmit={handleSubmit} className="mb-8 rounded-2xl border border-indigo-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 text-lg font-bold text-zinc-900">Neue Rolle ausschreiben</h2>
+            <h2 className="mb-6 text-lg font-bold text-zinc-900">{t("new_role")}</h2>
 
             <div className="flex flex-col gap-5">
               <div>
                 <label className="mb-1 block text-sm font-medium text-zinc-700">
-                  Was suchst du?
+                  {t("what_seeking")}
                 </label>
                 <input
                   required
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  placeholder="z.B. Video-Cutter, Thumbnail-Designer, Co-Streamer, CTO …"
+                  placeholder={t("what_seeking_placeholder")}
                   className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Kategorie</label>
+                <label className="mb-2 block text-sm font-medium text-zinc-700">{t("category")}</label>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map(c => (
                     <button
@@ -166,20 +168,20 @@ export default function RolesPage() {
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-zinc-700">
-                  Beschreibung
+                  {t("description")}
                 </label>
                 <textarea
                   required rows={4}
                   value={description}
                   onChange={e => setDescription(e.target.value)}
-                  placeholder="Wer bist du, was machst du, was erwartest du von der Person? Je konkreter, desto besser."
+                  placeholder={t("description_placeholder")}
                   className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none"
                 />
               </div>
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-zinc-700">
-                  Vergütung <span className="text-zinc-400">(mehrere möglich)</span>
+                  {t("compensation")} <span className="text-zinc-400">{t("multiple_possible")}</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {COMPENSATION.map(c => (
@@ -192,15 +194,15 @@ export default function RolesPage() {
                           : "border-zinc-200 bg-white hover:border-zinc-300"
                       }`}
                     >
-                      <span className="text-sm font-semibold text-zinc-900">{c.label}</span>
-                      <span className="text-xs text-zinc-500">{c.desc}</span>
+                      <span className="text-sm font-semibold text-zinc-900">{t(c.labelKey)}</span>
+                      <span className="text-xs text-zinc-500">{t(c.descKey)}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Zeitaufwand</label>
+                <label className="mb-2 block text-sm font-medium text-zinc-700">{t("commitment")}</label>
                 <div className="flex flex-wrap gap-2">
                   {COMMITMENT.map(c => (
                     <button
@@ -220,7 +222,7 @@ export default function RolesPage() {
 
               <div>
                 <SkillPicker
-                  label="Welche Skills werden gebraucht?"
+                  label={t("skills_label")}
                   selected={neededSkills}
                   onChange={setNeededSkills}
                   max={10}
@@ -229,7 +231,7 @@ export default function RolesPage() {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-zinc-700">
-                  Wo suchst du? <span className="text-zinc-400">(Land / Region)</span>
+                  {t("where_seeking")} <span className="text-zinc-400">{t("country_region")}</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {REGIONS.map(r => (
@@ -250,7 +252,7 @@ export default function RolesPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Arbeitssprache</label>
+                <label className="mb-2 block text-sm font-medium text-zinc-700">{t("work_language")}</label>
                 <div className="flex flex-wrap gap-2">
                   {LANGUAGES.map(l => (
                     <button
@@ -275,16 +277,16 @@ export default function RolesPage() {
                   onChange={e => setRemote(e.target.checked)}
                   className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
                 />
-                <span className="text-sm text-zinc-700">Remote möglich</span>
+                <span className="text-sm text-zinc-700">{t("remote_possible")}</span>
               </label>
             </div>
 
             <div className="mt-6 flex gap-3">
               <Button type="submit" disabled={!title || selectedComp.length === 0}>
-                Ausschreiben
+                {t("submit")}
               </Button>
               <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
-                Abbrechen
+                {t("cancel")}
               </Button>
             </div>
           </form>
@@ -294,32 +296,32 @@ export default function RolesPage() {
         {roles.length === 0 ? (
           <div className="py-20 text-center text-zinc-400">
             <p className="text-4xl mb-3">👥</p>
-            <p className="font-semibold text-zinc-600">Noch keine offenen Rollen</p>
-            <p className="mt-1 text-sm">Schreib deine erste Rolle aus um Talente zu finden.</p>
+            <p className="font-semibold text-zinc-600">{t("empty_title")}</p>
+            <p className="mt-1 text-sm">{t("empty_desc")}</p>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
             {roles.map(role => (
-              <RoleCard key={role.id} role={role} onDelete={handleDelete} />
+              <RoleCard key={role.id} role={role} onDelete={handleDelete} t={t} />
             ))}
           </div>
         )}
 
         {/* Free plan note */}
         <p className="mt-8 text-center text-xs text-zinc-400">
-          Free-Plan: 1 aktive Rolle · <Link href="/startup/billing" className="underline hover:text-zinc-600">Auf Pro upgraden</Link> für bis zu 5 Rollen
+          {t("free_note_prefix")} <Link href="/startup/billing" className="underline hover:text-zinc-600">{t("upgrade_to_pro")}</Link> {t("free_note_suffix")}
         </p>
       </main>
     </div>
   );
 }
 
-function RoleCard({ role, onDelete }: { role: Role; onDelete: (id: string) => void }) {
+function RoleCard({ role, onDelete, t }: { role: Role; onDelete: (id: string) => void; t: (key: string) => string }) {
   const compLabels: Record<string, string> = {
-    revenue_share: "Revenue Share",
-    equity: "Equity",
-    cash: "Gehalt",
-    exposure: "Exposure",
+    revenue_share: t("complabel_revenue_share"),
+    equity: t("complabel_equity"),
+    cash: t("complabel_cash"),
+    exposure: t("complabel_exposure"),
   };
 
   return (
@@ -335,7 +337,7 @@ function RoleCard({ role, onDelete }: { role: Role; onDelete: (id: string) => vo
             )}
             {role.remote && (
               <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600">
-                Remote
+                {t("remote")}
               </span>
             )}
             {role.region && (() => {
@@ -373,8 +375,8 @@ function RoleCard({ role, onDelete }: { role: Role; onDelete: (id: string) => vo
           </span>
         )}
         <div className="ml-auto flex gap-2">
-          <Button size="sm" variant="outline">Bearbeiten</Button>
-          <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-600" onClick={() => onDelete(role.id)}>Entfernen</Button>
+          <Button size="sm" variant="outline">{t("edit")}</Button>
+          <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-600" onClick={() => onDelete(role.id)}>{t("remove")}</Button>
         </div>
       </div>
     </div>

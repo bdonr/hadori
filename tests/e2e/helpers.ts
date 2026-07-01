@@ -40,6 +40,15 @@ export async function login(page: Page, email: string) {
   await page.waitForURL(/\/(startup|talent|investor)/, { timeout: 20_000 });
 }
 
+// Firebase client auth resolves asynchronously after navigation. The navbar
+// only renders the signout button once onAuthStateChanged has fired with a
+// user, so it's a reliable "client auth is ready" signal before we interact
+// with client-side Firestore reads/writes.
+export async function waitForAuthReady(page: Page) {
+  await page.getByRole("button", { name: /abmelden|ausloggen|sign out|logout/i })
+    .waitFor({ timeout: 20_000 });
+}
+
 export async function signout(page: Page) {
   // Navbar loads user async — wait for signout button to appear first
   await page.getByRole("button", { name: /abmelden|ausloggen|sign out|logout/i }).waitFor({ timeout: 20_000 });

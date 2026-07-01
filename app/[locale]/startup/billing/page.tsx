@@ -8,6 +8,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { usePlanTier } from "@/hooks/usePlanTier";
 import { formatPrice } from "@/lib/currency";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 const STRIPE_PRICE_IDS: Record<string, string> = {
   project:     STRIPE_PRICES.project,
   startup:     STRIPE_PRICES.startup,
@@ -21,6 +22,7 @@ const ACCENT: Record<string, { ring: string; btn: string }> = {
 };
 
 export default function StartupBillingPage() {
+  const t = useTranslations("startup_pages.billing");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const currency = useCurrency();
@@ -29,7 +31,7 @@ export default function StartupBillingPage() {
   async function handleUpgrade(tierId: string) {
     const priceId = STRIPE_PRICE_IDS[tierId];
     if (!priceId) {
-      setError("Dieser Plan ist noch nicht buchbar. Bitte versuche es später erneut.");
+      setError(t("not_bookable"));
       return;
     }
     setLoading(tierId);
@@ -44,7 +46,7 @@ export default function StartupBillingPage() {
       if (url) window.location.href = url;
       else throw new Error("Keine Checkout-URL");
     } catch {
-      setError("Zahlung konnte nicht gestartet werden.");
+      setError(t("payment_failed"));
     } finally {
       setLoading(null);
     }
@@ -56,9 +58,9 @@ export default function StartupBillingPage() {
 
       <main className="mx-auto max-w-4xl px-6 py-10">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-extrabold text-zinc-900">Dein Projekt- / Startup-Plan</h2>
+          <h2 className="text-2xl font-extrabold text-zinc-900">{t("heading")}</h2>
           <p className="mt-2 text-zinc-500">
-            Aktuell: <strong>{PROJECT_TIERS.find(t => t.id === CURRENT)?.name ?? "Projekt"}</strong>
+            {t("current_label")} <strong>{PROJECT_TIERS.find(t => t.id === CURRENT)?.name ?? t("fallback_tier_name")}</strong>
           </p>
         </div>
 
@@ -83,14 +85,14 @@ export default function StartupBillingPage() {
               <div key={tier.id} className={`relative rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm flex flex-col ${a.ring}`}>
                 {tier.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-white shadow">Beliebt ⭐</span>
+                    <span className="rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-white shadow">{t("popular")}</span>
                   </div>
                 )}
                 <span className="text-3xl">{tier.emoji}</span>
                 <h3 className="mt-2 text-xl font-extrabold text-zinc-900">{tier.name}</h3>
                 <div className="mt-1 flex items-baseline gap-1 mb-5">
                   <span className="text-2xl font-black text-zinc-900">{formatPrice(tier.price, currency)}</span>
-                  <span className="text-sm text-zinc-400">/ Mo</span>
+                  <span className="text-sm text-zinc-400">{t("per_month_short")}</span>
                 </div>
                 <ul className="flex-1 flex flex-col gap-2 mb-7">
                   {tier.features.map(f => (
@@ -100,13 +102,13 @@ export default function StartupBillingPage() {
                   ))}
                 </ul>
                 {isCurrent ? (
-                  <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">Aktueller Plan</div>
+                  <div className="rounded-xl bg-zinc-100 py-2.5 text-center text-sm font-semibold text-zinc-500">{t("current_plan")}</div>
                 ) : isDowngrade ? (
-                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">Downgrade</div>
+                  <div className="rounded-xl bg-zinc-50 border border-zinc-200 py-2.5 text-center text-sm text-zinc-400">{t("downgrade")}</div>
                 ) : (
                   <button onClick={() => handleUpgrade(tier.id)} disabled={!!loading}
                     className={`rounded-xl py-2.5 text-sm font-bold transition-colors disabled:opacity-50 ${a.btn}`}>
-                    {loading === tier.id ? "Wird gestartet…" : tier.cta}
+                    {loading === tier.id ? t("starting") : tier.cta}
                   </button>
                 )}
               </div>
@@ -118,29 +120,29 @@ export default function StartupBillingPage() {
 
         {/* Feature comparison */}
         <div className="mt-10 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-zinc-900 mb-4">Was ist enthalten?</h3>
+          <h3 className="font-bold text-zinc-900 mb-4">{t("whats_included")}</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-100">
-                  <th className="text-left py-2 text-zinc-500 font-medium">Feature</th>
+                  <th className="text-left py-2 text-zinc-500 font-medium">{t("col_feature")}</th>
                   {PROJECT_TIERS.map(t => <th key={t.id} className="py-2 text-center font-semibold text-zinc-700">{t.emoji} {t.name}</th>)}
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-50">
                 {[
-                  ["Öffentliches Profil",          "✓", "✓", "✓"],
-                  ["Stealth-Modus",                 "✓", "✓", "✓"],
-                  ["Talent finden",                 "✓", "✓", "✓"],
-                  ["Von Investoren gefunden",        "✓", "✓", "✓"],
-                  ["Funding Stage & MRR",           "–", "✓", "✓"],
-                  ["KI-Businessplan",               "–", "✓", "✓"],
-                  ["Investoren entdecken & anfragen","–", "✓", "✓"],
-                  ["DADORI Intro",                  "–", "✓", "✓"],
-                  ["Verified Badge",                "–", "–", "✓"],
-                  ["Featured Placement",            "–", "–", "✓"],
-                  ["Datenraum",                     "–", "–", "✓"],
-                  ["Unbegrenzte Intros",            "–", "–", "✓"],
+                  [t("feat_public_profile"),        "✓", "✓", "✓"],
+                  [t("feat_stealth_mode"),          "✓", "✓", "✓"],
+                  [t("feat_find_talent"),           "✓", "✓", "✓"],
+                  [t("feat_found_by_investors"),    "✓", "✓", "✓"],
+                  [t("feat_funding_mrr"),           "–", "✓", "✓"],
+                  [t("feat_ai_businessplan"),       "–", "✓", "✓"],
+                  [t("feat_discover_investors"),    "–", "✓", "✓"],
+                  [t("feat_dadori_intro"),          "–", "✓", "✓"],
+                  [t("feat_verified_badge"),        "–", "–", "✓"],
+                  [t("feat_featured_placement"),    "–", "–", "✓"],
+                  [t("feat_data_room"),             "–", "–", "✓"],
+                  [t("feat_unlimited_intros"),      "–", "–", "✓"],
                 ].map(([feat, ...vals]) => (
                   <tr key={feat}>
                     <td className="py-2 text-zinc-600">{feat}</td>
@@ -154,7 +156,7 @@ export default function StartupBillingPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-zinc-400">Monatlich kündbar · Zahlung über Stripe · Sofort aktiv</p>
+        <p className="mt-6 text-center text-xs text-zinc-400">{t("footer_note")}</p>
       </main>
     </div>
   );

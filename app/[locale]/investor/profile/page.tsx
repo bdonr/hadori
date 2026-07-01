@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { REGIONS } from "@/lib/regions";
@@ -22,15 +23,16 @@ const ROLES = [
 ];
 
 const STAGE_PREFS = [
-  { id: "idea",       label: "Idee 💡" },
-  { id: "pre_seed",   label: "Pre-Seed 🌱" },
-  { id: "seed",       label: "Seed 🌿" },
-  { id: "series_a",   label: "Series A 📈" },
-  { id: "series_b",   label: "Series B+ 🏦" },
-  { id: "bootstrapped", label: "Bootstrapped 💪" },
+  { id: "idea",       labelKey: "stage_idea" },
+  { id: "pre_seed",   labelKey: "stage_pre_seed" },
+  { id: "seed",       labelKey: "stage_seed" },
+  { id: "series_a",   labelKey: "stage_series_a" },
+  { id: "series_b",   labelKey: "stage_series_b" },
+  { id: "bootstrapped", labelKey: "stage_bootstrapped" },
 ];
 
 export default function InvestorProfilePage() {
+  const t = useTranslations("investor_pages.profile");
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "en";
@@ -104,19 +106,19 @@ export default function InvestorProfilePage() {
 
           {/* Basis */}
           <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-            <h2 className="font-semibold text-zinc-900">Über dich</h2>
+            <h2 className="font-semibold text-zinc-900">{t("about_you")}</h2>
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">Name</label>
+              <label className="text-sm font-medium text-zinc-700">{t("name")}</label>
               <input value={name} onChange={e => setName(e.target.value)} required
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">Firma / Fonds <span className="text-zinc-400 font-normal">(optional)</span></label>
-              <input value={firm} onChange={e => setFirm(e.target.value)} placeholder="z.B. Sequoia, Independent Angel"
+              <label className="text-sm font-medium text-zinc-700">{t("firm_fund")} <span className="text-zinc-400 font-normal">{t("optional")}</span></label>
+              <input value={firm} onChange={e => setFirm(e.target.value)} placeholder={t("firm_placeholder")}
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400" />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">Rolle</label>
+              <label className="text-sm font-medium text-zinc-700">{t("role")}</label>
               <div className="flex flex-wrap gap-2">
                 {ROLES.map(r => (
                   <button key={r.id} type="button" onClick={() => setRole(r.id)}
@@ -127,18 +129,18 @@ export default function InvestorProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">Bio / Investment-Thesis <span className="text-zinc-400 font-normal">(optional)</span></label>
+              <label className="text-sm font-medium text-zinc-700">{t("bio_thesis")} <span className="text-zinc-400 font-normal">{t("optional")}</span></label>
               <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3}
-                placeholder="Was macht dich als Investor aus? Was suchst du in Gründern?"
+                placeholder={t("bio_placeholder")}
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 resize-none" />
             </div>
           </section>
 
           {/* Investment-Fokus */}
           <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-            <h2 className="font-semibold text-zinc-900">Investment-Fokus</h2>
+            <h2 className="font-semibold text-zinc-900">{t("investment_focus")}</h2>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">Branchen / Kategorien</label>
+              <label className="text-sm font-medium text-zinc-700">{t("industries_categories")}</label>
               <div className="flex flex-wrap gap-2">
                 {INVESTOR_FOCUS.map(f => (
                   <button key={f.id} type="button" onClick={() => toggle(setFocus, f.id)}
@@ -149,18 +151,18 @@ export default function InvestorProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">Bevorzugte Phasen</label>
+              <label className="text-sm font-medium text-zinc-700">{t("preferred_stages")}</label>
               <div className="flex flex-wrap gap-2">
                 {STAGE_PREFS.map(s => (
                   <button key={s.id} type="button" onClick={() => toggle(setStages, s.id)}
                     className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${stages.includes(s.id) ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-zinc-700 border-zinc-200 hover:border-emerald-300"}`}>
-                    {s.label}
+                    {t(s.labelKey)}
                   </button>
                 ))}
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">Typische Check-Size</label>
+              <label className="text-sm font-medium text-zinc-700">{t("typical_check_size")}</label>
               <div className="flex flex-wrap gap-2">
                 {CHECK_SIZES.map(c => (
                   <button key={c.id} type="button" onClick={() => setCheckSize(c.id === checkSize ? "" : c.id)}
@@ -171,15 +173,15 @@ export default function InvestorProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700">Deals pro Jahr</label>
-              <input value={dealsPerYear} onChange={e => setDealsPerYear(e.target.value)} placeholder="z.B. 3–5"
+              <label className="text-sm font-medium text-zinc-700">{t("deals_per_year")}</label>
+              <input value={dealsPerYear} onChange={e => setDealsPerYear(e.target.value)} placeholder={t("deals_per_year_placeholder")}
                 className="rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 w-40" />
             </div>
           </section>
 
           {/* Region */}
           <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-3">
-            <h2 className="font-semibold text-zinc-900">Region</h2>
+            <h2 className="font-semibold text-zinc-900">{t("region")}</h2>
             <div className="flex flex-wrap gap-2">
               {REGIONS.map(r => (
                 <button key={r.id} type="button" onClick={() => setRegion(r.id)}
@@ -194,8 +196,8 @@ export default function InvestorProfilePage() {
           <section className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-zinc-900">Offen für DADORI Intros</p>
-                <p className="text-sm text-zinc-500 mt-0.5">Gründer können eine Intro-Anfrage stellen.</p>
+                <p className="font-semibold text-zinc-900">{t("open_to_intros")}</p>
+                <p className="text-sm text-zinc-500 mt-0.5">{t("open_to_intros_desc")}</p>
               </div>
               <button type="button" onClick={() => setOpenToIntros(!openToIntros)}
                 className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${openToIntros ? "bg-emerald-600" : "bg-zinc-200"}`}>
@@ -205,7 +207,7 @@ export default function InvestorProfilePage() {
           </section>
 
           <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white">
-            {saved ? "Gespeichert ✓" : "Profil speichern"}
+            {saved ? t("saved") : t("save_profile")}
           </Button>
         </form>
       </main>

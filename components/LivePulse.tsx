@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { useTranslations } from "next-intl";
 import { db } from "@/lib/firebase/client";
 
 type ActivityItem = { id: string; label: string };
 
 export function LivePulse() {
+  const t = useTranslations("misc_pages.live_pulse");
   const [items, setItems] = useState<ActivityItem[]>([]);
   const [current, setCurrent] = useState(0);
 
@@ -17,12 +19,12 @@ export function LivePulse() {
         .filter(d => d.data().name)
         .map(d => ({
           id: d.id,
-          label: `🚀 ${d.data().name} — gerade beigetreten`,
+          label: `🚀 ${t("just_joined", { name: d.data().name })}`,
         }))
       );
     }, () => {}); // silence errors (e.g. offline)
     return unsub;
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (items.length < 2) return;

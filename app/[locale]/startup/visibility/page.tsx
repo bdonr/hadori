@@ -6,9 +6,11 @@ import type { Profile } from "@/lib/firebase/collections";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
+import { getTranslations } from "next-intl/server";
 
 export default async function VisibilityPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations("startup_pages.visibility");
   const session = await getServerSession();
   if (!session) redirect(`/${locale}/login`);
 
@@ -20,10 +22,10 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
   const isVisible = profile.investor_visible ?? false;
 
   const perks = [
-    { icon: "🔍", title: "Auffindbar für 200+ Investoren", desc: "Dein Profil erscheint im Investoren-Feed von DADORI-geprüften VCs und Angels." },
-    { icon: "📬", title: "Direkte Anfragen erhalten", desc: "Investoren können dich direkt kontaktieren — du entscheidest, ob du antwortest." },
-    { icon: "🏅", title: "DADORI-Verified Badge", desc: "Zeigt Investoren, dass dein Businessplan und Pitchdeck geprüft wurden." },
-    { icon: "🔒", title: "Data Room", desc: "Teile Dokumente sicher mit ausgewählten Investoren — du kontrollierst den Zugang." },
+    { icon: "🔍", title: t("perk_findable_title"), desc: t("perk_findable_desc") },
+    { icon: "📬", title: t("perk_requests_title"), desc: t("perk_requests_desc") },
+    { icon: "🏅", title: t("perk_badge_title"), desc: t("perk_badge_desc") },
+    { icon: "🔒", title: t("perk_dataroom_title"), desc: t("perk_dataroom_desc") },
   ];
 
   return (
@@ -39,16 +41,16 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
               <h2 className="text-lg font-bold text-zinc-900">
                 {isPro
                   ? isVisible
-                    ? "🟢 Du bist für Investoren sichtbar"
-                    : "⚪ Sichtbarkeit ist deaktiviert"
-                  : "🔒 Für Investoren sichtbar werden"}
+                    ? t("status_visible")
+                    : t("status_disabled")
+                  : t("status_become_visible")}
               </h2>
               <p className="mt-1 text-sm text-zinc-500">
                 {isPro
                   ? isVisible
-                    ? "Investoren können dein Profil jetzt finden und dich kontaktieren."
-                    : "Du bist im Pro-Plan — aktiviere die Sichtbarkeit, wenn du bereit bist."
-                  : "Im Free-Plan bist du für Investoren nicht auffindbar. Upgrade auf Pro, um die Sichtbarkeit selbst zu steuern."}
+                    ? t("status_visible_desc")
+                    : t("status_disabled_desc")
+                  : t("status_free_desc")}
               </p>
             </div>
 
@@ -56,7 +58,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
               <VisibilityToggle uid={session.uid} initialValue={isVisible} />
             ) : (
               <Button asChild className="shrink-0">
-                <Link href={`/${locale}/startup/billing`}>Auf Pro upgraden</Link>
+                <Link href={`/${locale}/startup/billing`}>{t("upgrade_to_pro")}</Link>
               </Button>
             )}
           </div>
@@ -64,7 +66,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
 
         {/* What you get */}
         <div className="mt-10">
-          <h3 className="mb-5 text-base font-bold text-zinc-900">Was du als sichtbares Startup bekommst</h3>
+          <h3 className="mb-5 text-base font-bold text-zinc-900">{t("perks_heading")}</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             {perks.map((p) => (
               <div
@@ -87,14 +89,13 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
             <div className="flex items-start gap-4">
               <span className="text-2xl">⚡</span>
               <div className="flex-1">
-                <p className="font-bold text-amber-900">Du entscheidest — nicht wir</p>
+                <p className="font-bold text-amber-900">{t("upsell_title")}</p>
                 <p className="mt-1 text-sm text-amber-800">
-                  Im Pro-Plan kannst du die Sichtbarkeit jederzeit ein- und ausschalten.
-                  Kein automatisches Auflisten — nur wenn du aktiv Interesse hast.
+                  {t("upsell_desc")}
                 </p>
               </div>
               <Button asChild className="shrink-0 bg-amber-600 hover:bg-amber-700">
-                <Link href={`/${locale}/startup/billing`}>49 €/Monat</Link>
+                <Link href={`/${locale}/startup/billing`}>{t("price_per_month")}</Link>
               </Button>
             </div>
           </div>
@@ -102,9 +103,7 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
 
         {/* Legal note */}
         <p className="mt-8 text-xs text-zinc-400">
-          DADORI vermittelt ausschließlich Kontakte zwischen Startups und Investoren.
-          Wir sind nicht an Transaktionen beteiligt und erheben keine Beteiligungsgebühren.
-          Hol dir rechtliche Beratung, bevor du Kapital annimmst.
+          {t("legal_note")}
         </p>
       </main>
     </div>

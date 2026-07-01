@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: string }) {
+  const t = useTranslations("workspace_pages.create_card");
   const router = useRouter();
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState("");
@@ -25,9 +27,9 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
         router.push(`/${locale}/workspace/${data.id}`);
         return;
       }
-      setError(data.error ?? "Workspace konnte nicht erstellt werden.");
+      setError(data.error ?? t("error_create"));
     } catch {
-      setError("Netzwerkfehler — bitte erneut versuchen.");
+      setError(t("error_network"));
     } finally {
       setCreating(false);
     }
@@ -41,11 +43,11 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
       >
         <span className="text-3xl">🚀</span>
         <div>
-          <h2 className="font-semibold text-violet-900">Workspace erstellen</h2>
-          <p className="text-sm text-violet-600">Kanban, Team, Milestones & KI Co-Founder</p>
+          <h2 className="font-semibold text-violet-900">{t("create_heading")}</h2>
+          <p className="text-sm text-violet-600">{t("features")}</p>
         </div>
         <span className="ml-auto text-sm font-semibold text-violet-600 border border-violet-300 rounded-lg px-3 py-1 hover:bg-violet-100">
-          Erstellen →
+          {t("create_arrow")}
         </span>
       </button>
     );
@@ -53,14 +55,14 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
 
   return (
     <div className="rounded-2xl border border-violet-200 bg-violet-50 p-6">
-      <h2 className="font-semibold text-violet-900 mb-3">🚀 Workspace erstellen</h2>
+      <h2 className="font-semibold text-violet-900 mb-3">🚀 {t("create_heading")}</h2>
       <div className="flex gap-3">
         <input
           autoFocus
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && create()}
-          placeholder="Name deines Workspace…"
+          placeholder={t("name_placeholder")}
           className="flex-1 rounded-lg border border-violet-200 bg-white px-3 py-2 text-sm outline-none focus:border-violet-400"
         />
         <button
@@ -68,7 +70,7 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
           disabled={creating || !name.trim()}
           className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50 transition-colors"
         >
-          {creating ? "…" : "Erstellen"}
+          {creating ? "…" : t("create_button")}
         </button>
         <button
           onClick={() => setShowForm(false)}

@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { INVESTOR_FOCUS, CHECK_SIZES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 export default function DiscoverInvestorsPage() {
+  const t = useTranslations("startup_pages.discover");
   const { locale } = useParams<{ locale: string }>();
   const [focusFilter, setFocusFilter] = useState<string[]>([]);
 
@@ -22,14 +24,14 @@ export default function DiscoverInvestorsPage() {
         <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 flex items-start gap-3">
           <span className="text-xl">💡</span>
           <div>
-            <p className="text-sm font-semibold text-amber-900">DADORI Intro — wie es funktioniert</p>
-            <p className="text-sm text-amber-700">Investoren werden hier erscheinen sobald sie sich registrieren. Anfrage senden → DADORI prüft den Match → beide Seiten stimmen zu → Intro.</p>
+            <p className="text-sm font-semibold text-amber-900">{t("intro_title")}</p>
+            <p className="text-sm text-amber-700">{t("intro_desc")}</p>
           </div>
         </div>
 
         {/* Fokus-Filter */}
         <div className="mb-6">
-          <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">Fokus</p>
+          <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">{t("focus")}</p>
           <div className="flex flex-wrap gap-1.5">
             {INVESTOR_FOCUS.map(f => (
               <button key={f.id} onClick={() => toggleFocus(f.id)}
@@ -45,8 +47,8 @@ export default function DiscoverInvestorsPage() {
 
         <div className="mt-16 text-center">
           <span className="text-5xl">🔭</span>
-          <p className="mt-4 text-lg font-semibold text-zinc-700">Noch keine Investoren registriert</p>
-          <p className="mt-2 text-sm text-zinc-400">Investoren erscheinen hier sobald sie ein DADORI-Profil erstellen.</p>
+          <p className="mt-4 text-lg font-semibold text-zinc-700">{t("empty_title")}</p>
+          <p className="mt-2 text-sm text-zinc-400">{t("empty_desc")}</p>
         </div>
       </main>
     </div>

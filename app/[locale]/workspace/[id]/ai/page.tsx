@@ -5,8 +5,10 @@ import { useParams } from "next/navigation";
 import { db } from "@/lib/firebase/client";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import type { WorkspaceAIMessage } from "@/lib/firebase/workspace";
+import { useTranslations } from "next-intl";
 
 export default function AIAssistantPage() {
+  const t = useTranslations("workspace_pages.ai");
   const { id: workspaceId } = useParams<{ id: string }>();
   const [messages, setMessages] = useState<WorkspaceAIMessage[]>([]);
   const [input, setInput] = useState("");
@@ -42,7 +44,7 @@ export default function AIAssistantPage() {
     });
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Something went wrong");
+      setError(data.error ?? t("error_generic"));
     }
     setSending(false);
   }
@@ -51,8 +53,8 @@ export default function AIAssistantPage() {
     <div className="flex h-full flex-col">
       {/* Header */}
       <div className="border-b border-zinc-200 bg-white px-6 py-4">
-        <h1 className="text-lg font-bold text-zinc-900">🤖 AI Co-Founder</h1>
-        <p className="text-sm text-zinc-500">Context-aware assistant — knows your board, milestones, and team.</p>
+        <h1 className="text-lg font-bold text-zinc-900">🤖 {t("title")}</h1>
+        <p className="text-sm text-zinc-500">{t("subtitle")}</p>
       </div>
 
       {/* Messages */}
@@ -60,16 +62,16 @@ export default function AIAssistantPage() {
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <span className="text-5xl">🤖</span>
-            <p className="mt-4 font-semibold text-zinc-700">Your AI Co-Founder is ready</p>
+            <p className="mt-4 font-semibold text-zinc-700">{t("empty_title")}</p>
             <p className="mt-2 text-sm text-zinc-400 max-w-sm">
-              Ask about your roadmap, get investor update drafts, find team gaps, or get advice on your next move.
+              {t("empty_description")}
             </p>
             <div className="mt-6 flex flex-wrap gap-2 justify-center">
               {[
-                "What should we focus on this week?",
-                "Draft an investor update",
-                "What's blocking us?",
-                "What team roles are missing?",
+                t("suggestion_focus"),
+                t("suggestion_investor_update"),
+                t("suggestion_blocking"),
+                t("suggestion_team_roles"),
               ].map((s) => (
                 <button
                   key={s}
@@ -91,7 +93,7 @@ export default function AIAssistantPage() {
                 : "border border-zinc-200 bg-white text-zinc-800"
             }`}>
               {msg.role === "assistant" && (
-                <p className="mb-1 text-[10px] font-bold text-zinc-400">🤖 AI CO-FOUNDER</p>
+                <p className="mb-1 text-[10px] font-bold text-zinc-400">🤖 {t("message_label")}</p>
               )}
               <p className="whitespace-pre-wrap">{msg.content}</p>
             </div>
@@ -126,7 +128,7 @@ export default function AIAssistantPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-            placeholder="Ask your AI Co-Founder anything…"
+            placeholder={t("input_placeholder")}
             className="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
           />
           <button
@@ -134,7 +136,7 @@ export default function AIAssistantPage() {
             disabled={sending || !input.trim()}
             className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
           >
-            Send
+            {t("send")}
           </button>
         </div>
       </div>

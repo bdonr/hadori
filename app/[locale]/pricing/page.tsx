@@ -4,28 +4,29 @@ import Link from "next/link";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import { TALENT_TIERS, PROJECT_TIERS, INVESTOR_TIERS } from "@/lib/tiers";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 const TRACK_META = [
   {
     key: "talent",
-    label: "👤 Talent",
-    desc: "Du hast Skills und suchst Projekte, Startups oder Co-Gründer.",
+    labelKey: "track_talent_label",
+    descKey: "track_talent_desc",
     tiers: TALENT_TIERS,
     href: (id: string) => `/en/signup?tier=${id}`,
     accent: "indigo",
   },
   {
     key: "project",
-    label: "🎯 Projekt & Startup",
-    desc: "Du baust etwas — von YouTube-Kanal bis VC-funded Startup.",
+    labelKey: "track_project_label",
+    descKey: "track_project_desc",
     tiers: PROJECT_TIERS,
     href: (id: string) => `/en/signup?tier=${id}`,
     accent: "amber",
   },
   {
     key: "investor",
-    label: "💼 Investor",
-    desc: "Du investierst oder willst den richtigen Deal Flow finden.",
+    labelKey: "track_investor_label",
+    descKey: "track_investor_desc",
     tiers: INVESTOR_TIERS,
     href: (id: string) => `/en/signup?tier=${id}`,
     accent: "emerald",
@@ -39,14 +40,15 @@ const ACCENT = {
 };
 
 export default function PricingPage() {
+  const t = useTranslations("pricing");
   return (
     <div className="min-h-screen bg-zinc-50">
       <Navbar />
 
       <main className="mx-auto max-w-6xl px-6 py-16">
         <div className="text-center mb-14">
-          <h1 className="text-4xl font-extrabold text-zinc-900">Einfache Preise. Kein Bullshit.</h1>
-          <p className="mt-3 text-lg text-zinc-500">Drei Tracks — starte wo du stehst. Upgrade wenn du bereit bist.</p>
+          <h1 className="text-4xl font-extrabold text-zinc-900">{t("headline")}</h1>
+          <p className="mt-3 text-lg text-zinc-500">{t("subhead")}</p>
         </div>
 
         {TRACK_META.map(track => {
@@ -55,8 +57,8 @@ export default function PricingPage() {
             <section key={track.key} className="mb-16">
               {/* Track header */}
               <div className={`rounded-2xl border px-6 py-4 mb-5 ${a.header}`}>
-                <h2 className="text-lg font-extrabold">{track.label}</h2>
-                <p className="text-sm opacity-70 mt-0.5">{track.desc}</p>
+                <h2 className="text-lg font-extrabold">{t(track.labelKey)}</h2>
+                <p className="text-sm opacity-70 mt-0.5">{t(track.descKey)}</p>
               </div>
 
               {/* Tier cards */}
@@ -69,7 +71,7 @@ export default function PricingPage() {
                     {tier.highlight && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className={`rounded-full px-4 py-1 text-xs font-bold text-white shadow ${track.accent === "indigo" ? "bg-indigo-600" : track.accent === "amber" ? "bg-amber-500" : "bg-emerald-600"}`}>
-                          Beliebt ⭐
+                          {t("badge_popular")}
                         </span>
                       </div>
                     )}
@@ -79,11 +81,11 @@ export default function PricingPage() {
                       <h3 className="mt-2 text-xl font-extrabold text-zinc-900">{tier.name}</h3>
                       <div className="mt-1 flex items-baseline gap-1">
                         {tier.price === 0 ? (
-                          <span className="text-2xl font-black text-zinc-900">Gratis</span>
+                          <span className="text-2xl font-black text-zinc-900">{t("price_free")}</span>
                         ) : (
                           <>
                             <span className="text-2xl font-black text-zinc-900">{tier.price} €</span>
-                            <span className="text-sm text-zinc-400">/ Monat</span>
+                            <span className="text-sm text-zinc-400">{t("per_month")}</span>
                           </>
                         )}
                       </div>
@@ -113,12 +115,12 @@ export default function PricingPage() {
 
         {/* Upgrade path */}
         <section className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm mb-12">
-          <h2 className="text-center font-bold text-zinc-900 text-lg mb-8">Dein Weg auf DADORI</h2>
+          <h2 className="text-center font-bold text-zinc-900 text-lg mb-8">{t("upgrade_path_title")}</h2>
           <div className="flex flex-col gap-6">
             {[
-              { track: "Talent", steps: ["👤 Free", "⭐ Plus 5€", "🏆 Pro 20€"], color: "indigo" },
-              { track: "Projekt / Startup", steps: ["🎯 Projekt 2€", "🚀 Startup 10€", "🦄 Startup Pro 25€"], color: "amber" },
-              { track: "Investor", steps: ["💼 Investor Free", "🏦 Investor Pro 49€"], color: "emerald" },
+              { track: t("upgrade_track_talent"), steps: ["👤 Free", "⭐ Plus 5€", "🏆 Pro 20€"], color: "indigo" },
+              { track: t("upgrade_track_project"), steps: ["🎯 Projekt 2€", "🚀 Startup 10€", "🦄 Startup Pro 25€"], color: "amber" },
+              { track: t("upgrade_track_investor"), steps: ["💼 Investor Free", "🏦 Investor Pro 49€"], color: "emerald" },
             ].map(({ track, steps, color }) => (
               <div key={track} className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 w-36 shrink-0">{track}</span>
@@ -138,19 +140,19 @@ export default function PricingPage() {
             ))}
           </div>
           <p className="mt-6 text-center text-sm text-zinc-400">
-            Jeder Upgrade behält dein Profil, deine Matches und deine History.
+            {t("upgrade_note")}
           </p>
         </section>
 
         {/* FAQ */}
         <section className="grid gap-4 sm:grid-cols-2">
           {[
-            { q: "Kann ich jederzeit kündigen?", a: "Ja — monatlich kündbar, keine Mindestlaufzeit, sofort aktiv." },
-            { q: "Was ist Stealth-Modus?", a: "Dein Projekt ist anonym sichtbar — nur Kategorie & Problem-Bereich, kein Name. Investoren können trotzdem Interesse bekunden." },
-            { q: "Upgrade Projekt → Startup?", a: "Ein Klick — dein Profil wird vollständig übernommen, du zahlst nur die Differenz." },
-            { q: "Investoren: warum Free?", a: "Wir wollen Investoren auf der Plattform, nicht davon fernhalten. Pro lohnt sich für aktiven Deal Flow." },
-            { q: "Was kostet DADORI Intro?", a: "Die Intro selbst ist kostenlos — du brauchst nur den passenden Tier (Startup oder Investor Pro)." },
-            { q: "Gibt es Jahrespläne?", a: "Kommt bald — mit ~20% Rabatt gegenüber monatlicher Zahlung." },
+            { q: t("faq_cancel_q"), a: t("faq_cancel_a") },
+            { q: t("faq_stealth_q"), a: t("faq_stealth_a") },
+            { q: t("faq_upgrade_q"), a: t("faq_upgrade_a") },
+            { q: t("faq_investor_free_q"), a: t("faq_investor_free_a") },
+            { q: t("faq_intro_q"), a: t("faq_intro_a") },
+            { q: t("faq_yearly_q"), a: t("faq_yearly_a") },
           ].map(({ q, a }) => (
             <div key={q} className="rounded-xl border border-zinc-200 bg-white p-5">
               <p className="font-semibold text-zinc-900 text-sm">{q}</p>

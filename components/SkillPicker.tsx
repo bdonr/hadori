@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { SKILL_CATEGORIES } from "@/lib/skills";
 
 interface SkillPickerProps {
@@ -11,6 +12,7 @@ interface SkillPickerProps {
 }
 
 export function SkillPicker({ selected, onChange, label = "Skills", max }: SkillPickerProps) {
+  const t = useTranslations("misc_pages.skill_picker");
   const [search, setSearch] = useState("");
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
@@ -37,7 +39,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
       <div className="mb-3 flex items-center justify-between">
         <p className="text-sm font-medium text-zinc-700">{label}</p>
         <span className="text-xs text-zinc-400">
-          {selected.length}{max ? `/${max}` : ""} ausgewählt
+          {selected.length}{max ? `/${max}` : ""} {t("selected")}
         </span>
       </div>
 
@@ -46,7 +48,7 @@ export function SkillPicker({ selected, onChange, label = "Skills", max }: Skill
         type="text"
         value={search}
         onChange={e => setSearch(e.target.value)}
-        placeholder="Skill suchen …"
+        placeholder={t("search_placeholder")}
         className="mb-4 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
       />
 

@@ -22,12 +22,13 @@ service cloud.firestore {
         && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["role", "plan_tier", "stripe_customer_id"]);
     }
 
-    // Startups
+    // Startups — the document ID IS the owner's uid (startups/{uid}), so we
+    // check ownership by the path. This works even when the doc doesn't exist
+    // yet (a fresh owner reading their own empty profile), which a
+    // resource.data-based rule would wrongly deny and hang the client.
     match /startups/{startupId} {
-      // Create: the new doc must be owned by the caller
-      allow create: if isAuth() && request.resource.data.owner_uid == request.auth.uid;
-      // Owner can read/update/delete
-      allow read, update, delete: if isAuth() && resource.data.owner_uid == request.auth.uid;
+      allow create: if isOwner(startupId) && request.resource.data.owner_uid == request.auth.uid;
+      allow read, update, delete: if isOwner(startupId);
       // Investors / others can read discoverable startups
       allow read: if isAuth() && resource.data.is_discoverable == true;
 

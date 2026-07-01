@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, use, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { LangSwitcher } from "@/components/LangSwitcher";
 import { getSkillLabel } from "@/lib/skills";
 import { REGIONS, LANGUAGES } from "@/lib/regions";
@@ -57,6 +58,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   const { id } = use(params);
   const routeParams = useParams();
   const locale = (routeParams.locale as string) ?? "en";
+  const t = useTranslations("misc_pages.user_detail");
 
   const [authUid, setAuthUid] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -115,14 +117,14 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
         <span className="text-5xl">👤</span>
         {id === "me" && !authUid ? (
           <>
-            <h1 className="text-xl font-bold text-zinc-900">Du bist nicht eingeloggt</h1>
+            <h1 className="text-xl font-bold text-zinc-900">{t("not_logged_in")}</h1>
             <Link href={`/${locale}/login`} className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-              Jetzt einloggen →
+              {t("login_now")}
             </Link>
           </>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-zinc-900">Profil nicht gefunden</h1>
+            <h1 className="text-xl font-bold text-zinc-900">{t("profile_not_found")}</h1>
             <Link href={`/${locale}/explore`} className="text-sm text-indigo-600 hover:underline">← Explore</Link>
           </>
         )}
@@ -130,7 +132,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  const displayName = profile.full_name || "Unbekannt";
+  const displayName = profile.full_name || t("unknown");
   const bio = talent?.bio ?? "";
   const skills = talent?.skills ?? [];
   const avail = talent?.availability
@@ -162,7 +164,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-extrabold text-zinc-900">{displayName}</h1>
                 {isOwnProfile && (
-                  <span className="rounded-full bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">Du</span>
+                  <span className="rounded-full bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">{t("you")}</span>
                 )}
               </div>
               {talent?.headline && (
@@ -177,7 +179,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                 )}
                 {talent?.remote && (
                   <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-600">
-                    🌍 Remote
+                    🌍 {t("remote")}
                   </span>
                 )}
                 {talent?.experience && EXPERIENCE_LABEL[talent.experience] && (
@@ -193,23 +195,23 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {isOwnProfile ? (
               <Link href={`/${locale}/talent/skills`}
                 className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                ✏️ Profil bearbeiten
+                ✏️ {t("edit_profile")}
               </Link>
             ) : (
               !contacted ? (
                 <button onClick={() => setContacted(true)}
                   className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                  Kontakt anfragen
+                  {t("request_contact")}
                 </button>
               ) : (
                 <span className="rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">
-                  ✓ Anfrage gesendet
+                  ✓ {t("request_sent")}
                 </span>
               )
             )}
             <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
               className="rounded-xl border border-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-600 hover:border-indigo-300 transition-colors">
-              🔗 Profil teilen
+              🔗 {t("share_profile")}
             </button>
           </div>
         </div>
@@ -219,14 +221,14 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {/* Bio */}
             {bio ? (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-3 font-bold text-zinc-900">Über {displayName}</h2>
+                <h2 className="mb-3 font-bold text-zinc-900">{t("about_name", { name: displayName })}</h2>
                 <p className="text-sm leading-relaxed text-zinc-600">{bio}</p>
               </div>
             ) : isOwnProfile ? (
               <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
                 <p className="text-sm text-zinc-400">
-                  Noch keine Bio —{" "}
-                  <Link href={`/${locale}/talent/skills`} className="text-indigo-600 hover:underline">jetzt hinzufügen →</Link>
+                  {t("no_bio_yet")}{" "}
+                  <Link href={`/${locale}/talent/skills`} className="text-indigo-600 hover:underline">{t("add_now")}</Link>
                 </p>
               </div>
             ) : null}
@@ -234,7 +236,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {/* Skills */}
             {skills.length > 0 ? (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 font-bold text-zinc-900">Skills</h2>
+                <h2 className="mb-4 font-bold text-zinc-900">{t("skills")}</h2>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((s, i) => (
                     <span key={s} className={`rounded-full px-3 py-1 text-xs font-semibold ${
@@ -248,8 +250,8 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             ) : isOwnProfile ? (
               <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
                 <p className="text-sm text-zinc-400">
-                  Noch keine Skills —{" "}
-                  <Link href={`/${locale}/talent/skills`} className="text-indigo-600 hover:underline">Skills hinzufügen →</Link>
+                  {t("no_skills_yet")}{" "}
+                  <Link href={`/${locale}/talent/skills`} className="text-indigo-600 hover:underline">{t("add_skills")}</Link>
                 </p>
               </div>
             ) : null}
@@ -257,10 +259,10 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {/* Sprachen & Region */}
             {(languages.length > 0 || regions.length > 0) && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 font-bold text-zinc-900">Sprachen & Region</h2>
+                <h2 className="mb-4 font-bold text-zinc-900">{t("languages_region")}</h2>
                 {languages.length > 0 && (
                   <div className="mb-4">
-                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">Arbeitssprachen</p>
+                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">{t("working_languages")}</p>
                     <div className="flex flex-wrap gap-2">
                       {languages.map(l => (
                         <span key={l.id} className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm font-medium text-zinc-700">
@@ -272,7 +274,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                 )}
                 {regions.length > 0 && (
                   <div>
-                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">Regionen</p>
+                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-400">{t("regions")}</p>
                     <div className="flex flex-wrap gap-2">
                       {regions.map(r => (
                         <span key={r.id} className="flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm font-medium text-zinc-700">
@@ -290,9 +292,9 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {portfolio.length > 0 && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-bold text-zinc-900">Portfolio</h2>
+                  <h2 className="font-bold text-zinc-900">{t("portfolio")}</h2>
                   {isOwnProfile && (
-                    <Link href={`/${locale}/talent/portfolio`} className="text-xs text-indigo-600 hover:underline">Alle bearbeiten →</Link>
+                    <Link href={`/${locale}/talent/portfolio`} className="text-xs text-indigo-600 hover:underline">{t("edit_all")}</Link>
                   )}
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -310,7 +312,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                   ))}
                 </div>
                 {portfolio.length > 4 && (
-                  <p className="mt-3 text-xs text-zinc-400 text-center">+{portfolio.length - 4} weitere Werke</p>
+                  <p className="mt-3 text-xs text-zinc-400 text-center">{t("more_works", { count: portfolio.length - 4 })}</p>
                 )}
               </div>
             )}
@@ -321,24 +323,24 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             {/* Details-Card */}
             {talent && (
               <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Details</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">{t("details")}</p>
                 <dl className="flex flex-col gap-2 text-sm">
                   {avail && (
                     <div className="flex items-center justify-between">
-                      <dt className="text-zinc-500">Verfügbarkeit</dt>
+                      <dt className="text-zinc-500">{t("availability")}</dt>
                       <dd className="font-medium text-zinc-800">{avail.label}</dd>
                     </div>
                   )}
                   {talent.experience && EXPERIENCE_LABEL[talent.experience] && (
                     <div className="flex items-center justify-between">
-                      <dt className="text-zinc-500">Erfahrung</dt>
+                      <dt className="text-zinc-500">{t("experience")}</dt>
                       <dd className="font-medium text-zinc-800">{EXPERIENCE_LABEL[talent.experience]}</dd>
                     </div>
                   )}
                   {talent.remote !== undefined && (
                     <div className="flex items-center justify-between">
-                      <dt className="text-zinc-500">Remote</dt>
-                      <dd className="font-medium text-zinc-800">{talent.remote ? "Ja" : "Nein"}</dd>
+                      <dt className="text-zinc-500">{t("remote")}</dt>
+                      <dd className="font-medium text-zinc-800">{talent.remote ? t("yes") : t("no")}</dd>
                     </div>
                   )}
                 </dl>
@@ -347,42 +349,42 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
 
             {isOwnProfile ? (
               <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Dein Profil</p>
-                <p className="text-sm text-zinc-600 mb-3">Skills, Region oder Bio aktualisieren.</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">{t("your_profile")}</p>
+                <p className="text-sm text-zinc-600 mb-3">{t("your_profile_desc")}</p>
                 <Link href={`/${locale}/talent/skills`}
                   className="block w-full rounded-lg bg-indigo-600 py-2 text-center text-xs font-bold text-white hover:bg-indigo-700 transition-colors">
-                  Profil bearbeiten →
+                  {t("edit_profile_arrow")}
                 </Link>
                 {portfolio.length === 0 && (
                   <Link href={`/${locale}/talent/portfolio`}
                     className="mt-2 block w-full rounded-lg border border-indigo-200 py-2 text-center text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors">
-                    Portfolio hinzufügen →
+                    {t("add_portfolio")}
                   </Link>
                 )}
               </div>
             ) : (
               <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-5">
-                <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">Du bist Talent?</p>
-                <p className="text-sm text-indigo-700 mb-3">Erstell dein eigenes Profil und werde von Startups gefunden.</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">{t("are_you_talent")}</p>
+                <p className="text-sm text-indigo-700 mb-3">{t("are_you_talent_desc")}</p>
                 <Link href={`/${locale}/signup`}
                   className="block w-full rounded-lg bg-indigo-600 py-2 text-center text-xs font-bold text-white hover:bg-indigo-700 transition-colors">
-                  Profil erstellen →
+                  {t("create_profile")}
                 </Link>
               </div>
             )}
 
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Teilen</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">{t("share")}</p>
               <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
                 className="w-full rounded-lg border border-zinc-200 py-2 text-xs font-semibold text-zinc-600 hover:border-indigo-300 transition-colors">
-                🔗 Link kopieren
+                🔗 {t("copy_link")}
               </button>
             </div>
           </div>
         </div>
 
         <p className="mt-8 text-center text-sm text-zinc-400">
-          Startups & Projekte entdecken:{" "}
+          {t("discover_startups_projects")}{" "}
           <Link href={`/${locale}/explore`} className="text-indigo-600 hover:underline">Explore →</Link>
         </p>
       </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,11 @@ const TIER_LIMITS: Record<string, number> = { free: 1, pro: 10, scale: Infinity 
 const DEFAULT_TIER = "free";
 
 const MEDIA_TYPES = [
-  { id: "video", label: "Video / Reel", icon: "🎬" },
-  { id: "image", label: "Bild / Grafik", icon: "🖼️" },
-  { id: "audio", label: "Audio / Track", icon: "🎵" },
-  { id: "link", label: "Link / Website", icon: "🔗" },
-  { id: "pdf", label: "PDF / Dokument", icon: "📄" },
+  { id: "video", labelKey: "media_video", icon: "🎬" },
+  { id: "image", labelKey: "media_image", icon: "🖼️" },
+  { id: "audio", labelKey: "media_audio", icon: "🎵" },
+  { id: "link", labelKey: "media_link", icon: "🔗" },
+  { id: "pdf", labelKey: "media_pdf", icon: "📄" },
 ];
 
 interface PortfolioItem {
@@ -31,6 +32,7 @@ interface PortfolioItem {
 }
 
 export default function PortfolioPage() {
+  const t = useTranslations("talent_pages.portfolio");
   const { locale } = useParams<{ locale: string }>();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [tier, setTier] = useState(DEFAULT_TIER);
@@ -106,14 +108,14 @@ export default function PortfolioPage() {
           <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
             <div>
               <p className="font-semibold text-amber-900">
-                {tier === "free" ? "Free-Plan: 1 Portfolio-Eintrag" : "Pro-Plan: 10 Portfolio-Einträge"}
+                {tier === "free" ? t("limit_free_title") : t("limit_pro_title")}
               </p>
               <p className="mt-0.5 text-sm text-amber-700">
-                {tier === "free" ? "Upgrade auf Pro für 10 Einträge, auf Scale für unbegrenzt." : "Upgrade auf Scale für unbegrenzte Einträge."}
+                {tier === "free" ? t("limit_free_hint") : t("limit_pro_hint")}
               </p>
             </div>
             <Button asChild className="shrink-0 bg-amber-600 hover:bg-amber-700">
-              <Link href={`/${locale}/talent/billing`}>{tier === "free" ? "Auf Pro upgraden" : "Auf Scale upgraden"}</Link>
+              <Link href={`/${locale}/talent/billing`}>{tier === "free" ? t("upgrade_to_pro") : t("upgrade_to_scale")}</Link>
             </Button>
           </div>
         )}
@@ -128,7 +130,7 @@ export default function PortfolioPage() {
               />
             </div>
             <span className="text-xs text-zinc-400 shrink-0">
-              {isScale ? "Unbegrenzt" : `Noch ${LIMIT - items.length} frei`}
+              {isScale ? t("unlimited") : t("remaining_free", { n: LIMIT - items.length })}
             </span>
           </div>
         )}
@@ -136,12 +138,12 @@ export default function PortfolioPage() {
         {/* Add form */}
         {showForm && (
           <form onSubmit={handleSubmit} className="mb-8 rounded-2xl border border-indigo-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 text-base font-bold text-zinc-900">Neues Portfolio-Stück</h2>
+            <h2 className="mb-6 text-base font-bold text-zinc-900">{t("form_title")}</h2>
 
             <div className="flex flex-col gap-5">
               {/* Media type */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Art des Werks</label>
+                <label className="mb-2 block text-sm font-medium text-zinc-700">{t("label_media_type")}</label>
                 <div className="flex flex-wrap gap-2">
                   {MEDIA_TYPES.map(m => (
                     <button
@@ -153,33 +155,33 @@ export default function PortfolioPage() {
                           : "border border-zinc-200 text-zinc-600 hover:border-indigo-300"
                       }`}
                     >
-                      {m.icon} {m.label}
+                      {m.icon} {t(m.labelKey)}
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-zinc-700">Titel</label>
+                <label className="mb-1 block text-sm font-medium text-zinc-700">{t("label_title")}</label>
                 <input
                   required value={title} onChange={e => setTitle(e.target.value)}
-                  placeholder="z.B. Gaming Highlight Reel – Creator XY"
+                  placeholder={t("placeholder_title")}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-zinc-700">Beschreibung</label>
+                <label className="mb-1 block text-sm font-medium text-zinc-700">{t("label_description")}</label>
                 <textarea
                   rows={3} value={description} onChange={e => setDescription(e.target.value)}
-                  placeholder="Was hast du gemacht? Für wen? Welche Tools?"
+                  placeholder={t("placeholder_description")}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 resize-none"
                 />
               </div>
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-zinc-700">
-                  Link {mediaType === "video" ? "(YouTube, Vimeo …)" : mediaType === "audio" ? "(SoundCloud, Spotify …)" : "(URL)"}
+                  {t("label_link")} {mediaType === "video" ? t("link_hint_video") : mediaType === "audio" ? t("link_hint_audio") : t("link_hint_url")}
                 </label>
                 <input
                   type="url" value={url} onChange={e => setUrl(e.target.value)}
@@ -190,7 +192,7 @@ export default function PortfolioPage() {
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-zinc-700">
-                  Tags <span className="text-zinc-400">(Enter oder Komma)</span>
+                  {t("label_tags")} <span className="text-zinc-400">{t("tags_hint")}</span>
                 </label>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {tags.map(t => (
@@ -204,15 +206,15 @@ export default function PortfolioPage() {
                   value={tagInput}
                   onChange={e => setTagInput(e.target.value)}
                   onKeyDown={addTag}
-                  placeholder="z.B. Gaming, DaVinci, YouTube …"
+                  placeholder={t("placeholder_tags")}
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                 />
               </div>
             </div>
 
             <div className="mt-6 flex gap-3">
-              <Button type="submit">Speichern</Button>
-              <Button type="button" variant="outline" onClick={() => setShowForm(false)}>Abbrechen</Button>
+              <Button type="submit">{t("save")}</Button>
+              <Button type="button" variant="outline" onClick={() => setShowForm(false)}>{t("cancel")}</Button>
             </div>
           </form>
         )}
@@ -221,9 +223,9 @@ export default function PortfolioPage() {
         {items.length === 0 ? (
           <div className="py-20 text-center text-zinc-400">
             <p className="text-5xl mb-4">🎨</p>
-            <p className="font-semibold text-zinc-600">Noch kein Portfolio</p>
-            <p className="mt-1 text-sm">Füge deine ersten Arbeiten hinzu — Videos, Designs, Tracks, Links.</p>
-            <Button className="mt-4" onClick={() => setShowForm(true)}>Erstes Werk hinzufügen</Button>
+            <p className="font-semibold text-zinc-600">{t("empty_title")}</p>
+            <p className="mt-1 text-sm">{t("empty_hint")}</p>
+            <Button className="mt-4" onClick={() => setShowForm(true)}>{t("add_first")}</Button>
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2">
@@ -235,9 +237,9 @@ export default function PortfolioPage() {
             {tier === "free" && (
               <div className="relative rounded-2xl border-2 border-dashed border-zinc-200 bg-white p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
                 <span className="text-3xl">🔒</span>
-                <p className="text-sm font-semibold text-zinc-500">+9 weitere Einträge im Pro-Plan</p>
+                <p className="text-sm font-semibold text-zinc-500">{t("locked_more")}</p>
                 <Button size="sm" asChild variant="outline">
-                  <Link href={`/${locale}/talent/billing`}>Pro für 19 €/Monat</Link>
+                  <Link href={`/${locale}/talent/billing`}>{t("pro_price_cta")}</Link>
                 </Button>
               </div>
             )}
@@ -253,6 +255,7 @@ const MEDIA_ICON: Record<string, string> = {
 };
 
 function PortfolioCard({ item, onRemove }: { item: PortfolioItem; onRemove: () => void }) {
+  const t = useTranslations("talent_pages.portfolio");
   return (
     <div className="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md">
       <div className="flex items-start justify-between gap-2">
@@ -287,7 +290,7 @@ function PortfolioCard({ item, onRemove }: { item: PortfolioItem; onRemove: () =
             href={item.url} target="_blank" rel="noopener noreferrer"
             className="text-xs font-medium text-indigo-600 hover:underline"
           >
-            Ansehen →
+            {t("view")}
           </a>
         )}
       </div>

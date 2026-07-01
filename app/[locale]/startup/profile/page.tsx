@@ -10,6 +10,7 @@ import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS } from "@/lib/regions";
 import { FUNDING_STAGES, MRR_RANGES } from "@/lib/funding";
 import { Navbar } from "@/components/layout/navbar";
+import { useTranslations } from "next-intl";
 
 const TEAM_SIZES = ["1", "2–5", "6–15", "16–50", "50+"];
 
@@ -20,6 +21,7 @@ const CATEGORIES = [
 ];
 
 export default function StartupProfilePage() {
+  const t = useTranslations("startup_pages.profile");
   const [uid, setUid] = useState<string | null>(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -45,30 +47,34 @@ export default function StartupProfilePage() {
       if (!user) { setLoading(false); return; }
       setUid(user.uid);
 
-      // Load existing data
-      const snap = await getDoc(doc(db, "startups", user.uid));
-      if (snap.exists()) {
-        const d = snap.data() as Record<string, unknown>;
-        if (d.name) setName(d.name as string);
-        if (d.tagline) setTagline(d.tagline as string);
-        if (d.description) setDescription(d.description as string);
-        if (d.website) setWebsite(d.website as string);
-        if (d.industry) setCategory(d.industry as string);
-        if (d.teamSize) setTeamSize(d.teamSize as string);
-        if (d.neededSkills) setNeededSkills(d.neededSkills as string[]);
-        if (d.region) setRegion(d.region as string);
-        if (d.stage) setStage(d.stage as string);
-        if (d.mrrRange) setMrrRange(d.mrrRange as string);
-        if (d.fundingGoal) setFundingGoal(d.fundingGoal as string);
-        if (d.seekingInvestors) setSeekingInvestors(d.seekingInvestors as boolean);
+      try {
+        // Load existing data
+        const snap = await getDoc(doc(db, "startups", user.uid));
+        if (snap.exists()) {
+          const d = snap.data() as Record<string, unknown>;
+          if (d.name) setName(d.name as string);
+          if (d.tagline) setTagline(d.tagline as string);
+          if (d.description) setDescription(d.description as string);
+          if (d.website) setWebsite(d.website as string);
+          if (d.industry) setCategory(d.industry as string);
+          if (d.teamSize) setTeamSize(d.teamSize as string);
+          if (d.neededSkills) setNeededSkills(d.neededSkills as string[]);
+          if (d.region) setRegion(d.region as string);
+          if (d.stage) setStage(d.stage as string);
+          if (d.mrrRange) setMrrRange(d.mrrRange as string);
+          if (d.fundingGoal) setFundingGoal(d.fundingGoal as string);
+          if (d.seekingInvestors) setSeekingInvestors(d.seekingInvestors as boolean);
+        }
+
+        // Check tier
+        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+        const tier = profileSnap.data()?.plan_tier ?? "free";
+        setIsPro(tier === "startup" || tier === "startup_pro" || tier === "scale");
+      } catch {
+        // Read failed — still let the user fill in and save their profile
+      } finally {
+        setLoading(false);
       }
-
-      // Check tier
-      const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-      const tier = profileSnap.data()?.plan_tier ?? "free";
-      setIsPro(tier === "startup" || tier === "startup_pro" || tier === "scale");
-
-      setLoading(false);
     });
     return () => unsub();
   }, []);
@@ -100,7 +106,7 @@ export default function StartupProfilePage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Fehler beim Speichern");
+      setError(e instanceof Error ? e.message : t("save_error"));
     } finally {
       setSaving(false);
     }
@@ -110,7 +116,7 @@ export default function StartupProfilePage() {
     return (
       <div className="min-h-screen bg-zinc-50">
         <Navbar />
-        <div className="flex items-center justify-center pt-32 text-zinc-400">Wird geladen…</div>
+        <div className="flex items-center justify-center pt-32 text-zinc-400">{t("loading")}</div>
       </div>
     );
   }
@@ -121,46 +127,46 @@ export default function StartupProfilePage() {
 
       <div className="max-w-2xl mx-auto px-4 pt-8 pb-4">
         <Link href="/startup" className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-800 mb-4">
-          ← Dashboard
+          {t("back_dashboard")}
         </Link>
-        <h1 className="text-2xl font-bold text-zinc-900">Startup-Profil bearbeiten</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("page_title")}</h1>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 flex flex-col gap-5">
         {/* Section 1 */}
         <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-zinc-800">Dein Startup</h2>
+          <h2 className="text-base font-semibold text-zinc-800">{t("section_startup")}</h2>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="sp-name" className="text-sm font-medium text-zinc-700">Name</label>
+            <label htmlFor="sp-name" className="text-sm font-medium text-zinc-700">{t("name")}</label>
             <input id="sp-name" value={name} onChange={(e) => setName(e.target.value)}
-              placeholder="z.B. DADORI"
+              placeholder={t("name_placeholder")}
               className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="sp-tagline" className="text-sm font-medium text-zinc-700">Tagline</label>
+            <label htmlFor="sp-tagline" className="text-sm font-medium text-zinc-700">{t("tagline")}</label>
             <input id="sp-tagline" value={tagline} onChange={(e) => setTagline(e.target.value)}
-              placeholder="Ein Satz was ihr macht"
+              placeholder={t("tagline_placeholder")}
               className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="sp-desc" className="text-sm font-medium text-zinc-700">Beschreibung</label>
+            <label htmlFor="sp-desc" className="text-sm font-medium text-zinc-700">{t("description")}</label>
             <textarea id="sp-desc" value={description} onChange={(e) => setDescription(e.target.value)}
-              placeholder="Was macht ihr? Für wen? Was ist der Unterschied?" rows={4}
+              placeholder={t("description_placeholder")} rows={4}
               className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 resize-none" />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="sp-web" className="text-sm font-medium text-zinc-700">Website</label>
+            <label htmlFor="sp-web" className="text-sm font-medium text-zinc-700">{t("website")}</label>
             <input id="sp-web" value={website} onChange={(e) => setWebsite(e.target.value)}
               placeholder="https://" type="url"
               className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-zinc-700">Kategorie</label>
+            <label className="text-sm font-medium text-zinc-700">{t("category")}</label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((cat) => (
                 <button key={cat} type="button" onClick={() => setCategory(cat === category ? "" : cat)}
@@ -176,9 +182,9 @@ export default function StartupProfilePage() {
 
         {/* Section 2: Team */}
         <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-zinc-800">Team & Suche</h2>
+          <h2 className="text-base font-semibold text-zinc-800">{t("section_team")}</h2>
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-zinc-700">Teamgröße</label>
+            <label className="text-sm font-medium text-zinc-700">{t("team_size")}</label>
             <div className="flex flex-wrap gap-2">
               {TEAM_SIZES.map((size) => (
                 <button key={size} type="button" onClick={() => setTeamSize(size === teamSize ? "" : size)}
@@ -190,12 +196,12 @@ export default function StartupProfilePage() {
               ))}
             </div>
           </div>
-          <SkillPicker label="Welche Skills sucht ihr noch?" selected={neededSkills} onChange={setNeededSkills} max={10} />
+          <SkillPicker label={t("skills_label")} selected={neededSkills} onChange={setNeededSkills} max={10} />
         </section>
 
         {/* Section 3: Region */}
         <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-zinc-800">Region</h2>
+          <h2 className="text-base font-semibold text-zinc-800">{t("section_region")}</h2>
           <div className="flex flex-wrap gap-2">
             {REGIONS.map((r) => (
               <button key={r.id} type="button" onClick={() => setRegion(r.id)}
@@ -210,11 +216,11 @@ export default function StartupProfilePage() {
 
         {/* Section 4: Funding (PRO) */}
         <section className="rounded-2xl bg-white p-6 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-zinc-800">Funding & Traction</h2>
+          <h2 className="text-base font-semibold text-zinc-800">{t("section_funding")}</h2>
           <div className="relative">
             <div className={`flex flex-col gap-4 ${!isPro ? "blur-sm pointer-events-none select-none" : ""}`}>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-zinc-700">Funding-Stage</label>
+                <label className="text-sm font-medium text-zinc-700">{t("funding_stage")}</label>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {FUNDING_STAGES.map((s) => (
                     <button key={s.id} type="button" onClick={() => setStage(s.id === stage ? "" : s.id)}
@@ -231,7 +237,7 @@ export default function StartupProfilePage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-zinc-700">Aktueller MRR</label>
+                <label className="text-sm font-medium text-zinc-700">{t("current_mrr")}</label>
                 <div className="flex flex-wrap gap-2">
                   {MRR_RANGES.map((m) => (
                     <button key={m.id} type="button" onClick={() => setMrrRange(m.id === mrrRange ? "" : m.id)}
@@ -242,23 +248,23 @@ export default function StartupProfilePage() {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <label htmlFor="sp-funding" className="text-sm font-medium text-zinc-700">Funding-Ziel</label>
+                <label htmlFor="sp-funding" className="text-sm font-medium text-zinc-700">{t("funding_goal")}</label>
                 <input id="sp-funding" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)}
-                  placeholder="z.B. €500k Seed-Runde · Verwenden für: Product-Team & Go-to-Market"
+                  placeholder={t("funding_goal_placeholder")}
                   className="rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={seekingInvestors} onChange={(e) => setSeekingInvestors(e.target.checked)}
                   className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500" />
-                <span className="text-sm text-zinc-700">Suche ich aktiv Investoren?</span>
+                <span className="text-sm text-zinc-700">{t("seeking_investors")}</span>
               </label>
             </div>
             {!isPro && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl bg-white/60 backdrop-blur-[2px]">
                 <span className="text-3xl">🔒</span>
-                <p className="text-sm font-semibold text-zinc-800 text-center">Funding-Details sind ein Pro-Feature</p>
+                <p className="text-sm font-semibold text-zinc-800 text-center">{t("funding_pro_note")}</p>
                 <Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                  <Link href="/startup/billing">Ab Pro freischalten — 10 €/Mo</Link>
+                  <Link href="/startup/billing">{t("unlock_pro_cta")}</Link>
                 </Button>
               </div>
             )}
@@ -270,9 +276,9 @@ export default function StartupProfilePage() {
         <div className="flex items-center gap-3">
           <Button onClick={handleSave} disabled={!name.trim() || saving}
             className="bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50">
-            {saving ? "Wird gespeichert…" : saved ? "Gespeichert ✓" : "Speichern"}
+            {saving ? t("saving") : saved ? t("saved") : t("save")}
           </Button>
-          {saved && <span className="text-sm text-green-600 font-medium">Änderungen gespeichert!</span>}
+          {saved && <span className="text-sm text-green-600 font-medium">{t("changes_saved")}</span>}
         </div>
       </div>
     </div>

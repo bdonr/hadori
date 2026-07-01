@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Navbar } from "@/components/layout/navbar";
 
 const TIER_GATE = "investor_basic"; // angel+
@@ -26,6 +27,7 @@ function tierAtLeast(required: string) {
 }
 
 export default function DealFlowPage() {
+  const t = useTranslations("investor_pages.dealflow");
   const [filter, setFilter] = useState("all");
   const [saved, setSaved] = useState<Set<string>>(new Set());
 
@@ -51,10 +53,10 @@ export default function DealFlowPage() {
         {!canSeeDeals ? (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-10 text-center">
             <span className="text-4xl">🔒</span>
-            <h2 className="mt-4 text-xl font-bold text-zinc-900">Deal Flow ab Angel (19 €/Mo)</h2>
-            <p className="mt-2 text-sm text-zinc-500">Wöchentliche neue Startups, Stealth-Projekte und Frühzugang.</p>
+            <h2 className="mt-4 text-xl font-bold text-zinc-900">{t("gate_title")}</h2>
+            <p className="mt-2 text-sm text-zinc-500">{t("gate_subtitle")}</p>
             <Link href="/investor/billing" className="mt-4 inline-block rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors">
-              Jetzt upgraden →
+              {t("upgrade_now")}
             </Link>
           </div>
         ) : (
@@ -63,14 +65,14 @@ export default function DealFlowPage() {
             <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 flex items-center gap-3">
               <span className="text-lg">📬</span>
               <p className="text-sm text-emerald-800">
-                <strong>{DEAL_FLOW.filter(d => d.isNew).length} neue Startups</strong> diese Woche ·
-                {tierAtLeast("investor_pro") ? ` inkl. ${DEAL_FLOW.filter(d => d.isStealth).length} Stealth-Projekte` : " Stealth-Projekte ab Pro"}
+                <strong>{t("new_startups", { n: DEAL_FLOW.filter(d => d.isNew).length })}</strong> {t("this_week")} ·
+                {tierAtLeast("investor_pro") ? ` ${t("incl_stealth", { n: DEAL_FLOW.filter(d => d.isStealth).length })}` : ` ${t("stealth_from_pro")}`}
               </p>
             </div>
 
             {/* Filters */}
             <div className="mb-5 flex gap-2">
-              {[["all", "Alle"], ["new", "🆕 Neu diese Woche"], ["stealth", "🥷 Stealth"]].map(([id, label]) => (
+              {[["all", t("filter_all")], ["new", t("filter_new")], ["stealth", t("filter_stealth")]].map(([id, label]) => (
                 <button key={id} onClick={() => setFilter(id)}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${filter === id ? "bg-emerald-600 text-white" : "border border-zinc-200 bg-white text-zinc-600 hover:border-emerald-300"}`}>
                   {label}
@@ -91,15 +93,15 @@ export default function DealFlowPage() {
                         <div className="flex items-start justify-between gap-3 flex-wrap">
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-zinc-900">{deal.isStealth ? "Stealth-Projekt" : deal.name}</span>
-                              {deal.isNew && <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">NEU</span>}
-                              {deal.isStealth && <span className="rounded-full bg-zinc-100 text-zinc-500 px-2 py-0.5 text-[10px] font-semibold">🥷 Stealth</span>}
-                              <span className="text-xs text-zinc-400">vor {deal.addedDaysAgo}d</span>
+                              <span className="font-bold text-zinc-900">{deal.isStealth ? t("stealth_project") : deal.name}</span>
+                              {deal.isNew && <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">{t("badge_new")}</span>}
+                              {deal.isStealth && <span className="rounded-full bg-zinc-100 text-zinc-500 px-2 py-0.5 text-[10px] font-semibold">{t("badge_stealth")}</span>}
+                              <span className="text-xs text-zinc-400">{t("days_ago", { n: deal.addedDaysAgo })}</span>
                             </div>
                             {isStealthLocked ? (
-                              <p className="text-sm text-zinc-400 mt-0.5">Problem-Bereich: <strong>{deal.stealthProblems?.join(", ")}</strong> · Details ab Pro</p>
+                              <p className="text-sm text-zinc-400 mt-0.5">{t("problem_area")} <strong>{deal.stealthProblems?.join(", ")}</strong> {t("details_from_pro")}</p>
                             ) : deal.isStealth ? (
-                              <p className="text-sm text-zinc-500 mt-0.5">Löst: <strong>{deal.stealthProblems?.join(" & ")}</strong> im Bereich <strong>{deal.category}</strong></p>
+                              <p className="text-sm text-zinc-500 mt-0.5">{t("solves")} <strong>{deal.stealthProblems?.join(" & ")}</strong> {t("in_area")} <strong>{deal.category}</strong></p>
                             ) : (
                               <p className="text-sm text-zinc-500 mt-0.5">{deal.tagline}</p>
                             )}
@@ -107,11 +109,11 @@ export default function DealFlowPage() {
                           <div className="flex gap-2 shrink-0">
                             <button onClick={() => toggleSave(deal.id)}
                               className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${saved.has(deal.id) ? "bg-amber-100 text-amber-700" : "border border-zinc-200 text-zinc-500 hover:border-amber-300"}`}>
-                              {saved.has(deal.id) ? "⭐ Gespeichert" : "☆ Speichern"}
+                              {saved.has(deal.id) ? t("saved") : t("save")}
                             </button>
                             <Link href={`/en/project/${deal.id}`}
                               className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-colors">
-                              Details →
+                              {t("details")}
                             </Link>
                           </div>
                         </div>
@@ -120,7 +122,7 @@ export default function DealFlowPage() {
                           <span>·</span>
                           <span>{deal.stageEmoji} {deal.stage}</span>
                           <span>·</span>
-                          <span>💰 MRR: {deal.mrr}</span>
+                          <span>{t("mrr_label", { mrr: deal.mrr })}</span>
                           <span>·</span>
                           <span>👥 {deal.teamSize}</span>
                           <span>·</span>

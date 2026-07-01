@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { auth, db } from "@/lib/firebase/client";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
@@ -21,6 +22,7 @@ const INITIAL: { id: string; name: string; icon: string; category: string; stage
 type WatchlistItem = { id: string; name: string; icon: string; category: string; stage: string; regionFlag: string; tagline: string };
 
 export default function WatchlistPage() {
+  const t = useTranslations("investor_pages.watchlist");
   const [list, setList] = useState<WatchlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
@@ -85,8 +87,8 @@ export default function WatchlistPage() {
         ) : list.length === 0 ? (
           <div className="py-20 text-center text-zinc-400">
             <span className="text-4xl">⭐</span>
-            <p className="mt-3 font-semibold">Noch nichts gespeichert</p>
-            <Link href="/investor/dealflow" className="mt-3 inline-block text-sm text-emerald-600 hover:underline">Deal Flow entdecken →</Link>
+            <p className="mt-3 font-semibold">{t("empty_title")}</p>
+            <Link href="/investor/dealflow" className="mt-3 inline-block text-sm text-emerald-600 hover:underline">{t("discover_deal_flow")}</Link>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -99,7 +101,7 @@ export default function WatchlistPage() {
                   <p className="text-sm text-zinc-400 truncate mt-0.5">{item.tagline}</p>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <Link href={`/en/project/${item.id}`} className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-semibold text-zinc-600 hover:border-emerald-300 transition-colors">Details</Link>
+                  <Link href={`/en/project/${item.id}`} className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-semibold text-zinc-600 hover:border-emerald-300 transition-colors">{t("details")}</Link>
                   <button onClick={() => remove(item.id)} className="rounded-lg border border-zinc-100 px-3 py-1.5 text-xs text-zinc-400 hover:text-red-500 hover:border-red-200 transition-colors">✕</button>
                 </div>
               </div>
@@ -108,7 +110,7 @@ export default function WatchlistPage() {
         )}
         {!tierAtLeast("investor_basic") && (
           <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center text-sm text-emerald-700">
-            Watchlist bis 5 Startups kostenlos · <Link href="/investor/billing" className="font-bold hover:underline">Auf Angel upgraden für 20 Slots →</Link>
+            {t("free_limit")} · <Link href="/investor/billing" className="font-bold hover:underline">{t("upgrade_angel")}</Link>
           </div>
         )}
       </main>
