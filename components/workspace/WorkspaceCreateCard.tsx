@@ -8,20 +8,29 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function create() {
     if (!name.trim()) return;
     setCreating(true);
-    const res = await fetch("/api/workspace", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name.trim(), entityType: "startup" }),
-    });
-    const data = await res.json();
-    if (data.id) {
-      router.push(`/${locale}/workspace/${data.id}`);
+    setError(null);
+    try {
+      const res = await fetch("/api/workspace", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), entityType: "startup", entityId: uid }),
+      });
+      const data = await res.json();
+      if (res.ok && data.id) {
+        router.push(`/${locale}/workspace/${data.id}`);
+        return;
+      }
+      setError(data.error ?? "Workspace konnte nicht erstellt werden.");
+    } catch {
+      setError("Netzwerkfehler — bitte erneut versuchen.");
+    } finally {
+      setCreating(false);
     }
-    setCreating(false);
   }
 
   if (!showForm) {
@@ -68,6 +77,7 @@ export function WorkspaceCreateCard({ locale, uid }: { locale: string; uid: stri
           ✕
         </button>
       </div>
+      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

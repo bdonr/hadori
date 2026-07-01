@@ -35,7 +35,10 @@ export default function InvestorBillingPage() {
       return;
     }
     const priceId = STRIPE_PRICE_IDS[tierId];
-    if (!priceId) return;
+    if (!priceId) {
+      setError("Dieser Plan ist noch nicht buchbar. Bitte versuche es später erneut.");
+      return;
+    }
     setLoading(tierId);
     setError(null);
     try {

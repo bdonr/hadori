@@ -4,3 +4,35 @@ runConfig:
   memoryMiB: 512
   minInstances: 0
   maxInstances: 100
+
+env:
+  # Stripe price IDs — public identifiers (safe to expose; already NEXT_PUBLIC).
+  # Must be available at BUILD so Next.js inlines them into the client bundle,
+  # otherwise the upgrade buttons receive an empty priceId and silently no-op.
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_TALENT_PLUS
+    value: price_1To4j9LyMUHVuOGsk31yqErd
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_TALENT_PRO
+    value: price_1To4jDLyMUHVuOGsJURlAxN9
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_PROJECT
+    value: price_1To4jHLyMUHVuOGskLz8vggC
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_STARTUP
+    value: price_1To4jLLyMUHVuOGsuV1LIA63
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_STARTUP_PRO
+    value: price_1To4jPLyMUHVuOGs5cFNO4QZ
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_ANGEL
+    value: price_1To4jSLyMUHVuOGsmz2WMxq4
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_PRO
+    value: price_1To4jWLyMUHVuOGsEPNKroaY
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_PREMIUM
+    value: price_1To4jaLyMUHVuOGs35rPYu6c
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_ELITE
+    value: price_1To4jeLyMUHVuOGsPJHcItHb
+    availability: [BUILD, RUNTIME]

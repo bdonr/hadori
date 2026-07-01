@@ -24,9 +24,11 @@ service cloud.firestore {
 
     // Startups
     match /startups/{startupId} {
-      // Owner can read/write
-      allow read, write: if isAuth() && resource.data.owner_uid == request.auth.uid;
-      // Investors can read discoverable startups
+      // Create: the new doc must be owned by the caller
+      allow create: if isAuth() && request.resource.data.owner_uid == request.auth.uid;
+      // Owner can read/update/delete
+      allow read, update, delete: if isAuth() && resource.data.owner_uid == request.auth.uid;
+      // Investors / others can read discoverable startups
       allow read: if isAuth() && resource.data.is_discoverable == true;
 
       // Business plans: subcollection, startup-owner only
@@ -41,6 +43,18 @@ service cloud.firestore {
         allow write: if isAuth()
           && get(/databases/$(database)/documents/startups/$(startupId)).data.owner_uid == request.auth.uid;
       }
+    }
+
+    // Projects: creator-owned. Anyone authenticated can browse; only owner mutates.
+    match /projects/{projectId} {
+      allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;
+      allow read: if isAuth();
+      allow update, delete: if isAuth() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Portfolios: talent-owned nested items
+    match /portfolios/{uid}/items/{itemId} {
+      allow read, write: if isOwner(uid);
     }
 
     // Talent profiles: owner reads/writes, startups read to match
@@ -67,6 +81,35 @@ service cloud.firestore {
     match /investor_interests/{id} {
       allow create: if isAuth() && request.resource.data.investor_uid == request.auth.uid;
       allow read: if isAuth() && resource.data.investor_uid == request.auth.uid;
+    }
+
+    // Workspaces: created by the Admin SDK (server) which bypasses these rules.
+    // Members read/write the workspace and its sub-collections (kanban tasks,
+    // milestones, team, AI log). Membership is proven by having a member doc.
+    match /workspaces/{workspaceId} {
+      function isMember() {
+        return isAuth()
+          && exists(/databases/$(database)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid));
+      }
+
+      allow read: if isMember();
+      allow update, delete: if isAuth() && resource.data.ownerId == request.auth.uid;
+
+      match /tasks/{taskId} {
+        allow read, write: if isMember();
+      }
+      match /milestones/{milestoneId} {
+        allow read, write: if isMember();
+      }
+      match /ailog/{logId} {
+        allow read, write: if isMember();
+      }
+      match /members/{memberId} {
+        // A member can read the roster; owner manages membership.
+        allow read: if isMember();
+        allow write: if isAuth()
+          && get(/databases/$(database)/documents/workspaces/$(workspaceId)).data.ownerId == request.auth.uid;
+      }
     }
   }
 }

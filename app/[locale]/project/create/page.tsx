@@ -50,6 +50,7 @@ export default function CreateProjectPage() {
   const [problems, setProblems] = useState<string[]>([]);
   const [uid, setUid] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -67,33 +68,36 @@ export default function CreateProjectPage() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit || saving) return;
+    setError(null);
+
+    if (!uid) {
+      setError("Bitte melde dich an, um dein Projekt zu speichern.");
+      router.push(`/${locale}/login?next=/${locale}/project/create`);
+      return;
+    }
+
     setSaving(true);
     try {
-      if (uid) {
-        const docRef = await addDoc(collection(db, "projects"), {
-          ownerId: uid,
-          name,
-          tagline,
-          description,
-          category,
-          skills,
-          region,
-          stealth,
-          stealthProblems: stealth ? problems : [],
-          type: "project",
-          investorVisible: false,
-          stage: "",
-          teamSize: "",
-          lookingFor: [],
-          created_at: serverTimestamp(),
-        });
-        router.push(`/${locale}/project/${docRef.id}`);
-      } else {
-        const tempId = Date.now().toString();
-        router.push(`/${locale}/project/${tempId}`);
-      }
-    } catch {
-      // silent
+      const docRef = await addDoc(collection(db, "projects"), {
+        ownerId: uid,
+        name,
+        tagline,
+        description,
+        category,
+        skills,
+        region,
+        stealth,
+        stealthProblems: stealth ? problems : [],
+        type: "project",
+        investorVisible: false,
+        stage: "",
+        teamSize: "",
+        lookingFor: [],
+        created_at: serverTimestamp(),
+      });
+      router.push(`/${locale}/project/${docRef.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Projekt konnte nicht gespeichert werden.");
       setSaving(false);
     }
   }
@@ -209,6 +213,8 @@ export default function CreateProjectPage() {
           <Button type="submit" size="lg" disabled={!canSubmit || saving} className="disabled:opacity-40">
             {saving ? "Wird gespeichert…" : stealth ? "🥷 Stealth-Profil veröffentlichen" : "Projekt veröffentlichen →"}
           </Button>
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
           {/* Upgrade teaser */}
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 flex items-start gap-3">
