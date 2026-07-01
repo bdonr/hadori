@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { signup, uniqueEmail, waitForAuthReady } from "./helpers";
 
-test("pitch deck: a slide field persists after save + reload", async ({ page }) => {
+test("pitch deck: text, dropdown & multiselect all persist after save + reload", async ({ page }) => {
   const email = uniqueEmail("deck");
   await signup(page, "creator", email, "Deck Tester");
   await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
@@ -10,16 +10,19 @@ test("pitch deck: a slide field persists after save + reload", async ({ page }) 
   await waitForAuthReady(page);
 
   const value = `Persistenz-Test ${Date.now()}`;
-  const firstField = page.locator("textarea, input[type=text]").first();
-  await firstField.waitFor({ timeout: 15_000 });
-  await firstField.fill(value);
+  await page.locator("textarea").first().waitFor({ timeout: 15_000 });
+  await page.locator("textarea").first().fill(value);
+  // Multi-select chip (audience) + single-select dropdown (revenue model)
+  await page.getByRole("button", { name: "KMU" }).click();
+  await page.locator("select").first().selectOption({ label: "Abo (SaaS)" });
 
   await page.getByRole("button", { name: /Pitchdeck speichern/i }).click();
-  // After saving, the page redirects to the overview (standing rule #6).
   await expect(page).toHaveURL(/\/de\/startup\/overview/, { timeout: 15_000 });
 
-  // Navigate back to the deck — the saved value must still be there.
+  // Back to the deck — every input type must have survived.
   await page.goto("/de/startup/pitchdeck");
   await waitForAuthReady(page);
-  await expect(page.locator("textarea, input[type=text]").first()).toHaveValue(value, { timeout: 20_000 });
+  await expect(page.locator("textarea").first()).toHaveValue(value, { timeout: 20_000 });
+  await expect(page.locator("select").first()).toHaveValue("subscription");
+  await expect(page.getByRole("button", { name: "KMU" })).toHaveClass(/bg-indigo-600/, { timeout: 10_000 });
 });
