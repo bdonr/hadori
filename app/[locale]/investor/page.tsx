@@ -14,7 +14,7 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || profile.role !== "investor") redirect(`/${locale}/login`);
+  if (!profile) redirect(`/${locale}/login`);
 
   const t = await getTranslations("investor");
   const td = await getTranslations("investor_pages.dashboard");

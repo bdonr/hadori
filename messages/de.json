@@ -3,7 +3,14 @@
     "brand": "DADORI",
     "signout": "Abmelden",
     "login": "Anmelden",
-    "signup": "Loslegen"
+    "signup": "Loslegen",
+    "explore": "Entdecken",
+    "startup": "Startup",
+    "talent": "Talent",
+    "investor": "Investor",
+    "plan": "Plan",
+    "features": "Funktionen",
+    "pricing": "Preise"
   },
   "common": {
     "save": "Speichern",

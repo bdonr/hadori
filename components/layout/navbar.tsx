@@ -81,16 +81,19 @@ export function Navbar() {
           {t("brand")}
         </Link>
         <nav className="hidden gap-6 text-sm text-zinc-600 sm:flex">
-          <Link href={`/${locale}#features`} className="hover:text-zinc-900">Features</Link>
           {user ? (
-            <Link
-              href={`/${locale}/${user.role === "talent" ? "talent" : user.role === "investor" ? "investor" : "startup"}/billing`}
-              className="hover:text-zinc-900"
-            >
-              Plan
-            </Link>
+            <>
+              <Link href={`/${locale}/explore`} className="hover:text-zinc-900">{t("explore")}</Link>
+              <Link href={`/${locale}/startup`} className="hover:text-zinc-900">{t("startup")}</Link>
+              <Link href={`/${locale}/talent`} className="hover:text-zinc-900">{t("talent")}</Link>
+              <Link href={`/${locale}/investor`} className="hover:text-zinc-900">{t("investor")}</Link>
+              <Link href={`/${locale}/startup/billing`} className="hover:text-zinc-900">{t("plan")}</Link>
+            </>
           ) : (
-            <Link href={`/${locale}#pricing`} className="hover:text-zinc-900">Pricing</Link>
+            <>
+              <Link href={`/${locale}#features`} className="hover:text-zinc-900">{t("features")}</Link>
+              <Link href={`/${locale}#pricing`} className="hover:text-zinc-900">{t("pricing")}</Link>
+            </>
           )}
         </nav>
         <div className="flex items-center gap-3">

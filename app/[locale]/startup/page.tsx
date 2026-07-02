@@ -15,7 +15,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
 
   const snap = await adminDb!.collection("profiles").doc(session.uid).get();
   const profile = snap.data() as Profile | undefined;
-  if (!profile || (profile.role !== "startup" && profile.role !== "creator")) redirect(`/${locale}/login`);
+  if (!profile) redirect(`/${locale}/login`);
 
   const t = await getTranslations("startup");
 

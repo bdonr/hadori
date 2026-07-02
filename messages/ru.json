@@ -3,7 +3,14 @@
     "brand": "DADORI",
     "signout": "Выйти",
     "login": "Войти",
-    "signup": "Начать"
+    "signup": "Начать",
+    "explore": "Обзор",
+    "startup": "Стартап",
+    "talent": "Таланты",
+    "investor": "Инвестор",
+    "plan": "Тариф",
+    "features": "Возможности",
+    "pricing": "Цены"
   },
   "common": {
     "save": "Сохранить",

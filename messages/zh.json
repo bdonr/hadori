@@ -3,7 +3,14 @@
     "brand": "DADORI",
     "signout": "退出登录",
     "login": "登录",
-    "signup": "开始使用"
+    "signup": "开始使用",
+    "explore": "探索",
+    "startup": "初创公司",
+    "talent": "人才",
+    "investor": "投资人",
+    "plan": "套餐",
+    "features": "功能",
+    "pricing": "定价"
   },
   "common": {
     "save": "保存",

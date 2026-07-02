@@ -3,7 +3,14 @@
     "brand": "DADORI",
     "signout": "ログアウト",
     "login": "ログイン",
-    "signup": "はじめる"
+    "signup": "はじめる",
+    "explore": "探索",
+    "startup": "スタートアップ",
+    "talent": "タレント",
+    "investor": "投資家",
+    "plan": "プラン",
+    "features": "機能",
+    "pricing": "料金"
   },
   "common": {
     "save": "保存",
