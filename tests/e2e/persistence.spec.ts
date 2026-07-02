@@ -1,6 +1,23 @@
 import { test, expect } from "@playwright/test";
 import { signup, uniqueEmail, waitForAuthReady } from "./helpers";
 
+const TOKEN = process.env.GCLOUD_TOKEN ?? "";
+const FS = "https://firestore.googleapis.com/v1/projects/hadori-7665f/databases/(default)/documents";
+
+// Grant a paid startup-family capability to a freshly-signed-up test account so
+// it can create (creation is gated to paid accounts in the n:m model).
+async function grantProjectCap(page: import("@playwright/test").Page, email: string) {
+  const q = await page.request.post(`${FS}:runQuery`, {
+    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    data: { structuredQuery: { from: [{ collectionId: "profiles" }], where: { fieldFilter: { field: { fieldPath: "email" }, op: "EQUAL", value: { stringValue: email } } }, limit: 1 } },
+  }).then((r) => r.json());
+  const uid = q.find((r: { document?: { name: string } }) => r.document)?.document?.name?.split("/").pop();
+  await page.request.patch(`${FS}/profiles/${uid}?updateMask.fieldPaths=plan_tier`, {
+    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    data: { fields: { plan_tier: { stringValue: "project" } } },
+  });
+}
+
 // These tests verify that data actually persists to Firestore in production —
 // the whole point of the rules/secrets fixes. Each test writes something,
 // reloads (fresh server render / fresh client read), and asserts it survived.
@@ -29,9 +46,13 @@ test.describe("Persistence — Startup", () => {
   });
 
   test("project create: publishes and lands on persisted project page", async ({ page }) => {
+    test.skip(!TOKEN, "needs GCLOUD_TOKEN to grant the create capability");
     const email = uniqueEmail("persist-project");
     await signup(page, "creator", email, "Project Creator");
     await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
+
+    // Creating is gated to paid accounts — grant the project capability first.
+    await grantProjectCap(page, email);
 
     const projectName = `Proj-${Date.now()}`;
     await page.goto("/de/project/create");
