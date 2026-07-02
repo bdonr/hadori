@@ -1501,7 +1501,9 @@
       "private_status": "🔒 Private",
       "view_public": "Public view →",
       "release_in_editor": "Release in editor",
-      "verified_badge": "Incubator-verified"
+      "verified_badge": "Incubator-verified",
+      "new_startup": "New startup",
+      "untitled": "Untitled startup"
     }
   },
   "glossary": {

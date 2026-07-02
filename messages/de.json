@@ -1501,7 +1501,9 @@
       "private_status": "🔒 Privat",
       "view_public": "Öffentliche Ansicht →",
       "release_in_editor": "Im Editor freigeben",
-      "verified_badge": "Inkubator-verifiziert"
+      "verified_badge": "Inkubator-verifiziert",
+      "new_startup": "Neues Startup",
+      "untitled": "Unbenanntes Startup"
     }
   },
   "glossary": {

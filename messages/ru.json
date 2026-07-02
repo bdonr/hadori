@@ -1478,7 +1478,9 @@
       "private_status": "🔒 Приватно",
       "view_public": "Публичный вид →",
       "release_in_editor": "Открыть в редакторе",
-      "verified_badge": "Проверено инкубатором"
+      "verified_badge": "Проверено инкубатором",
+      "new_startup": "Новый стартап",
+      "untitled": "Безымянный стартап"
     },
     "applicants": {
       "title": "Кандидаты",

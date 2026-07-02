@@ -14,7 +14,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { useTaxonomy } from "@/lib/taxonomy";
 
 type Deal = {
-  id: string; name: string; icon: string; tagline: string; industry: string;
+  id: string; owner_uid: string; name: string; icon: string; tagline: string; industry: string;
   teamSize: string; region: string; stage: string; mrrRange: string;
   updatedAt: string; isNew: boolean; seekingInvestors: boolean; featured: boolean;
 };
@@ -57,6 +57,7 @@ export default function DealFlowPage() {
           const isNew = updatedAt ? (Date.now() - new Date(updatedAt).getTime()) < 7 * 24 * 60 * 60 * 1000 : false;
           return {
             id: d.id,
+            owner_uid: (data.owner_uid as string) ?? "",
             name: (data.name as string) ?? "",
             tagline: (data.tagline as string) ?? "",
             industry: (data.industry as string) ?? "",
@@ -73,7 +74,7 @@ export default function DealFlowPage() {
         const withIcons = await Promise.all(base.map(async (b) => {
           let icon = "🚀";
           try {
-            const pp = await getDoc(doc(db, "publicProfiles", b.id));
+            const pp = await getDoc(doc(db, "publicProfiles", b.owner_uid));
             if (pp.exists() && pp.data().avatar_url) icon = pp.data().avatar_url as string;
           } catch {
             // ignore
@@ -103,7 +104,7 @@ export default function DealFlowPage() {
         const myReqs = reqSnap.docs
           .map(d => d.data() as Record<string, unknown>)
           .filter(d => d.type === "startup_request");
-        setRequestedIds(myReqs.map(d => d.toUid as string));
+        setRequestedIds(myReqs.map(d => (d.startupId as string) ?? (d.toUid as string)));
         const now = new Date();
         setIntrosThisMonth(myReqs.filter(d => {
           const ts = d.created_at as { toDate?: () => Date } | null | undefined;
@@ -140,7 +141,9 @@ export default function DealFlowPage() {
     try {
       await addDoc(collection(db, "applications"), {
         fromUid: uid,
-        toUid: deal.id,
+        toUid: deal.owner_uid,
+        startupId: deal.id,
+        startupName: deal.name,
         type: "startup_request",
         fromName: myName,
         toName: deal.name,

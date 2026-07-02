@@ -16,8 +16,9 @@ export async function GET() {
   const callerSnap = await adminDb.collection("profiles").doc(session.uid).get();
   if (!isStartupPaid(callerSnap.data())) return NextResponse.json({ matches: [], locked: true });
 
-  const startupSnap = await adminDb.collection("startups").doc(session.uid).get();
-  const s = startupSnap.data() ?? {};
+  // A user can own multiple startups now — match against their first one.
+  const startupsSnap = await adminDb.collection("startups").where("owner_uid", "==", session.uid).get();
+  const s = startupsSnap.empty ? {} : startupsSnap.docs[0].data();
   const startupStage = (s.stage as string) ?? "";
   const startupRegion = (s.region as string) ?? "";
   const industry = ((s.industry as string) ?? "").toLowerCase();

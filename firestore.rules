@@ -52,8 +52,10 @@ service cloud.firestore {
     // yet (a fresh owner reading their own empty profile), which a
     // resource.data-based rule would wrongly deny and hang the client.
     match /startups/{startupId} {
-      allow create: if isOwner(startupId) && request.resource.data.owner_uid == request.auth.uid;
-      allow read, update, delete: if isOwner(startupId);
+      // n:1 — startups use an autoId; ownership is by the owner_uid FIELD, not
+      // the doc id (a user can own multiple startups).
+      allow create: if isAuth() && request.resource.data.owner_uid == request.auth.uid;
+      allow read, update, delete: if isAuth() && resource.data.owner_uid == request.auth.uid;
       // Investors / others can read discoverable startups
       allow read: if isAuth() && resource.data.is_discoverable == true;
 

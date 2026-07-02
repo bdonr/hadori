@@ -1478,7 +1478,9 @@
       "private_status": "🔒 비공개",
       "view_public": "공개 보기 →",
       "release_in_editor": "편집기에서 공개",
-      "verified_badge": "인큐베이터 인증됨"
+      "verified_badge": "인큐베이터 인증됨",
+      "new_startup": "새 스타트업",
+      "untitled": "제목 없는 스타트업"
     },
     "applicants": {
       "title": "지원자",

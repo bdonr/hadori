@@ -108,7 +108,7 @@ const SLIDES: Slide[] = [
 interface PublicProfile { full_name?: string; role?: string; avatar_url?: string; verified?: boolean; }
 interface StartupDoc {
   name?: string; tagline?: string; description?: string;
-  industry?: string; region?: string;
+  industry?: string; region?: string; owner_uid?: string;
 }
 interface PitchDeckDoc {
   slides?: Record<string, Record<string, string | string[]>>;
@@ -144,19 +144,26 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      // Each read is wrapped independently so one failure (e.g. a rule
-      // denies pitchdecks) never blanks out the rest of the page.
-      const [prof, st, pd, bp] = await Promise.all([
-        getDoc(doc(db, "publicProfiles", id)).catch(() => null),
-        getDoc(doc(db, "startups", id)).catch(() => null),
-        getDoc(doc(db, "pitchdecks", id)).catch(() => null),
-        getDoc(doc(db, "businessplans", id)).catch(() => null),
-      ]);
+      // `id` is now a STARTUP id. Read the startup first to resolve its owner,
+      // then read the owner-keyed profile / deck / plan docs.
+      const st = await getDoc(doc(db, "startups", id)).catch(() => null);
       if (cancelled) return;
-      if (prof?.exists()) setProfile(prof.data() as PublicProfile);
-      if (st?.exists()) setStartup(st.data() as StartupDoc);
-      if (pd?.exists()) setDeck(pd.data() as PitchDeckDoc);
-      if (bp?.exists()) setPlan(bp.data() as BusinessPlanDoc);
+      const startupData = st?.exists() ? (st.data() as StartupDoc) : null;
+      if (startupData) setStartup(startupData);
+      const ownerUid = startupData?.owner_uid;
+      if (ownerUid) {
+        // Each read is wrapped independently so one failure (e.g. a rule
+        // denies pitchdecks) never blanks out the rest of the page.
+        const [prof, pd, bp] = await Promise.all([
+          getDoc(doc(db, "publicProfiles", ownerUid)).catch(() => null),
+          getDoc(doc(db, "pitchdecks", ownerUid)).catch(() => null),
+          getDoc(doc(db, "businessplans", ownerUid)).catch(() => null),
+        ]);
+        if (cancelled) return;
+        if (prof?.exists()) setProfile(prof.data() as PublicProfile);
+        if (pd?.exists()) setDeck(pd.data() as PitchDeckDoc);
+        if (bp?.exists()) setPlan(bp.data() as BusinessPlanDoc);
+      }
       setLoading(false);
     })();
     return () => { cancelled = true; };
@@ -182,7 +189,7 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
         const myReqs = reqSnap.docs
           .map(d => d.data() as Record<string, unknown>)
           .filter(d => d.type === "startup_request");
-        if (myReqs.some(d => d.toUid === id)) setRequested(true);
+        if (myReqs.some(d => d.startupId === id)) setRequested(true);
         const now = new Date();
         setIntrosThisMonth(myReqs.filter(d => {
           const ts = d.created_at as { toDate?: () => Date } | null | undefined;
@@ -202,14 +209,17 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
   const atIntroLimit = introsThisMonth >= introCap;
 
   async function requestIntro() {
-    if (!authUid || !canRequestIntro || atIntroLimit || requested || authUid === id) return;
+    const ownerUid = startup?.owner_uid;
+    if (!authUid || !ownerUid || !canRequestIntro || atIntroLimit || requested || authUid === ownerUid) return;
     const message = (typeof window !== "undefined" ? window.prompt(t("message_prompt")) : "") ?? "";
     setRequested(true);
     setIntrosThisMonth(prev => prev + 1);
     try {
       await addDoc(collection(db, "applications"), {
         fromUid: authUid,
-        toUid: id,
+        toUid: ownerUid,
+        startupId: id,
+        startupName: startup?.name || "",
         type: "startup_request",
         fromName: myName,
         toName: (startup?.name || profile?.full_name || ""),
@@ -318,7 +328,7 @@ export default function CompanyPublicPage({ params }: { params: Promise<{ id: st
               </div>
             </div>
           )}
-          {isInvestorViewer && authUid !== id && (
+          {isInvestorViewer && authUid !== startup?.owner_uid && (
             <div className="mt-5">
               {requested ? (
                 <span className="inline-block rounded-xl bg-green-50 border border-green-200 px-6 py-3 text-sm font-semibold text-green-700">{t("intro_requested")}</span>

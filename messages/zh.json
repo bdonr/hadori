@@ -1478,7 +1478,9 @@
       "private_status": "🔒 私密",
       "view_public": "公开视图 →",
       "release_in_editor": "在编辑器中发布",
-      "verified_badge": "孵化器认证"
+      "verified_badge": "孵化器认证",
+      "new_startup": "新建初创公司",
+      "untitled": "未命名初创公司"
     },
     "applicants": {
       "title": "申请者",

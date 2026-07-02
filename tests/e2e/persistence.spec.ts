@@ -37,12 +37,13 @@ test.describe("Persistence — Startup", () => {
 
     await page.getByRole("button", { name: /^speichern$/i }).click();
     // After saving, the profile redirects to the overview (standing rule #6).
+    // n:1 model: the overview lists the user's startups — the new one appears there.
     await expect(page).toHaveURL(/\/de\/startup\/overview/, { timeout: 15_000 });
+    await expect(page.getByText(startupName).first()).toBeVisible({ timeout: 15_000 });
 
-    // Navigate back to the profile — the value must come back from Firestore.
-    await page.goto("/de/startup/profile");
-    await waitForAuthReady(page);
-    await expect(page.locator("#sp-name")).toHaveValue(startupName, { timeout: 20_000 });
+    // Reload — the startup must come back from Firestore.
+    await page.reload();
+    await expect(page.getByText(startupName).first()).toBeVisible({ timeout: 20_000 });
   });
 
   test("project create: publishes and lands on persisted project page", async ({ page }) => {

@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import { Button } from "@/components/ui/button";
 import { SkillPicker } from "@/components/SkillPicker";
@@ -29,6 +29,8 @@ export default function StartupProfilePage() {
   const tax = useTaxonomy();
   const router = useRouter();
   const locale = (useParams().locale as string) ?? "de";
+  const startupId = useSearchParams().get("id");
+  const [docId, setDocId] = useState<string | null>(startupId);
   const [uid, setUid] = useState<string | null>(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -55,10 +57,12 @@ export default function StartupProfilePage() {
       setUid(user.uid);
 
       try {
-        // Load existing data
-        const snap = await getDoc(doc(db, "startups", user.uid));
-        if (snap.exists()) {
+        // Load existing data — edit a specific startup (?id=) if it belongs to
+        // this user; otherwise fall through to create-new mode.
+        const snap = startupId ? await getDoc(doc(db, "startups", startupId)) : null;
+        if (snap?.exists() && (snap.data() as Record<string, unknown>).owner_uid === user.uid) {
           const d = snap.data() as Record<string, unknown>;
+          setDocId(startupId);
           if (d.name) setName(d.name as string);
           if (d.tagline) setTagline(d.tagline as string);
           if (d.description) setDescription(d.description as string);
@@ -71,6 +75,9 @@ export default function StartupProfilePage() {
           if (d.mrrRange) setMrrRange(d.mrrRange as string);
           if (d.fundingGoal) setFundingGoal(d.fundingGoal as string);
           if (d.seekingInvestors) setSeekingInvestors(d.seekingInvestors as boolean);
+        } else {
+          // No id, or id not owned by this user → create a new startup.
+          setDocId(null);
         }
 
         // Check tier
@@ -94,8 +101,10 @@ export default function StartupProfilePage() {
     setError(null);
     try {
       const now = new Date().toISOString();
-      await setDoc(doc(db, "startups", uid), {
-        id: uid,
+      // Edit the existing startup, or create a new one with an autoId.
+      const ref = docId ? doc(db, "startups", docId) : doc(collection(db, "startups"));
+      await setDoc(ref, {
+        id: ref.id,
         owner_uid: uid,
         name: name.trim(),
         tagline: tagline.trim(),
@@ -109,7 +118,9 @@ export default function StartupProfilePage() {
         mrrRange: isPro ? mrrRange : "",
         fundingGoal: isPro ? fundingGoal.trim() : "",
         seekingInvestors: isPro ? seekingInvestors : false,
-        is_discoverable: false,
+        // Only initialise discoverability on create; editing must not reset a
+        // startup the founder already published.
+        ...(docId ? {} : { is_discoverable: false }),
         updated_at: now,
       }, { merge: true });
       setSaved(true);

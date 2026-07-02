@@ -1478,7 +1478,9 @@
       "private_status": "🔒 非公開",
       "view_public": "公開ビュー →",
       "release_in_editor": "エディタで公開",
-      "verified_badge": "インキュベーター認証済み"
+      "verified_badge": "インキュベーター認証済み",
+      "new_startup": "新しいスタートアップ",
+      "untitled": "無題のスタートアップ"
     },
     "applicants": {
       "title": "応募者",

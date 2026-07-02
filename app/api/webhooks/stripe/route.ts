@@ -58,7 +58,9 @@ async function setTier(customerId: string, tier: string, uid?: string, subscript
   const proPlus = capabilities.some((c) => isStartupProPlus(c));
   try {
     await adminDb!.collection("publicProfiles").doc(ref.id).set({ verified: proPlus }, { merge: true });
-    await adminDb!.collection("startups").doc(ref.id).set({ featured: proPlus }, { merge: true });
+    // A user can own multiple startups — stamp `featured` on all of them.
+    const owned = await adminDb!.collection("startups").where("owner_uid", "==", ref.id).get();
+    await Promise.all(owned.docs.map((d) => d.ref.set({ featured: proPlus }, { merge: true })));
   } catch {}
 }
 

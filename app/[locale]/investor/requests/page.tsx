@@ -17,6 +17,8 @@ interface Application {
   fromName?: string;
   toName?: string;
   subjectTitle?: string;
+  startupId?: string;
+  startupName?: string;
   message?: string;
   status: string;
   created_at?: { toDate?: () => Date };
@@ -171,9 +173,9 @@ export default function InvestorRequestsPage() {
                   {sent.map(a => (
                     <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                       <div className="min-w-0 flex-1">
-                        <span className="font-semibold text-zinc-900">
-                          {a.subjectTitle || a.toName || t("someone")}
-                        </span>
+                        <Link href={`/${locale}/company/${a.startupId ?? a.fromUid}`} className="font-semibold text-zinc-900 hover:text-indigo-600 transition-colors">
+                          {a.startupName ?? a.subjectTitle ?? a.toName ?? t("someone")}
+                        </Link>
                         <MessageNote message={a.message} />
                       </div>
                       <StatusBadge status={a.status} />

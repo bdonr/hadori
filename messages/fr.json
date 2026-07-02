@@ -1478,7 +1478,9 @@
       "private_status": "🔒 Privé",
       "view_public": "Vue publique →",
       "release_in_editor": "Publier dans l’éditeur",
-      "verified_badge": "Vérifié par l’incubateur"
+      "verified_badge": "Vérifié par l’incubateur",
+      "new_startup": "Nouvelle startup",
+      "untitled": "Startup sans titre"
     },
     "applicants": {
       "title": "Candidats",
