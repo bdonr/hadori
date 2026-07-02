@@ -12,6 +12,13 @@ test("public company view: another user sees only the released pitch-deck slide"
   await signup(page, "creator", founderEmail, "Public Founder");
   await expect(page).toHaveURL(/\/de\/startup/, { timeout: 15_000 });
 
+  // n:1 — the public company page is per STARTUP, so create one first.
+  await page.goto("/de/startup/profile");
+  await waitForAuthReady(page);
+  await page.locator("#sp-name").fill(`PubCo-${Date.now()}`);
+  await page.getByRole("button", { name: /^speichern$/i }).click();
+  await expect(page).toHaveURL(/\/de\/startup\/overview/, { timeout: 15_000 });
+
   const secret = `Öffentlich-${Date.now()}`;
   await page.goto("/de/startup/pitchdeck");
   await waitForAuthReady(page);
@@ -30,6 +37,21 @@ test("public company view: another user sees only the released pitch-deck slide"
   const founderUid = q.find((r: { document?: { name: string } }) => r.document)?.document?.name?.split("/").pop();
   expect(founderUid, "founder uid").toBeTruthy();
 
+  // The company page is keyed by the startup id — look it up by owner_uid.
+  const sq = await page.request.post(`${FS}:runQuery`, {
+    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    data: { structuredQuery: { from: [{ collectionId: "startups" }], where: { fieldFilter: { field: { fieldPath: "owner_uid" }, op: "EQUAL", value: { stringValue: founderUid } } }, limit: 1 } },
+  }).then((r) => r.json());
+  const startupId = sq.find((r: { document?: { name: string } }) => r.document)?.document?.name?.split("/").pop();
+  expect(startupId, "startup id").toBeTruthy();
+
+  // A public company page requires a discoverable startup (rules gate non-owner
+  // reads on is_discoverable). Publish it so the viewer can resolve the owner.
+  await page.request.patch(`${FS}/startups/${startupId}?updateMask.fieldPaths=is_discoverable`, {
+    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    data: { fields: { is_discoverable: { booleanValue: true } } },
+  });
+
   // --- Viewer (separate account/context): open the public company page ---
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ baseURL });
@@ -37,7 +59,7 @@ test("public company view: another user sees only the released pitch-deck slide"
   await signup(viewer, "talent", uniqueEmail("pub-viewer"), "Public Viewer");
   await expect(viewer).toHaveURL(/\/de\/talent/, { timeout: 15_000 });
 
-  await viewer.goto(`/de/company/${founderUid}`);
+  await viewer.goto(`/de/company/${startupId}`);
   // The released slide's text must be visible to the other user.
   await expect(viewer.getByText(secret)).toBeVisible({ timeout: 20_000 });
   await ctx.close();
