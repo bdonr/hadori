@@ -582,7 +582,10 @@
       "publish_stealth": "🥷 Publier le profil Stealth",
       "publish_project": "Publier le projet →",
       "upgrade_title": "Passer à Startup plus tard",
-      "upgrade_desc": "Quand ton projet devient une idée de business, passe à Startup (10 €/mois) — Funding Stage, pitch investisseurs & business plan inclus."
+      "upgrade_desc": "Quand ton projet devient une idée de business, passe à Startup (10 €/mois) — Funding Stage, pitch investisseurs & business plan inclus.",
+      "gate_title": "La création nécessite un forfait",
+      "gate_desc": "Un forfait Projet (à partir de 2 €/mois) vous permet de créer des projets et des startups. Les comptes gratuits peuvent remplir leur profil et être découverts.",
+      "gate_cta": "Voir les forfaits"
     },
     "project_detail": {
       "not_found_title": "Projet introuvable",

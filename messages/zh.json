@@ -582,7 +582,10 @@
       "publish_stealth": "🥷 发布隐身档案",
       "publish_project": "发布项目 →",
       "upgrade_title": "之后升级为初创企业",
-      "upgrade_desc": "当你的项目发展为商业构想时，可升级为初创企业（每月 10 €）——含 Funding Stage、投资人 Pitch 与商业计划书。"
+      "upgrade_desc": "当你的项目发展为商业构想时，可升级为初创企业（每月 10 €）——含 Funding Stage、投资人 Pitch 与商业计划书。",
+      "gate_title": "创建需要付费套餐",
+      "gate_desc": "项目套餐（每月2欧元起）可让你创建项目和初创公司。免费账户可以完善资料并被发现。",
+      "gate_cta": "查看套餐"
     },
     "project_detail": {
       "not_found_title": "未找到项目",

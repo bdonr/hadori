@@ -233,6 +233,51 @@ export function isInvestorPaid(planTier?: string | null): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// n:m capabilities — an account can hold several paid capabilities at once
+// (e.g. a startup founder who also invests). `capabilities` is the source of
+// truth; when empty we fall back to the legacy single `plan_tier` so existing
+// paying users keep their access unchanged.
+// ---------------------------------------------------------------------------
+export interface CapabilityHolder { plan_tier?: string | null; capabilities?: string[] | null }
+
+export const STARTUP_FAMILY = ["project", "startup", "startup_pro", "pro", "scale"];
+export const TALENT_FAMILY = ["plus", "pro", "scale"];
+export const INVESTOR_FAMILY = ["investor_basic", "investor_pro", "investor_premium", "investor_elite"];
+
+export function getCapabilities(p?: CapabilityHolder | null): string[] {
+  if (!p) return [];
+  if (p.capabilities && p.capabilities.length) return p.capabilities;
+  return p.plan_tier && p.plan_tier !== "free" ? [p.plan_tier] : [];
+}
+
+export function hasCapability(p: CapabilityHolder | null | undefined, cap: string): boolean {
+  return getCapabilities(p).includes(cap);
+}
+
+// Can this account create projects/startups? True if it holds any paid
+// startup-family capability (project 2€ and up).
+export function canCreate(p?: CapabilityHolder | null): boolean {
+  return getCapabilities(p).some((c) => STARTUP_FAMILY.includes(c));
+}
+
+// Merge the PlanCaps of every held capability (booleans OR-ed, numbers max-ed)
+// so a multi-capability account gets the union of its perks.
+export function resolveCaps(p?: CapabilityHolder | null): PlanCaps {
+  const caps = getCapabilities(p);
+  if (!caps.length) return planCaps("free");
+  return caps.reduce<PlanCaps>((acc, c) => {
+    const pc = planCaps(c);
+    const merged = { ...acc } as Record<string, unknown>;
+    for (const [k, v] of Object.entries(pc)) {
+      if (typeof v === "boolean") merged[k] = (merged[k] as boolean) || v;
+      else if (typeof v === "number") merged[k] = Math.max((merged[k] as number) ?? 0, v);
+      else merged[k] = v;
+    }
+    return merged as unknown as PlanCaps;
+  }, planCaps("free"));
+}
+
+// ---------------------------------------------------------------------------
 // Per-tier capability matrix — the promised perks for every purchasable tier,
 // mirroring lib/tiers.ts. This is the SINGLE source of truth for what a
 // purchase unlocks. Read plan_tier from the profile and pass it here.

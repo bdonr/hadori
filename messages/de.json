@@ -582,7 +582,10 @@
       "publish_stealth": "🥷 Stealth-Profil veröffentlichen",
       "publish_project": "Projekt veröffentlichen →",
       "upgrade_title": "Später zum Startup upgraden",
-      "upgrade_desc": "Wenn aus deinem Projekt eine Business-Idee wird, upgrade zu Startup (10 €/Mo) — Funding Stage, Investor-Pitch & Business Plan inklusive."
+      "upgrade_desc": "Wenn aus deinem Projekt eine Business-Idee wird, upgrade zu Startup (10 €/Mo) — Funding Stage, Investor-Pitch & Business Plan inklusive.",
+      "gate_title": "Erstellen ist kostenpflichtig",
+      "gate_desc": "Mit einem Projekt-Plan (ab 2 €/Monat) kannst du Projekte und Startups erstellen. Kostenlos kannst du dein Profil ausfüllen und entdeckt werden.",
+      "gate_cta": "Pläne ansehen"
     },
     "project_detail": {
       "not_found_title": "Projekt nicht gefunden",

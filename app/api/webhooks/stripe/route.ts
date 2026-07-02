@@ -27,19 +27,35 @@ async function findProfileRef(customerId: string, uid?: string) {
   return null;
 }
 
+// Recompute the account's held capabilities from ALL its active Stripe
+// subscriptions — the source of truth for the n:m model. Each subscription maps
+// to one capability (project / startup / startup_pro / talent tiers / investor_*).
+async function activeCapabilities(customerId: string): Promise<string[]> {
+  const subs = await getStripe().subscriptions.list({ customer: customerId, status: "active", limit: 50 });
+  const caps = new Set<string>();
+  for (const s of subs.data) {
+    const c = s.metadata?.plan_tier || tierForPriceId(s.items.data[0]?.price.id);
+    if (c && c !== "free") caps.add(c);
+  }
+  return [...caps];
+}
+
 async function setTier(customerId: string, tier: string, uid?: string, subscriptionId?: string) {
-  if (!tier) return;
   const ref = await findProfileRef(customerId, uid);
   if (!ref) return;
+  // Source of truth = all active subscriptions (supports multiple concurrent
+  // capabilities). `plan_tier` is kept for back-compat as a representative tier.
+  const capabilities = await activeCapabilities(customerId);
+  const legacyTier = tier || capabilities[0] || "free";
   await ref.update({
-    plan_tier: tier,
+    plan_tier: legacyTier,
+    capabilities,
     ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
     updated_at: new Date().toISOString(),
   });
-  // Stamp PUBLIC flags derived from the tier so other users can see
-  // verified badge / featured placement (plan_tier itself is owner-only).
-  // The profile ref's id IS the uid.
-  const proPlus = isStartupProPlus(tier);
+  // Stamp PUBLIC flags so other users can see verified badge / featured
+  // placement (plan_tier/capabilities are owner-only). The ref id IS the uid.
+  const proPlus = capabilities.some((c) => isStartupProPlus(c));
   try {
     await adminDb!.collection("publicProfiles").doc(ref.id).set({ verified: proPlus }, { merge: true });
     await adminDb!.collection("startups").doc(ref.id).set({ featured: proPlus }, { merge: true });

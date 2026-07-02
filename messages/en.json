@@ -582,7 +582,10 @@
       "publish_stealth": "🥷 Publish stealth profile",
       "publish_project": "Publish project →",
       "upgrade_title": "Upgrade to a startup later",
-      "upgrade_desc": "When your project becomes a business idea, upgrade to Startup (€10/mo) — funding stage, investor pitch & business plan included."
+      "upgrade_desc": "When your project becomes a business idea, upgrade to Startup (€10/mo) — funding stage, investor pitch & business plan included.",
+      "gate_title": "Creating requires a plan",
+      "gate_desc": "A Projekt plan (from €2/mo) lets you create projects and startups. Free accounts can fill their profile and be discovered.",
+      "gate_cta": "See plans"
     },
     "project_detail": {
       "not_found_title": "Project not found",

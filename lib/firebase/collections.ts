@@ -24,6 +24,10 @@ export interface Profile {
   email?: string;
   avatar_url?: string;
   plan_tier: PlanTier;
+  // n:m capability model — the set of paid capabilities held simultaneously
+  // (e.g. ["startup_pro","investor_pro"]). Coexists with the legacy single
+  // `plan_tier`; entitlement helpers fall back to plan_tier when this is empty.
+  capabilities?: string[];
   stripe_customer_id?: string;
   stripe_subscription_id?: string;
   investor_visible?: boolean;

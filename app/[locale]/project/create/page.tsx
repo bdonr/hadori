@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
+import { canCreate } from "@/lib/entitlements";
 import { SkillPicker } from "@/components/SkillPicker";
 import { REGIONS } from "@/lib/regions";
 import { Button } from "@/components/ui/button";
@@ -54,12 +55,19 @@ export default function CreateProjectPage() {
   const [problems, setProblems] = useState<string[]>([]);
   const [uid, setUid] = useState<string | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [allowed, setAllowed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       setUid(user?.uid ?? null);
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, "profiles", user.uid));
+          setAllowed(canCreate(snap.exists() ? (snap.data() as { plan_tier?: string; capabilities?: string[] }) : null));
+        } catch { setAllowed(false); }
+      }
       setAuthReady(true);
     });
     return unsub;
@@ -110,6 +118,25 @@ export default function CreateProjectPage() {
       setError(err instanceof Error ? err.message : t("error_save_failed"));
       setSaving(false);
     }
+  }
+
+  // Creating costs — free accounts can browse & be discovered but must hold a
+  // paid startup-family capability (Projekt 2€ and up) to create.
+  if (authReady && uid && !allowed) {
+    return (
+      <div className="min-h-screen bg-zinc-50">
+        <Navbar />
+        <main className="mx-auto max-w-lg px-6 py-20 text-center">
+          <span className="text-5xl">🚀</span>
+          <h1 className="mt-4 text-2xl font-bold text-zinc-900">{t("gate_title")}</h1>
+          <p className="mt-2 text-zinc-500">{t("gate_desc")}</p>
+          <Link href={`/${locale}/startup/billing`}
+            className="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
+            {t("gate_cta")}
+          </Link>
+        </main>
+      </div>
+    );
   }
 
   return (
