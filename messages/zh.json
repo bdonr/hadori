@@ -326,7 +326,9 @@
     "talent_requires_login": "登录以浏览人才资料",
     "talent_neutral_name": "人才资料",
     "empty_startups": "暂无初创公司",
-    "empty_talent": "未找到人才"
+    "empty_talent": "未找到人才",
+    "empty_desc_create": "创建你的第一个项目或初创公司。",
+    "empty_cta_create": "创建项目"
   },
   "workspace": {
     "board": "看板",

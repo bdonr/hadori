@@ -326,7 +326,9 @@
     "talent_requires_login": "Melde dich an, um Talent-Profile zu durchsuchen",
     "talent_neutral_name": "Talent-Profil",
     "empty_startups": "Noch keine Startups",
-    "empty_talent": "Keine Talente gefunden"
+    "empty_talent": "Keine Talente gefunden",
+    "empty_desc_create": "Erstelle dein erstes Projekt oder Startup.",
+    "empty_cta_create": "Projekt erstellen"
   },
   "workspace": {
     "board": "Board",

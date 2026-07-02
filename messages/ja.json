@@ -326,7 +326,9 @@
     "talent_requires_login": "タレントプロフィールを見るにはログインしてください",
     "talent_neutral_name": "タレントプロフィール",
     "empty_startups": "まだスタートアップがありません",
-    "empty_talent": "タレントが見つかりません"
+    "empty_talent": "タレントが見つかりません",
+    "empty_desc_create": "最初のプロジェクトまたはスタートアップを作成しましょう。",
+    "empty_cta_create": "プロジェクトを作成"
   },
   "workspace": {
     "board": "ボード",

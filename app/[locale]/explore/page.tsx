@@ -251,9 +251,9 @@ export default function ExplorePage() {
             <div className="mt-16 text-center">
               <span className="text-5xl">🚀</span>
               <p className="mt-4 text-lg font-semibold text-zinc-700">{t("empty_title")}</p>
-              <p className="mt-2 text-sm text-zinc-400">{t("empty_desc")}</p>
-              <Link href={`/${locale}/signup`} className="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
-                {t("empty_cta")}
+              <p className="mt-2 text-sm text-zinc-400">{loggedIn ? t("empty_desc_create") : t("empty_desc")}</p>
+              <Link href={loggedIn ? `/${locale}/project/create` : `/${locale}/signup`} className="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">
+                {loggedIn ? t("empty_cta_create") : t("empty_cta")}
               </Link>
             </div>
           ) : (

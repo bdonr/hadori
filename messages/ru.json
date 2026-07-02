@@ -326,7 +326,9 @@
     "talent_requires_login": "Войдите, чтобы просматривать профили талантов",
     "talent_neutral_name": "Профиль таланта",
     "empty_startups": "Пока нет стартапов",
-    "empty_talent": "Таланты не найдены"
+    "empty_talent": "Таланты не найдены",
+    "empty_desc_create": "Создайте свой первый проект или стартап.",
+    "empty_cta_create": "Создать проект"
   },
   "workspace": {
     "board": "Доска",
