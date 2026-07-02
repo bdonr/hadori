@@ -28,6 +28,7 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
   const [requested, setRequested] = useState(false);
   const [authUid, setAuthUid] = useState<string | null>(null);
   const [myTier, setMyTier] = useState<string | null>(null);
+  const [myCaps, setMyCaps] = useState<string[] | undefined>(undefined);
   const [myName, setMyName] = useState("");
   const [introsThisMonth, setIntrosThisMonth] = useState(0);
 
@@ -71,8 +72,10 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
       if (!user) return;
       try {
         const myProfileSnap = await getDoc(doc(db, "profiles", user.uid));
-        if (myProfileSnap.exists())
+        if (myProfileSnap.exists()) {
           setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+          setMyCaps(myProfileSnap.data().capabilities as string[] | undefined);
+        }
         const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
         if (myPubSnap.exists())
           setMyName((myPubSnap.data().full_name as string) ?? "");
@@ -96,8 +99,9 @@ export default function InvestorProfilePage({ params }: { params: Promise<{ id: 
     return () => unsub();
   }, [id]);
 
-  const canRequestIntro = isStartupPaid(myTier);
-  const introCap = isStartupProPlus(myTier) ? Infinity : 20;
+  const myHolder = { plan_tier: myTier, capabilities: myCaps };
+  const canRequestIntro = isStartupPaid(myHolder);
+  const introCap = isStartupProPlus(myHolder) ? Infinity : 20;
   const atIntroLimit = introsThisMonth >= introCap;
 
   async function requestIntro() {

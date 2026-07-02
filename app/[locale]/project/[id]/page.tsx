@@ -83,6 +83,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const [authUid, setAuthUid] = useState<string | null>(null);
   const [myRole, setMyRole] = useState<string | null>(null);
   const [myTier, setMyTier] = useState<string | null>(null);
+  const [myCaps, setMyCaps] = useState<string[] | undefined>(undefined);
   const [myName, setMyName] = useState("");
   const [introsThisMonth, setIntrosThisMonth] = useState(0);
   const [requestedToUids, setRequestedToUids] = useState<string[]>([]);
@@ -171,6 +172,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         if (myProfileSnap.exists()) {
           setMyRole((myProfileSnap.data().role as string) ?? null);
           setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+          setMyCaps(myProfileSnap.data().capabilities as string[] | undefined);
         }
         const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
         if (myPubSnap.exists()) setMyName((myPubSnap.data().full_name as string) ?? "");
@@ -247,8 +249,9 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
   const isOwner = !!authUid && !!project.ownerId && authUid === project.ownerId;
   const isInvestorViewer = myRole === "investor";
-  const canRequestIntro = isInvestorPaid(myTier);
-  const introCap = planCaps(myTier).introsPerMonth;
+  const myHolder = { plan_tier: myTier, capabilities: myCaps };
+  const canRequestIntro = isInvestorPaid(myHolder);
+  const introCap = planCaps(myHolder).introsPerMonth;
   const atIntroLimit = introsThisMonth >= introCap;
   const alreadyRequested = interested || (!!project.ownerId && requestedToUids.includes(project.ownerId));
   const showIntroButton = isInvestorViewer && !isOwner && !!project.ownerId;

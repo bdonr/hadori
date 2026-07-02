@@ -213,23 +213,31 @@ export function can(role: Role, tier: Tier, feature: keyof Entitlements): boolea
 
 // Paid startup plan: unlocks funding details, full pitch deck, investor
 // visibility, workspace AI co-founder.
-export function isStartupPaid(planTier?: string | null): boolean {
-  return !!planTier && ["startup", "startup_pro", "pro", "scale"].includes(planTier);
+// Each of these accepts EITHER a single tier string (legacy) OR a capability
+// holder ({plan_tier, capabilities}). When given a holder, it returns true if
+// ANY held capability qualifies — so a multi-capability account is evaluated
+// correctly.
+export function isStartupPaid(x?: string | null | CapabilityHolder): boolean {
+  if (x && typeof x === "object") return getCapabilities(x).some((t) => isStartupPaid(t));
+  return !!x && ["startup", "startup_pro", "pro", "scale"].includes(x);
 }
 
 // Top startup plan: verified badge, data room, featured placement.
-export function isStartupProPlus(planTier?: string | null): boolean {
-  return !!planTier && ["startup_pro", "scale"].includes(planTier);
+export function isStartupProPlus(x?: string | null | CapabilityHolder): boolean {
+  if (x && typeof x === "object") return getCapabilities(x).some((t) => isStartupProPlus(t));
+  return !!x && ["startup_pro", "scale"].includes(x);
 }
 
 // Paid talent plan (Plus or Pro).
-export function isTalentPaid(planTier?: string | null): boolean {
-  return !!planTier && ["plus", "pro", "scale"].includes(planTier);
+export function isTalentPaid(x?: string | null | CapabilityHolder): boolean {
+  if (x && typeof x === "object") return getCapabilities(x).some((t) => isTalentPaid(t));
+  return !!x && ["plus", "pro", "scale"].includes(x);
 }
 
 // Paid investor plan (Angel and above).
-export function isInvestorPaid(planTier?: string | null): boolean {
-  return !!planTier && planTier.startsWith("investor_") && planTier !== "investor_free";
+export function isInvestorPaid(x?: string | null | CapabilityHolder): boolean {
+  if (x && typeof x === "object") return getCapabilities(x).some((t) => isInvestorPaid(t));
+  return !!x && x.startsWith("investor_") && x !== "investor_free";
 }
 
 // ---------------------------------------------------------------------------
@@ -344,7 +352,10 @@ const NONE: PlanCaps = {
   dealFlowManager: false, apiAccess: false, prioritySupport: false,
 };
 
-export function planCaps(planTier?: string | null): PlanCaps {
+export function planCaps(planTier?: string | null | CapabilityHolder): PlanCaps {
+  // A holder ({plan_tier, capabilities}) resolves to the merged caps of all held
+  // capabilities; a plain string keeps the single-tier lookup below.
+  if (planTier && typeof planTier === "object") return resolveCaps(planTier);
   const t = planTier ?? "free";
   switch (t) {
     // ---- Startup / creator ----

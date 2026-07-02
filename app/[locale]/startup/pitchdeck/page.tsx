@@ -160,8 +160,10 @@ export default function PitchDeckPage() {
         // Load plan tier
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         if (profileSnap.exists()) {
-          const tier = profileSnap.data().plan_tier as string | undefined;
-          setIsPro(isStartupPaid(tier));
+          setIsPro(isStartupPaid({
+            plan_tier: profileSnap.data().plan_tier as string | undefined,
+            capabilities: profileSnap.data().capabilities as string[] | undefined,
+          }));
         }
         // Load existing pitchdeck
         const deckSnap = await getDoc(doc(db, "pitchdecks", user.uid));

@@ -30,6 +30,7 @@ export default function DealFlowPage() {
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
   const [tier, setTier] = useState<string | null>(null);
+  const [capsList, setCapsList] = useState<string[] | undefined>(undefined);
   const [limitHit, setLimitHit] = useState(false);
   const [myName, setMyName] = useState("");
   const [requestedIds, setRequestedIds] = useState<string[]>([]);
@@ -41,7 +42,10 @@ export default function DealFlowPage() {
       setUid(user.uid);
       try {
         const snap = await getDoc(doc(db, "profiles", user.uid));
-        if (snap.exists()) setTier((snap.data().plan_tier as string) ?? null);
+        if (snap.exists()) {
+          setTier((snap.data().plan_tier as string) ?? null);
+          setCapsList(snap.data().capabilities as string[] | undefined);
+        }
       } catch {
         // Firebase not configured
       }
@@ -115,8 +119,9 @@ export default function DealFlowPage() {
     return () => unsub();
   }, []);
 
-  const caps = planCaps(tier);
-  const canSeeDeals = isInvestorPaid(tier);        // Angel+
+  const holder = { plan_tier: tier, capabilities: capsList };
+  const caps = planCaps(holder);
+  const canSeeDeals = isInvestorPaid(holder);      // Angel+
   const canSeeDetails = caps.startupDetails;       // Angel+ (names)
   const canSeeFunding = caps.fundingData;          // Pro+ (MRR/stage)
   const maxWatchlist = caps.watchlistLimit;

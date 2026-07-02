@@ -20,9 +20,10 @@ export default function WatchlistPage() {
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
   const [tier, setTier] = useState<string | null>(null);
+  const [capsList, setCapsList] = useState<string[] | undefined>(undefined);
   const [limitHit, setLimitHit] = useState(false);
 
-  const caps = planCaps(tier);
+  const caps = planCaps({ plan_tier: tier, capabilities: capsList });
   const maxWatchlist = caps.watchlistLimit; // free 5, angel 20, pro+ ∞
   const atLimit = list.length >= maxWatchlist;
 
@@ -35,7 +36,10 @@ export default function WatchlistPage() {
       setUid(user.uid);
       try {
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-        if (profileSnap.exists()) setTier((profileSnap.data().plan_tier as string) ?? null);
+        if (profileSnap.exists()) {
+          setTier((profileSnap.data().plan_tier as string) ?? null);
+          setCapsList(profileSnap.data().capabilities as string[] | undefined);
+        }
       } catch {
         // Firebase not configured
       }

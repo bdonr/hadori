@@ -19,7 +19,7 @@ export default async function InvestorDashboard({ params }: { params: Promise<{ 
   const t = await getTranslations("investor");
   const td = await getTranslations("investor_pages.dashboard");
 
-  const caps = planCaps(profile.plan_tier);
+  const caps = planCaps(profile);
 
   // Pending incoming investor requests: single where() on toUid, filter here.
   let pendingRequests = 0;

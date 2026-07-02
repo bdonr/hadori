@@ -63,6 +63,7 @@ export default function TalentJobsPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [tier, setTier] = useState("free");
+  const [caps, setCaps] = useState<string[] | undefined>(undefined);
   const [myUid, setMyUid] = useState<string | null>(null);
   const [myName, setMyName] = useState("");
   // Roles the user has applied to (persisted in the `applications` collection).
@@ -86,8 +87,10 @@ export default function TalentJobsPage() {
           }
           // Plan tier lives on the profile doc, not the talent doc.
           const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-          if (profileSnap.exists())
+          if (profileSnap.exists()) {
             setTier((profileSnap.data().plan_tier as string) ?? "free");
+            setCaps(profileSnap.data().capabilities as string[] | undefined);
+          }
           // Display name comes from the public profile.
           const pubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
           if (pubSnap.exists())
@@ -191,7 +194,7 @@ export default function TalentJobsPage() {
 
   const topMatch = results.length > 0 ? results[0].match : 0;
 
-  const applicationsCap = planCaps(tier).applicationsPerMonth;
+  const applicationsCap = planCaps({ plan_tier: tier, capabilities: caps }).applicationsPerMonth;
   const applicationsLeft = applicationsCap - appsThisMonth;
   const atApplicationLimit = applicationsLeft <= 0;
 

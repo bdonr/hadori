@@ -18,7 +18,7 @@ export default async function TalentDashboard({ params }: { params: Promise<{ lo
 
   const t = await getTranslations("talent");
 
-  const isPro = isTalentPaid(profile.plan_tier);
+  const isPro = isTalentPaid(profile);
   const tier = profile.plan_tier ?? "free";
   const name = profile.full_name ?? "";
 

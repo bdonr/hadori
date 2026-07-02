@@ -30,6 +30,7 @@ export default function StartupOverviewPage() {
   const [uid, setUid] = useState<string | null>(null);
   const [startup, setStartup] = useState<StartupDoc | null>(null);
   const [tier, setTier] = useState("free");
+  const [caps, setCaps] = useState<string[] | undefined>(undefined);
   const [hasDeck, setHasDeck] = useState(false);
   const [deckPublic, setDeckPublic] = useState(false);
   const [planPublic, setPlanPublic] = useState(false);
@@ -52,6 +53,7 @@ export default function StartupOverviewPage() {
       ]);
       if (s?.exists()) setStartup(s.data() as StartupDoc);
       setTier((p?.data()?.plan_tier as string) ?? "free");
+      setCaps(p?.data()?.capabilities as string[] | undefined);
       setHasDeck(!!d?.exists());
       if (d?.exists()) setDeckPublic(d.data()?.isPublic === true);
       if (bp?.exists()) { setPlan(bp.data() as typeof plan); setPlanPublic(bp.data()?.showExternal === true); }
@@ -60,7 +62,7 @@ export default function StartupOverviewPage() {
     return () => unsub();
   }, []);
 
-  const paid = isStartupPaid(tier);
+  const paid = isStartupPaid({ plan_tier: tier, capabilities: caps });
   const regionLabel = REGIONS.find((r) => r.id === startup?.region);
 
   if (loading) {
@@ -132,7 +134,7 @@ export default function StartupOverviewPage() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="text-xl font-extrabold text-zinc-900">{startup.name}</p>
-                  {external && isStartupProPlus(tier) && (
+                  {external && isStartupProPlus({ plan_tier: tier, capabilities: caps }) && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
                       ✔ {t("verified_badge")}
                     </span>

@@ -75,8 +75,10 @@ export default function StartupProfilePage() {
 
         // Check tier
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-        const tier = profileSnap.data()?.plan_tier ?? "free";
-        setIsPro(isStartupPaid(tier));
+        setIsPro(isStartupPaid({
+          plan_tier: (profileSnap.data()?.plan_tier as string | undefined) ?? "free",
+          capabilities: profileSnap.data()?.capabilities as string[] | undefined,
+        }));
       } catch {
         // Read failed — still let the user fill in and save their profile
       } finally {

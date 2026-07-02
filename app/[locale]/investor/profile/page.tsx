@@ -54,8 +54,9 @@ export default function InvestorProfilePage() {
   const [openToIntros, setOpenToIntros] = useState(true);
   const [saved, setSaved] = useState(false);
   const [tier, setTier] = useState<string | null>(null);
+  const [capsList, setCapsList] = useState<string[] | undefined>(undefined);
 
-  const caps = planCaps(tier);
+  const caps = planCaps({ plan_tier: tier, capabilities: capsList });
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -64,7 +65,10 @@ export default function InvestorProfilePage() {
       if (!name) setName(user.displayName ?? "");
       try {
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-        if (profileSnap.exists()) setTier((profileSnap.data().plan_tier as string) ?? null);
+        if (profileSnap.exists()) {
+          setTier((profileSnap.data().plan_tier as string) ?? null);
+          setCapsList(profileSnap.data().capabilities as string[] | undefined);
+        }
       } catch {
         // Firebase not configured
       }

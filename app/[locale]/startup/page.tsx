@@ -20,7 +20,7 @@ export default async function StartupDashboard({ params }: { params: Promise<{ l
   const t = await getTranslations("startup");
 
   const name = profile.full_name ?? t("default_name");
-  const isPro = isStartupPaid(profile.plan_tier);
+  const isPro = isStartupPaid(profile);
   const isVisible = profile.investor_visible ?? false;
 
   let workspaceId: string | null = null;

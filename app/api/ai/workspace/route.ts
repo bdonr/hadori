@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "AI assistant requires Pro or Scale plan" }, { status: 403 });
 
   // Check monthly limit for finite-AI plans (10 messages); top tier is unlimited
-  if (!isStartupProPlus(profile?.plan_tier)) {
+  if (!isStartupProPlus(profile)) {
     const monthStart = new Date();
     monthStart.setDate(1);
     monthStart.setHours(0, 0, 0, 0);

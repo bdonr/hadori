@@ -79,6 +79,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
   const [loading, setLoading] = useState(true);
   const [contacted, setContacted] = useState(false);
   const [myTier, setMyTier] = useState<string | null>(null);
+  const [myCaps, setMyCaps] = useState<string[] | undefined>(undefined);
   const [myName, setMyName] = useState("");
   const [contactsThisMonth, setContactsThisMonth] = useState(0);
   const [contactMessage, setContactMessage] = useState("");
@@ -115,8 +116,10 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
         if (user && targetUid && targetUid !== user.uid) {
           try {
             const myProfileSnap = await getDoc(doc(db, "profiles", user.uid));
-            if (myProfileSnap.exists())
+            if (myProfileSnap.exists()) {
               setMyTier((myProfileSnap.data().plan_tier as string) ?? null);
+              setMyCaps(myProfileSnap.data().capabilities as string[] | undefined);
+            }
             const myPubSnap = await getDoc(doc(db, "publicProfiles", user.uid));
             if (myPubSnap.exists())
               setMyName((myPubSnap.data().full_name as string) ?? "");
@@ -190,8 +193,9 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
 
   const displayName = profile.full_name || t("unknown");
   const targetUid = id === "me" ? authUid : id;
-  const canRequestContact = isStartupPaid(myTier);
-  const contactCap = isStartupProPlus(myTier) ? Infinity : 20;
+  const myHolder = { plan_tier: myTier, capabilities: myCaps };
+  const canRequestContact = isStartupPaid(myHolder);
+  const contactCap = isStartupProPlus(myHolder) ? Infinity : 20;
   const atContactLimit = contactsThisMonth >= contactCap;
 
   async function requestContact() {

@@ -36,6 +36,7 @@ export default function PortfolioPage() {
   const { locale } = useParams<{ locale: string }>();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [tier, setTier] = useState(DEFAULT_TIER);
+  const [caps, setCaps] = useState<string[] | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -43,7 +44,10 @@ export default function PortfolioPage() {
     if (!uid) return;
     // Load tier from profile
     getDoc(doc(db, "profiles", uid)).then(snap => {
-      if (snap.exists()) setTier(snap.data().plan_tier ?? DEFAULT_TIER);
+      if (snap.exists()) {
+        setTier(snap.data().plan_tier ?? DEFAULT_TIER);
+        setCaps(snap.data().capabilities as string[] | undefined);
+      }
     }).catch(() => {});
     // Load portfolio items
     getDocs(collection(db, "portfolios", uid, "items")).then(snap => {
@@ -59,7 +63,7 @@ export default function PortfolioPage() {
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
-  const LIMIT = planCaps(tier).portfolioItems;
+  const LIMIT = planCaps({ plan_tier: tier, capabilities: caps }).portfolioItems;
   const atLimit = items.length >= LIMIT;
   const isScale = LIMIT === Infinity;
 

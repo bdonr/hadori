@@ -63,6 +63,7 @@ export default function PlanPage() {
   const t = useTranslations("startup_pages.plan") as unknown as T;
   const { locale } = useParams<{ locale: string }>();
   const [tier, setTier] = useState<string | null>(null);
+  const [caps, setCaps] = useState<string[] | undefined>(undefined);
   const [step, setStep] = useState<"form" | "questions" | "result">("form");
 
   const [name, setName] = useState("");
@@ -90,6 +91,7 @@ export default function PlanPage() {
         getDoc(doc(db, "businessplans", u.uid)),
       ]);
       setTier((s.data()?.plan_tier as string) ?? "free");
+      setCaps(s.data()?.capabilities as string[] | undefined);
       // Load a previously generated plan so it is never "lost" on reload.
       if (bp.exists()) {
         const d = bp.data() as { external?: External; internal?: Internal; showExternal?: boolean };
@@ -103,7 +105,7 @@ export default function PlanPage() {
     } catch { setTier("free"); }
   }), []);
 
-  const paid = isStartupPaid(tier);
+  const paid = isStartupPaid({ plan_tier: tier, capabilities: caps });
   const toggleMulti = (set: React.Dispatch<React.SetStateAction<string[]>>, id: string) =>
     set((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
 

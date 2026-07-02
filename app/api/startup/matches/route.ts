@@ -14,8 +14,7 @@ export async function GET() {
 
   // Gate: discovering & requesting investors is a startup+ feature.
   const callerSnap = await adminDb.collection("profiles").doc(session.uid).get();
-  const callerTier = (callerSnap.data()?.plan_tier as string) ?? "free";
-  if (!isStartupPaid(callerTier)) return NextResponse.json({ matches: [], locked: true });
+  if (!isStartupPaid(callerSnap.data())) return NextResponse.json({ matches: [], locked: true });
 
   const startupSnap = await adminDb.collection("startups").doc(session.uid).get();
   const s = startupSnap.data() ?? {};

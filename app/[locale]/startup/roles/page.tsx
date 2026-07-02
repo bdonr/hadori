@@ -70,10 +70,13 @@ export default function RolesPage() {
       if (!user) return;
       setUid(user.uid);
       try {
-        // Read plan_tier and derive the allowed number of active job postings.
+        // Read the plan holder and derive the allowed number of active job postings.
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-        const tier = profileSnap.data()?.plan_tier as string | undefined;
-        setMaxRoles(planCaps(tier).activeJobPostings);
+        const data = profileSnap.data();
+        setMaxRoles(planCaps({
+          plan_tier: data?.plan_tier as string | undefined,
+          capabilities: data?.capabilities as string[] | undefined,
+        }).activeJobPostings);
       } catch {
         // Read failed — keep the free default of 1
       }

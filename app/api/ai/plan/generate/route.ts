@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const profileSnap = await adminDb!.collection("profiles").doc(session.uid).get();
-  if (!isStartupPaid(profileSnap.data()?.plan_tier))
+  if (!isStartupPaid(profileSnap.data()))
     return NextResponse.json({ error: "AI business plan requires a paid Startup plan" }, { status: 403 });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;

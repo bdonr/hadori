@@ -37,6 +37,7 @@ export default function PortfolioPage() {
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [notesDraft, setNotesDraft] = useState("");
   const [tier, setTier] = useState<string | null>(null);
+  const [capsList, setCapsList] = useState<string[] | undefined>(undefined);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -44,7 +45,10 @@ export default function PortfolioPage() {
       setUid(user.uid);
       try {
         const snap = await getDoc(doc(db, "profiles", user.uid));
-        if (snap.exists()) setTier((snap.data().plan_tier as string) ?? null);
+        if (snap.exists()) {
+          setTier((snap.data().plan_tier as string) ?? null);
+          setCapsList(snap.data().capabilities as string[] | undefined);
+        }
       } catch {
         // Firebase not configured
       }
@@ -71,7 +75,7 @@ export default function PortfolioPage() {
     return () => unsub();
   }, []);
 
-  const canAccess = planCaps(tier).portfolioTracker; // Pro+
+  const canAccess = planCaps({ plan_tier: tier, capabilities: capsList }).portfolioTracker; // Pro+
 
   async function updateStatus(id: string, status: DealStatus) {
     setDeals(prev => prev.map(d => d.id === id ? { ...d, status } : d));

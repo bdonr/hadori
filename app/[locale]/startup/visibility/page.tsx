@@ -19,8 +19,8 @@ export default async function VisibilityPage({ params }: { params: Promise<{ loc
   const profile = snap.data() as Profile | undefined;
   if (!profile || (profile.role !== "startup" && profile.role !== "creator")) redirect(`/${locale}/login`);
 
-  const isPro = isStartupPaid(profile.plan_tier);
-  const isProPlus = isStartupProPlus(profile.plan_tier);
+  const isPro = isStartupPaid(profile);
+  const isProPlus = isStartupProPlus(profile);
   const isVisible = profile.investor_visible ?? false;
 
   // Investor visibility + requests are startup+ perks; the verified badge and

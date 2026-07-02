@@ -28,6 +28,7 @@ export default function DiscoverInvestorsPage() {
   const [locked, setLocked] = useState(false);
   const [myUid, setMyUid] = useState<string | null>(null);
   const [myTier, setMyTier] = useState<string | null>(null);
+  const [myCaps, setMyCaps] = useState<string[] | undefined>(undefined);
   const [myName, setMyName] = useState("");
   const [requestedIds, setRequestedIds] = useState<string[]>([]);
   const [introsThisMonth, setIntrosThisMonth] = useState(0);
@@ -39,8 +40,10 @@ export default function DiscoverInvestorsPage() {
         try {
           const snap = await getDoc(doc(db, "profiles", user.uid));
           const tier = snap.data()?.plan_tier as string | undefined;
+          const capabilities = snap.data()?.capabilities as string[] | undefined;
           setMyTier(tier ?? null);
-          if (!isStartupPaid(tier)) setLocked(true);
+          setMyCaps(capabilities);
+          if (!isStartupPaid({ plan_tier: tier, capabilities })) setLocked(true);
         } catch {
           // ignore — API is the authoritative gate
         }
@@ -79,7 +82,7 @@ export default function DiscoverInvestorsPage() {
     setFocusFilter((prev) => (prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]));
   }
 
-  const introCap = isStartupProPlus(myTier) ? Infinity : 20;
+  const introCap = isStartupProPlus({ plan_tier: myTier, capabilities: myCaps }) ? Infinity : 20;
   const atIntroLimit = introsThisMonth >= introCap;
 
   async function requestIntro(m: Match) {
